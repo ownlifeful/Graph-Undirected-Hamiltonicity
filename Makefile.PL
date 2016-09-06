@@ -1,0 +1,30 @@
+use 5.006;
+use strict;
+use warnings;
+use ExtUtils::MakeMaker;
+
+WriteMakefile(
+    NAME             => 'Graph::Undirected::Hamiltonicity',
+    AUTHOR           => q{Ashwin Dixit <ashwin at ownlifeful dot com>},
+    VERSION_FROM     => 'lib/Graph/Undirected/Hamiltonicity.pm',
+    ABSTRACT_FROM    => 'lib/Graph/Undirected/Hamiltonicity.pm',
+    LICENSE          => 'artistic_2',
+    PL_FILES         => {},
+    MIN_PERL_VERSION => 5.006,
+    CONFIGURE_REQUIRES => {
+        'ExtUtils::MakeMaker' => 0,
+    },
+    BUILD_REQUIRES => {
+        'Test::More' => 0,
+    },
+    PREREQ_PM => {
+        'Graph'              => '0.9704',
+        'Bit::Vector'        => '7.4',
+        'Data::Dumper'       => '2.145',
+        'CGI'                => '4.31',
+	'Readonly'           => '2.05',
+	'LWP'                => '6.05',
+    },
+    dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
+    clean => { FILES => 'Graph-Undirected-Hamiltonicity-*' },
+);

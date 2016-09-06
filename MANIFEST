@@ -1,0 +1,22 @@
+Changes
+lib/Graph/Undirected/Hamiltonicity.pm
+lib/Graph/Undirected/Hamiltonicity/Output.pm
+lib/Graph/Undirected/Hamiltonicity/Spoof.pm
+lib/Graph/Undirected/Hamiltonicity/Tests.pm
+lib/Graph/Undirected/Hamiltonicity/Transforms.pm
+Makefile.PL
+MANIFEST			This list of files
+README
+bin/hamilton.pl
+t/000-load.t
+t/001-test_trivial.t
+t/001-test_min_degree.t
+t/001-test_connected.t
+t/001-test_ALL.t
+t/002-graph_is_hamiltonian.t
+t/manifest.t
+t/pod-coverage.t
+t/pod.t
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)
+.gitignore
