@@ -46,7 +46,7 @@ __DATA__
 ###                           1 means GRAPH_IS_HAMILTONIAN
 ###                           2 means GRAPH_IS_NOT_HAMILTONIAN
 ###
-###    label: can be any string.
+###    label: can be any string that doesn't contain a pipe ( '|' ) character.
 ###
 ###    graph_text: is a string representation of the graph.
 ###
