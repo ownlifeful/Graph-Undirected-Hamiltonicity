@@ -4,14 +4,13 @@ use 5.006;
 use strict;
 use warnings;
 
-use Graph::Undirected::Hamiltonicity::Transforms qw(shuffle);
+use Graph::Undirected::Hamiltonicity::Transforms qw(add_random_edges shuffle);
 
 use Exporter qw(import);
 
 our @EXPORT_OK =  qw(
-                     &get_canonical_hamiltonian_graph
-                     &get_known_hamiltonian_graph
-                     &add_random_edges
+                     &spoof_canonical_hamiltonian_graph
+                     &spoof_known_hamiltonian_graph
         );
 
 our %EXPORT_TAGS = (
@@ -38,11 +37,11 @@ This module is a collection of subroutines for spoofing random graphs with given
 properties.
 
 
-    use Graph::Undirected::Hamiltonicity::Spoof qw(&get_known_hamiltonian_graph);
+    use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph);
 
     my $v = 30;
     my $e = 50;
-    my $G = get_known_hamiltonian_graph($v,$e);
+    my $G = spoof_known_hamiltonian_graph($v,$e);
 
     ### $G is an instance of Graph::Undirected
     ### $G is a random Hamiltonian graph with $v vertices and $e edges.
@@ -59,11 +58,9 @@ The subroutines that can be imported individually, by name, are:
 
 =over 4
 
-=item * &get_canonical_hamiltonian_graph
+=item * &spoof_canonical_hamiltonian_graph
 
-=item * &get_known_hamiltonian_graph
-
-=item * &add_random_edges
+=item * &spoof_known_hamiltonian_graph
 
 =back
 
@@ -73,7 +70,7 @@ The subroutines that can be imported individually, by name, are:
 
 ##############################################################################
 
-=head2 get_canonical_hamiltonian_graph
+=head2 spoof_canonical_hamiltonian_graph
 
 Takes: $v, the number of vertices desired.
 
@@ -82,7 +79,7 @@ Returns: a Graph::Undirected with $v vertices, and $v edges.
          ( regular-polygon-shaped ) Hamiltonian Cycle.
 =cut
 
-sub get_canonical_hamiltonian_graph {
+sub spoof_canonical_hamiltonian_graph {
     my ( $v ) = @_;
 
     my $last_vertex = $v - 1;
@@ -102,7 +99,7 @@ sub get_canonical_hamiltonian_graph {
 ##############################################################################
 
 
-=head2 get_known_hamiltonian_graph
+=head2 spoof_known_hamiltonian_graph
 
 Spoof a randomized Hamiltonian graph with the specified number of vertices
 and edges.
@@ -115,7 +112,7 @@ Returns: a Graph::Undirected with $v vertices, and $e edges.
 
 =cut
 
-sub get_known_hamiltonian_graph {
+sub spoof_known_hamiltonian_graph {
 
     my ( $v, $e ) = @_;
 
@@ -130,7 +127,7 @@ sub get_known_hamiltonian_graph {
 	$e = int( rand( 2 - 2 * $v + ($v * $v - $v)/2 ) ) - $v;
     }
 
-    my $G = get_canonical_hamiltonian_graph($v);
+    my $G = spoof_canonical_hamiltonian_graph($v);
 
     $G = shuffle( $G );
 
@@ -139,48 +136,6 @@ sub get_known_hamiltonian_graph {
     print "G=[$G] on line: ", __LINE__, "\n"; ### DEBUG
 
     return $G;
-}
-
-##############################################################################
-
-=head2 add_random_edges
-
-Add random edges to a given Graph::Undirected
-
-Takes:
-       $G, a Graph::Undirected
-       $edges_to_add, the number of random edges to add to the original graph.
-
-Returns:
-       $G1, a copy of $G with $edges_to_add random edges added.
-
-=cut
-
-sub add_random_edges {
-    my ( $G, $edges_to_add ) = @_;
-
-    my $G1 = $G->deep_copy_graph();
-
-    my @vertices = $G1->vertices();
-    my $v = scalar(@vertices);
-
-    my $added_edges = 0;
-    while ( $added_edges < $edges_to_add ) {
-
-	my $v1 = int ( rand($v) );
-	my $v2 = int ( rand($v) );
-
-	print "v1=$v1;\tv2=$v2;\tv=$v;\tadded_edges=$added_edges;\tG1=[$G1] on line:", __LINE__, "\n"; ### DEBUG
-
-	next if $v1 == $v2;
-	next if $G1->has_edge($v1,$v2);
-			    
-	$G1->add_edge($v1,$v2);
-	$added_edges++;
-    }
-
-
-    return $G1;
 }
 
 ##############################################################################

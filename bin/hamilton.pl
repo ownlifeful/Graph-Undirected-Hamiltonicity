@@ -5,7 +5,7 @@ use Getopt::Long;
 use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
-use Graph::Undirected::Hamiltonicity::Spoof qw(get_known_hamiltonian_graph);
+use Graph::Undirected::Hamiltonicity::Spoof qw(spoof_known_hamiltonian_graph);
 
 use warnings;
 use strict;
@@ -53,7 +53,7 @@ if ( $graph_file )  {
 } elsif ( $v ) {
     $count ||= 1;
     for ( my $i = 0; $i < $count; $i++ ) {
-	push @G, get_known_hamiltonian_graph($v, $e);
+	push @G, spoof_known_hamiltonian_graph($v, $e);
     }
 
 } else {

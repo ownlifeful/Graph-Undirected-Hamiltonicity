@@ -65,9 +65,9 @@ Returns: ($is_hamilton, $reason)
 Here is an example:
 
     use Graph::Undirected::Hamiltonicity::Tests qw(test_trivial);
-    use Graph::Undirected::Hamiltonicity::Spoof qw(get_known_hamiltonian_graph);
+    use Graph::Undirected::Hamiltonicity::Spoof qw(spoof_known_hamiltonian_graph);
 
-    my $G = get_known_hamiltonian_graph(30, 50); ### 30 vertices, 50 edges
+    my $G = spoof_known_hamiltonian_graph(30, 50); ### 30 vertices, 50 edges
 
     my ( $is_hamiltonian, $reason ) = test_trivial($G);
     ...
