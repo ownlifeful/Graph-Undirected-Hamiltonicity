@@ -91,8 +91,6 @@ sub spoof_canonical_hamiltonian_graph {
 	$G->add_edge( $i, $i + 1 );
     }
 
-    print "G=[$G] on line: ", __LINE__, "\n"; ### DEBUG
-
     return $G;
 }
 
@@ -122,18 +120,15 @@ sub spoof_known_hamiltonian_graph {
     if ( defined( $e ) and ( $e > 0 ) ) {
 	# Sanitize
 	$e =~ s/\D+//g;
-    } else {
-	# Generate random
-	$e = int( rand( 2 - 2 * $v + ($v * $v - $v)/2 ) ) - $v;
     }
 
+    # Generate random
+    my $max_edges = ( $v * $v - $v ) / 2;
+    $e ||= int( rand( $max_edges - 2 * $v + 2  )  ) + $v;
+
     my $G = spoof_canonical_hamiltonian_graph($v);
-
     $G = shuffle( $G );
-
     $G = add_random_edges($G, $e - $v);
-
-    print "G=[$G] on line: ", __LINE__, "\n"; ### DEBUG
 
     return $G;
 }

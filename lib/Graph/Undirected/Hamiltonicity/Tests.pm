@@ -363,8 +363,9 @@ sub test_required_cyclic_old {
     my $number_of_vertices_in_cycle = scalar(@cycle);
     if ( $number_of_vertices_in_cycle > 0 ) {
         my $cycle_string = join ', ', @cycle;
+        output( $required_graph, { required => 1 } );
+
         if ( $number_of_vertices_in_cycle < $v ) {
-            output( $required_graph, { required => 1 } );
             return ( $GRAPH_IS_NOT_HAMILTONIAN,
                       "The sub-graph of required edges has a cycle "
                     . "[$cycle_string] with fewer than $v vertices." );

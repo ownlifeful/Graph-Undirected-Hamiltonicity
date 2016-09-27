@@ -85,7 +85,7 @@ sub mark_required_edges {
 
     foreach my $vertex ( sort { $a <=> $b } $G1->vertices() ) {
         my $degree = $G1->degree($vertex);
-        output("Vertex $vertex : Degree=[$degree]<BR/>");
+        output("Vertex $vertex : Degree=[$degree] ");
 
         if ( $degree == 2 ) {
             output("<UL>");
@@ -471,8 +471,6 @@ sub shuffle {
 
     my ( $G ) = @_;
 
-    print "G=[$G] on line: ", __LINE__, "\n"; ### DEBUG
-
     my $G1 = $G->deep_copy_graph();
 
     my @vertices = $G1->vertices();
@@ -485,15 +483,11 @@ sub shuffle {
 	my $v1 = int ( rand($v) );
 	my $v2 = int ( rand($v) );
 
-	print "v1=$v1;\tv2=$v2 on line:", __LINE__, "\n"; ### DEBUG
-
 	next if $v1 == $v2;
 			    
 	$G1 = swap_vertices($G1, $v1,$v2);
 	$shuffles++;
     }
-
-    print "G1=[$G1] on line: ", __LINE__, "\n"; ### DEBUG
 
     return $G1;
 }
@@ -526,8 +520,6 @@ sub add_random_edges {
 
 	my $v1 = int ( rand($v) );
 	my $v2 = int ( rand($v) );
-
-	print "v1=$v1;\tv2=$v2;\tv=$v;\tadded_edges=$added_edges;\tG1=[$G1] on line:", __LINE__, "\n"; ### DEBUG
 
 	next if $v1 == $v2;
 	next if $G1->has_edge($v1,$v2);

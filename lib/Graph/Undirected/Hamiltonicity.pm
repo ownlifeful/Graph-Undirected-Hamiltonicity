@@ -200,27 +200,27 @@ sub is_hamiltonian {
         }
 
         ####################### BEGIN
-        my @maximization_steps;
-        ( $required_graph, @maximization_steps ) = maximize($required_graph);
-
-        output("The maximized required graph is as shown below:<BR/>");
-        output("$required_graph<BR/>" );
-        output( $required_graph, { required => 1 } );
-
-        my $maximized_flag = scalar(@maximization_steps) ? 1 : 0;
-
-        while ( scalar(@maximization_steps) ) {
-            my $i = shift @maximization_steps;
-            my $j = shift @maximization_steps;
-            $G1 = swap_vertices($G1, $i, $j);
-        }
-
-        if ( $maximized_flag ) {
-            mark_required_edges($G1);
-            output("The graph with the same transforms applied, is as shown below:<BR/>");
-            output($G1);
-        }
-
+#        my @maximization_steps;
+#        ( $required_graph, @maximization_steps ) = maximize($required_graph);
+#
+#        output("The maximized required graph is as shown below:<BR/>");
+#        output("$required_graph<BR/>" );
+#        output( $required_graph, { required => 1 } );
+#
+#        my $maximized_flag = scalar(@maximization_steps) ? 1 : 0;
+#
+#        while ( scalar(@maximization_steps) ) {
+#            my $i = shift @maximization_steps;
+#            my $j = shift @maximization_steps;
+#            $G1 = swap_vertices($G1, $i, $j);
+#        }
+#
+#        if ( $maximized_flag ) {
+#            mark_required_edges($G1);
+#            output("The graph with the same transforms applied, is as shown below:<BR/>");
+#            output($G1);
+#        }
+#
         ####################### END
 
     }
