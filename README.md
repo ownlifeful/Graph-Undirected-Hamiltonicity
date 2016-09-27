@@ -40,4 +40,7 @@ To get per-module help:
 
 
     perldoc Graph::Undirected::Hamiltonicity
-
+    perldoc Graph::Undirected::Hamiltonicity::Tests
+    perldoc Graph::Undirected::Hamiltonicity::Spoof
+    perldoc Graph::Undirected::Hamiltonicity::Transforms
+    perldoc Graph::Undirected::Hamiltonicity::Output
