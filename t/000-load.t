@@ -1,8 +1,7 @@
-#!perl -T
+#!perl
 use 5.006;
 use strict;
 use warnings;
-use perl5lib;
 use Test::More;
 
 plan tests => 5;
