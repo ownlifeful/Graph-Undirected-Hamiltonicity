@@ -3,10 +3,12 @@ Graph-Undirected-Hamiltonicity
 This module, which is mostly of esoteric interest, is dedicated to the
 Quixotic quest of determining whether "P=NP".  It attempts to decide
 whether a given Graph::Undirected contains a Hamiltonian Cycle, using
-a series of polynomial timme tests.
+a series of polynomial time tests.
 
 The input graph is systematically simplified, and finally, traversed,
 in a series of recursive tests.
+
+The underlying algorithm is non-deterministic.
 
 INSTALLATION
 
