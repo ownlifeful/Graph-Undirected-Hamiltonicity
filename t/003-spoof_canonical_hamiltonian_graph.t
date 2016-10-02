@@ -10,6 +10,8 @@ use Test::More;
 
 plan tests => 30;
 
+$ENV{HC_OUTPUT_FORMAT} = 'none';
+
 for my $v ( 1 .. 10 ) {
     my $G = spoof_canonical_hamiltonian_graph($v);
 
@@ -23,6 +25,6 @@ for my $v ( 1 .. 10 ) {
     }
 
     ### The result is counter-intuitive, for v == 2, but it makes sense in context. 
-    is($is_hamiltonian, $GRAPH_IS_HAMILTONIAN, "Graph is a canonical Hamiltonian Cycle.");
+    is($is_hamiltonian, $GRAPH_IS_HAMILTONIAN, "Spoofed graph is a canonical Hamiltonian Cycle.");
 
 }

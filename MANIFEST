@@ -14,6 +14,7 @@ t/001-test_min_degree.t
 t/001-test_connected.t
 t/001-test_ALL.t
 t/002-graph_is_hamiltonian.t
+t/003-spoof_canonical_hamiltonian_graph.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t

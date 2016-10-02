@@ -4,6 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
+use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity::Transforms qw(add_random_edges shuffle);
 
 use Exporter qw(import);
@@ -84,6 +85,7 @@ sub spoof_canonical_hamiltonian_graph {
 
     my $last_vertex = $v - 1;
     my @vertices = ( 0 .. $last_vertex );
+
     my $G = new Graph::Undirected( vertices => \@vertices );
     $G->add_edge( 0, $last_vertex );
 
