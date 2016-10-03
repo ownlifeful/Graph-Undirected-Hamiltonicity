@@ -15,10 +15,8 @@ our @EXPORT_OK =  qw(
                      &delete_unusable_edges
                      &get_required_graph
                      &graph_to_bitvector
-                     &graphs_are_identical
                      &mark_required_edges
                      &maximize
-                     &rotate
                      &shrink_required_walks_longer_than_2_edges
                      &shuffle
                      &string_to_graph
@@ -268,7 +266,6 @@ sub common_neighbors {
     my %vertex_1_neighbors;
     foreach my $neighbor_vertex ( $G->neighbors($vertex_1) ) {
         $vertex_1_neighbors{$neighbor_vertex}++;
-        ###    unless $neighbor_vertex == $vertex_2;
     }
 
     foreach my $neighbor_vertex ( $G->neighbors($vertex_2) ) {
@@ -277,7 +274,6 @@ sub common_neighbors {
     }
 
     return %common_neighbors;
-
 }
 
 ##########################################################################
@@ -408,61 +404,6 @@ sub string_to_graph {
 
     return $G;
  }
-
-##########################################################################
-
-sub rotate {
-    my ( $G ) = @_;
-    my @vertices = sort { $a <=> $b } $G->vertices();
-    my $v = scalar(@vertices);
-
-    my $rotated_graph = new Graph::Undirected( vertices => \@vertices );
-
-    my @E = $G->edges();
-    foreach my $edge_ref (@E) { 
-        $rotated_graph->add_edge( map { ( $_ + 1 ) % $v  } @$edge_ref );
-    }
-
-    output("The rotated graph is: ($rotated_graph)<BR/>");
-    mark_required_edges($rotated_graph);
-    output($rotated_graph);
-
-    return $rotated_graph;
-}
-
-##########################################################################
-
-=head2 graphs_are_identical
-
-Takes two Graph::Undirected objects and compares them for equality.
-
-Returns 1 if graphs are identical, 0 otherwise.
-
-=cut
-
-sub graphs_are_identical {
-    my ( $G1, $G2 ) = @_;
-
-    ### Commpare number of vertices
-    my $vertices_1 = scalar( $G1->vertices() );
-    my $vertices_2 = scalar( $G2->vertices() );
-    return 0 if $vertices_1 != $vertices_2;
-
-    ### Commpare number of edges
-    my $edges_1 = scalar( $G1->edges() );
-    my $edges_2 = scalar( $G2->edges() );
-    return 0 if $edges_1 != $edges_2;
-
-
-    ### Compare each edge
-    my @edges_1 = $G1->edges();
-    foreach my $edge_ref_1 ( @edges_1 ) {       
-        return 0 unless $G2->has_edge( @$edge_ref_1 );
-    }
-
-    return 1;
-}
-
 
 ##########################################################################
 
