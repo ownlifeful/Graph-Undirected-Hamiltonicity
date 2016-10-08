@@ -38,7 +38,7 @@ __DATA__
 ### are written, one per line,
 ### in the format: label|expected_result|graph_text
 ###
-###    label: can be any string.
+###    label: can be any string not containing the pipe ( | ) character.
 ###
 ###
 ###    expected_result: can be 1, or 2.

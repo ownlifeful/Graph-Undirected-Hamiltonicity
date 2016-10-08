@@ -12,7 +12,7 @@ t/000-load.t
 t/001-test_trivial.t
 t/001-test_min_degree.t
 t/001-test_connected.t
-t/001-test_ALL.t
+t/001-test_all.t
 t/002-graph_is_hamiltonian.t
 t/003-spoof_canonical_hamiltonian_graph.t
 t/manifest.t
