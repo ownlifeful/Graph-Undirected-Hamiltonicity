@@ -4,6 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
+use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity::Output qw(:all);
 
 use Exporter qw(import);

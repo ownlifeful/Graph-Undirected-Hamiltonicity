@@ -3,7 +3,6 @@ use 5.006;
 use strict;
 use warnings;
 
-use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph &add_random_edges);
 
