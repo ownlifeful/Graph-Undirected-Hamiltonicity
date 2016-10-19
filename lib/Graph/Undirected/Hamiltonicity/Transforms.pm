@@ -158,6 +158,7 @@ sub delete_unusable_edges {
                 $graph_cloned = 1;
             }
 
+            next unless $G1->has_edge(@neighbors);
             $G1->delete_edge(@neighbors);
             $deleted_edges++;
             output("Deleted edge " . ( join '=', @neighbors ) .
@@ -182,10 +183,10 @@ sub delete_non_required_neighbors {
     my $deleted_edges = 0;
     foreach my $required_vertex ( $required_graph->vertices() ) {
         next if $required_graph->degree($required_vertex) != 2;
-        foreach my $neighbor_vertex ( $G1->neighbors($required_vertex) ) {
+        foreach my $neighbor_vertex ( $G->neighbors($required_vertex) ) {
             my $required =
-                $G1->get_edge_attribute( $required_vertex,
-                                         $neighbor_vertex, 'required' );
+                $G->get_edge_attribute( $required_vertex,
+                                        $neighbor_vertex, 'required' );
             unless ($required) {
 
                 if ( ! $graph_cloned ) {
@@ -193,6 +194,7 @@ sub delete_non_required_neighbors {
                     $graph_cloned = 1;
                 }
 
+                next unless $G1->has_edge( $required_vertex, $neighbor_vertex );
                 $G1->delete_edge( $required_vertex, $neighbor_vertex );
                 $deleted_edges++;
                 output("Deleted edge $required_vertex=$neighbor_vertex " .
