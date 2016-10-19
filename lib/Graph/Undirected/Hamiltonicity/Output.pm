@@ -73,7 +73,7 @@ to determine the output format. The output format can be one of:
 sub output {
     my ( $input ) = @_;
 
-    my $format = $ENV{HC_OUTPUT_FORMAT} || 'html'; ### default to HTML
+    my $format = $ENV{HC_OUTPUT_FORMAT} || 'none';
 
     return if $format eq 'none';
 

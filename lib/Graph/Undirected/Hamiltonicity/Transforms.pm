@@ -166,35 +166,31 @@ sub delete_unusable_edges {
 ##########################################################################
 
 sub delete_non_required_neighbors {
-    my ( $required_graph, $G1 ) = @_;
+    my ( $required_graph, $G ) = @_;
 
     ### Delete all non-required edges adjacent to vertices adjacent 
     ### to 2 required edges.
 
-    my $deleted_edges;
+    my $G1 = $G->deep_copy_graph();
+
+    my $deleted_edges = 0;
     foreach my $required_vertex ( $required_graph->vertices() ) {
-        if ( 2 == $required_graph->degree($required_vertex) ) {
-            foreach my $neighbor_vertex ( $G1->neighbors($required_vertex) ) {
-                my $required =
-                    $G1->get_edge_attribute( $required_vertex,
-                    $neighbor_vertex, 'required' );
-                unless ($required) {
-                    $G1->delete_edge( $required_vertex, $neighbor_vertex );
-                    $deleted_edges++;
-                    output("Deleted edge $required_vertex=$neighbor_vertex " .
-                      "because vertex $required_vertex has degree==2 in the " .
-                      "required graph.<BR/>");
-                }
+        next if $required_graph->degree($required_vertex) != 2;
+        foreach my $neighbor_vertex ( $G1->neighbors($required_vertex) ) {
+            my $required =
+                $G1->get_edge_attribute( $required_vertex,
+                                         $neighbor_vertex, 'required' );
+            unless ($required) {
+                $G1->delete_edge( $required_vertex, $neighbor_vertex );
+                $deleted_edges++;
+                output("Deleted edge $required_vertex=$neighbor_vertex " .
+                       "because vertex $required_vertex has degree==2 " .
+                       "in the required graph.<BR/>");
             }
         }
     }
 
-    if ($deleted_edges) {
-        output("Here is the graph of required edges:<BR/>");
-        output( $required_graph, { required => 1 } );
-    }
-
-    return $deleted_edges;
+    return ( $deleted_edges, $G1 );
 }
 
 ##########################################################################

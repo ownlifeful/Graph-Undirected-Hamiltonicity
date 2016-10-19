@@ -179,7 +179,7 @@ sub is_hamiltonian {
         ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);
         return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
 
-        $deleted_edges = delete_non_required_neighbors( $required_graph, $G1 );
+        ( $deleted_edges, $G1 ) = delete_non_required_neighbors( $required_graph, $G1 );
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
             output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
