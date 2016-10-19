@@ -15,6 +15,11 @@ t/001-test_connected.t
 t/001-test_all.t
 t/002-graph_is_hamiltonian.t
 t/003-spoof_canonical_hamiltonian_graph.t
+t/003-spoof_known_hamiltonian_graph.t
+t/004-transform_add_random_edges.t
+t/004-transform_common_neighbors.t
+t/004-transform_delete_non_required_neighbors.t
+t/004-transform_delete_unusable_edges.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
