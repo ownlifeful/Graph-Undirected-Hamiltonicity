@@ -169,9 +169,9 @@ sub is_hamiltonian {
     ( $is_hamiltonian, $reason ) = test_required($required_graph);
     return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
 
-    my $deleted_edges = delete_unusable_edges( $required_graph, $G1 );
+    my $deleted_edges;
+    ( $deleted_edges, $G1 ) = delete_unusable_edges($G1);
     return is_hamiltonian($G1) if $deleted_edges;
-
 
     if ( $required_graph->edges() ) {
         output("Now calling test_required_cyclic()<BR/>"); ### DEBUG

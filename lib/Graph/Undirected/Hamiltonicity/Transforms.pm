@@ -144,23 +144,28 @@ sub get_required_graph {
 sub delete_unusable_edges {
 
     ### Delete edge connecting neighbors of degree 2 vertex.
-    my ( $required_graph, $G1 ) = @_;
+    my ( $G ) = @_;
+    my $graph_cloned = 0;
     my $deleted_edges = 0;
-
-    foreach my $vertex ( $G1->vertices() ) {
-        if ( $G1->degree($vertex) == 2 ) {
-            my @neighbors =
-                $G1->neighbors($vertex);    ### There are only two neighbors.
-            if ( $G1->has_edge(@neighbors) ) {
-                $G1->delete_edge(@neighbors);
-                $deleted_edges++;
-                output("Deleted edge " . ( join '=', @neighbors ) .
-                    ", between neighbors of a degree 2 vertex ($vertex)<BR/>");
+    my $G1;
+    foreach my $vertex ( $G->vertices() ) {
+        next if $G->degree($vertex) != 2;
+        my @neighbors = $G->neighbors($vertex);
+            
+        if ( $G->has_edge(@neighbors) ) {
+            if ( ! $graph_cloned ) {
+                $G1 = $G->deep_copy_graph();
+                $graph_cloned = 1;
             }
+
+            $G1->delete_edge(@neighbors);
+            $deleted_edges++;
+            output("Deleted edge " . ( join '=', @neighbors ) .
+                   ", between neighbors of a degree 2 vertex ($vertex)<BR/>");
         }
     }
 
-    return $deleted_edges;
+    return ( $deleted_edges, $deleted_edges ? $G1 : $G );
 }
 
 ##########################################################################
@@ -171,8 +176,9 @@ sub delete_non_required_neighbors {
     ### Delete all non-required edges adjacent to vertices adjacent 
     ### to 2 required edges.
 
-    my $G1 = $G->deep_copy_graph();
+    my $G1;
 
+    my $graph_cloned = 0;
     my $deleted_edges = 0;
     foreach my $required_vertex ( $required_graph->vertices() ) {
         next if $required_graph->degree($required_vertex) != 2;
@@ -181,6 +187,12 @@ sub delete_non_required_neighbors {
                 $G1->get_edge_attribute( $required_vertex,
                                          $neighbor_vertex, 'required' );
             unless ($required) {
+
+                if ( ! $graph_cloned ) {
+                    $G1 = $G->deep_copy_graph();
+                    $graph_cloned = 1;
+                }
+
                 $G1->delete_edge( $required_vertex, $neighbor_vertex );
                 $deleted_edges++;
                 output("Deleted edge $required_vertex=$neighbor_vertex " .
@@ -190,7 +202,7 @@ sub delete_non_required_neighbors {
         }
     }
 
-    return ( $deleted_edges, $G1 );
+    return ( $deleted_edges, $deleted_edges ? $G1 : $G );
 }
 
 ##########################################################################
