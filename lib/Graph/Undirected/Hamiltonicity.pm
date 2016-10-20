@@ -4,7 +4,6 @@ use 5.006;
 use strict;
 use warnings;
 
-use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity::Output qw(output);
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
@@ -26,9 +25,7 @@ our $VERSION = '0.01';
 
 our @EXPORT = qw(graph_is_hamiltonian); # exported by default
 
-our @EXPORT_OK = qw(
-                graph_is_hamiltonian
-                );
+our @EXPORT_OK = qw(graph_is_hamiltonian);
 
 our %EXPORT_TAGS = (
     all       =>  \@EXPORT_OK,

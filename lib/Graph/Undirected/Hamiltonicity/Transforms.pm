@@ -228,29 +228,29 @@ sub shrink_required_walks_longer_than_2_edges {
 ##########################################################################
 
 sub swap_vertices {
-    my ( $G1, $vertex_1, $vertex_2 ) = @_;
+    my ( $G, $vertex_1, $vertex_2 ) = @_;
 
-    my $G = $G1->deep_copy_graph();
+    my $G1 = $G->deep_copy_graph();
 
     my %common_neighbors =
-      common_neighbors( $G, $vertex_1, $vertex_2 );
+      common_neighbors( $G1, $vertex_1, $vertex_2 );
 
-    my @vertex_1_neighbors = grep { $_ != $vertex_2 } $G->neighbors($vertex_1);
-    my @vertex_2_neighbors = grep { $_ != $vertex_1 } $G->neighbors($vertex_2);
+    my @vertex_1_neighbors = grep { $_ != $vertex_2 } $G1->neighbors($vertex_1);
+    my @vertex_2_neighbors = grep { $_ != $vertex_1 } $G1->neighbors($vertex_2);
 
     foreach my $neighbor_vertex ( @vertex_1_neighbors ) {
       next if $common_neighbors{$neighbor_vertex};
-      $G->delete_edge($neighbor_vertex, $vertex_1);
-      $G->add_edge($neighbor_vertex, $vertex_2);
+      $G1->delete_edge($neighbor_vertex, $vertex_1);
+      $G1->add_edge($neighbor_vertex, $vertex_2);
     }
 
     foreach my $neighbor_vertex ( @vertex_2_neighbors ) {
       next if $common_neighbors{$neighbor_vertex};
-      $G->delete_edge($neighbor_vertex, $vertex_2);
-      $G->add_edge($neighbor_vertex, $vertex_1);
+      $G1->delete_edge($neighbor_vertex, $vertex_2);
+      $G1->add_edge($neighbor_vertex, $vertex_1);
     }
 
-    return $G;
+    return $G1;
 }
 
 ##########################################################################
@@ -307,13 +307,10 @@ sub shuffle {
     # everyday i'm shufflin'
 
     my ( $G ) = @_;
-
     my $G1 = $G->deep_copy_graph();
+    my $v = scalar($G1->vertices());
 
-    my @vertices = $G1->vertices();
-    my $v = scalar(@vertices);
-
-    my $max_times_to_shuffle = rand ( $v * $v );
+    my $max_times_to_shuffle = int( rand ( $v * $v ) );
     my $shuffles = 0;
     while ( $shuffles < $max_times_to_shuffle ) {
 

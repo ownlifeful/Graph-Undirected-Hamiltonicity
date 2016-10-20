@@ -3,15 +3,12 @@ use 5.006;
 use strict;
 use warnings;
 
-use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
 
 use Test::More;
 
 plan tests => 15;
-
-$ENV{HC_OUTPUT_FORMAT} = 'none';
 
 while ( defined ( my $line = <DATA> ) ) {
     next if $line =~ /^\s*#/; ### skip comments

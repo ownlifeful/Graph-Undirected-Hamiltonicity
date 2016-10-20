@@ -2,8 +2,7 @@
 
 use Getopt::Long;
 
-use Graph::Undirected;
-use Graph::Undirected::Hamiltonicity qw(:all);
+use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
 use Graph::Undirected::Hamiltonicity::Spoof qw(spoof_known_hamiltonian_graph);
 
