@@ -7,7 +7,7 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph &get_requir
 
 use Test::More;
 
-plan tests => 54;
+plan tests => 57;
 
 my $herschel_graph_text = '0=1,0=10,0=3,0=9,10=6,10=8,1=2,1=4,2=5,2=9,3=4,3=6,4=5,4=7,5=8,6=7,7=8,8=9';
 
@@ -42,5 +42,8 @@ foreach my $test ( @tests ) {
     foreach my $edge_ref ( $output_graph->edges() ) {
         isnt( $output_graph->get_edge_attribute(@$edge_ref,'required'), 1, "only edges in the required graph can be marked required.");
     }
+
+    is("$output_graph", "$G", "the graph is intact, except for attributes.");
+
 }
 
