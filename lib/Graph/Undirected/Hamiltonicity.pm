@@ -185,7 +185,7 @@ sub is_hamiltonian {
             return is_hamiltonian($G1);
         }
 
-        my ( $shrank_graph, $G2 ) =
+        my ( $shrank_graph, $G1 ) =
             shrink_required_walks_longer_than_2_edges( $required_graph, $G1 );
         if ($shrank_graph) {
             if ( $shrank_graph == 1 ) {
@@ -195,7 +195,7 @@ sub is_hamiltonian {
                 output("Shrank the graph by removing $shrank_graph edges and vertices.<BR/>");
             }
 
-            return is_hamiltonian($G2);
+            return is_hamiltonian($G1);
         }
 
     }

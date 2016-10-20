@@ -194,7 +194,7 @@ sub shrink_required_walks_longer_than_2_edges {
     my $G1 = $G->deep_copy_graph();
     my $deleted_edges = 0;
 
-    foreach my $vertex ( $required_graph->vertices() ) {
+    foreach my $vertex ( sort { $a <=> $b } $required_graph->vertices() ) {
         next unless $required_graph->degree($vertex) == 2;
 
         my @neighbors = $required_graph->neighbors($vertex);
@@ -205,12 +205,12 @@ sub shrink_required_walks_longer_than_2_edges {
         unless ( $G1->has_edge(@neighbors) ) {
             $required_graph->add_edge(@neighbors);
             $G1->add_edge(@neighbors);
-            $G1->set_edge_attribute( @neighbors, 'required', 1 );
             output("Added edge $neighbors[0]=$neighbors[1] and ");
         }
 
         output("deleted vertex $vertex because it was part of a " .
                "long required walk.<BR/>");
+        $G1->set_edge_attribute( @neighbors, 'required', 1 );
         $required_graph->delete_vertex($vertex);
         $G1->delete_vertex($vertex);
         $deleted_edges++;
