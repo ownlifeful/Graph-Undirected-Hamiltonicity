@@ -16,8 +16,6 @@ our @EXPORT_OK =  qw(
                      &delete_unusable_edges
                      &get_required_graph
                      &graph_to_bitvector
-                     &mark_required_edges
-                     &maximize
                      &shrink_required_walks_longer_than_2_edges
                      &shuffle
                      &string_to_graph
@@ -58,7 +56,7 @@ Perhaps a little code snippet.
 A list of functions that can be exported.  You can delete this section
 if you don't export anything, such as for a purely object-oriented module.
 
-=head1 SUBROUTINES/METHODS
+=head1 SUBROUTINES
 
 =head2 function1
 
@@ -70,25 +68,30 @@ sub function1 {
 ##################################################### BEGIN subs
 
 
-sub mark_required_edges {
+sub get_required_graph {
     ### For each vertex in the graph that has degree == 2,
     ### mark the edges adjacent to the vertex as "required".
 
-    my ($G1) = @_;
+    my ($G) = @_;
 
     Graph::Undirected::Hamiltonicity::output("Beginning a sweep to mark all edges adjacent to degree 2 "
         . "vertices as required:<BR/>");
 
+    my $G1 = $G->deep_copy_graph();
+    output($G1);
 
-    output($G1); ### DEBUG: REMOVE THIS!!!!!!!!!!!!!!
+    my @vertices = sort { $a <=> $b } $G1->vertices();
+    my $required_graph = new Graph::Undirected( vertices => \@vertices );
 
-    foreach my $vertex ( sort { $a <=> $b } $G1->vertices() ) {
+    foreach my $vertex ( @vertices ) {
         my $degree = $G1->degree($vertex);
         output("Vertex $vertex : Degree=[$degree] ");
 
         if ( $degree == 2 ) {
             output("<UL>");
             foreach my $neighbor_vertex ( $G1->neighbors($vertex) ) {
+
+                $required_graph->add_edge($vertex, $neighbor_vertex);
 
                 if ($G1->get_edge_attribute(
                         $vertex, $neighbor_vertex, 'required'
@@ -112,31 +115,8 @@ sub mark_required_edges {
         }
     }
 
-}
+    return ( $required_graph, $G1 );
 
-##########################################################################
-
-sub get_required_graph {
-    ### Return a graph with all the vertices of the original graph,
-    ### but only the edges marked "required".
-
-    my ($G1) = @_;
-
-    my @vertices = $G1->vertices;
-
-    ### Create a graph made of only required edges.
-    my $required_graph = new Graph::Undirected( vertices => \@vertices );
-    my @E1 = $G1->edges();
-    foreach my $edge_ref (@E1) {
-        if ( $G1->get_edge_attribute( @$edge_ref, 'required' ) ) {
-            ### Construct the graph of required edges.
-            unless ( $required_graph->has_edge(@$edge_ref) ) {
-                $required_graph->add_edge(@$edge_ref);
-            }
-        }
-    }
-
-    return $required_graph;
 }
 
 ##########################################################################
@@ -285,106 +265,6 @@ sub common_neighbors {
     }
 
     return %common_neighbors;
-}
-
-##########################################################################
-
-sub graph_to_bitvector {
-   ### return a Bitvector derived from a given graph
-
-    my ( $G ) = @_;
-    my @vertices = sort { $a <=> $b } $G->vertices();
-    my $v = scalar(@vertices);
-    my $max_edges = ( $v * $v - $v ) / 2;
-    my $bitvector = Bit::Vector->new( $max_edges );
-    my $bit_index = $max_edges - 1;
-
-    my $y1 = $vertices[1];
-    my $y2 = scalar(@vertices) - 1; # $#vertices is deprecated.
-
-    while ( $y1 < $y2 ) {
-        my $y = $y2;
-        for (my $x = 0; $x < $v - 1; $x++ ) {
-            last if $y == $v;
-            if ( $G->has_edge( $vertices[$x], $vertices[$y] ) ) {
-                $bitvector->Bit_On( $bit_index );
-            }
-
-            $bit_index--;
-            $y++;
-        }
-
-        $y = $y1;
-        for (my $x = 0; $x < $v - 1; $x++ ) {
-            last if $y == $v;
-            if ( $G->has_edge( $vertices[$x], $vertices[$y] ) ) {
-                $bitvector->Bit_On( $bit_index );
-            }
-
-            $bit_index--;
-            $y++;
-        }
-
-        $y1++;
-        $y2--;
-    }
-
-    return $bitvector;
-}
-
-##########################################################################
-
-
-sub maximize {
-    my ( $G, @maximization_steps ) = @_;
-    my @vertices = sort { $a <=> $b } $G->vertices();
-
-    output("Now trying to maximize the graph value.<BR/>");
-    output($G);
-
-    my $binary_string = graph_to_bitvector($G)->to_Bin();
-
-    my %isomorphs;
-    foreach my $i ( @vertices ) {
-        foreach my $j ( @vertices ) {
-            last if $i == $j;
-            my $G2 = swap_vertices($G, $i, $j);
-
-            ### Reconsider this.
-#           my ( $is_hamiltonian, $reason ) = test_canonical($G2);
-#           if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
-#               return $G2;
-#           }
-
-            my $swapped_binary_string = graph_to_bitvector($G2)->to_Bin();
-            if ( $swapped_binary_string > $binary_string ) {
-                $isomorphs{ "$i=$j" } = $swapped_binary_string;
-            }
-        }
-    }
-
-    my @sorted_isomorphs = sort {
-        $isomorphs{$b} <=> $isomorphs{$a}
-    } keys %isomorphs;
-
-    if ( scalar(@sorted_isomorphs) > 0 ) {
-        my ( $i, $j ) = split ( /=/, $sorted_isomorphs[ 0 ] ); # -1 means greedy, 0 means non-greedy    
-        my $next_highest_graph = swap_vertices($G, $i, $j );
-
-        push @maximization_steps, $i, $j;
-
-        output("Swapped vertices $i and $j<BR/>");
-        output("<CODE>$binary_string</CODE><BR/>");
-        output("<CODE>" . ( graph_to_bitvector($next_highest_graph)->to_Bin() ) .
-               "</CODE><BR/>");
-        return maximize($next_highest_graph, @maximization_steps);
-    }
-
-    output("The maximized graph is:");
-    output($G);
-
-    return ( $G, @maximization_steps );
-
 }
 
 ##########################################################################

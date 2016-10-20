@@ -154,10 +154,9 @@ sub is_hamiltonian {
             unless $is_hamiltonian == $DONT_KNOW;
     }
 
-    mark_required_edges($G1);
-
     ### Create a graph made of only required edges.
-    my $required_graph = get_required_graph($G1);
+    my $required_graph;
+    ( $required_graph, $G1 ) = get_required_graph($G1);
 
     if ( scalar( $required_graph->edges() ) ) {
         output("required graph:");
@@ -199,36 +198,8 @@ sub is_hamiltonian {
             return is_hamiltonian($G2);
         }
 
-        ####################### BEGIN
-#        my @maximization_steps;
-#        ( $required_graph, @maximization_steps ) = maximize($required_graph);
-#
-#        output("The maximized required graph is as shown below:<BR/>");
-#        output("$required_graph<BR/>" );
-#        output( $required_graph, { required => 1 } );
-#
-#        my $maximized_flag = scalar(@maximization_steps) ? 1 : 0;
-#
-#        while ( scalar(@maximization_steps) ) {
-#            my $i = shift @maximization_steps;
-#            my $j = shift @maximization_steps;
-#            $G1 = swap_vertices($G1, $i, $j);
-#        }
-#
-#        if ( $maximized_flag ) {
-#            mark_required_edges($G1);
-#            output("The graph with the same transforms applied, is as shown below:<BR/>");
-#            output($G1);
-#        }
-#
-        ####################### END
-
     }
-
-    ( $is_hamiltonian, $reason ) = test_canonical($G1);
-    return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
     
-    ### zzz
     output("Now running an exhaustive, recursive, and conclusive search, only slightly better than brute force.<BR/>"); ### DEBUG
 
     my %gain;
@@ -289,7 +260,7 @@ sub is_hamiltonian {
     }
 
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN, "The graph passed all tests." );
+    return ( $GRAPH_IS_NOT_HAMILTONIAN, "The graph passed all tests for Hamiltonicity." );
 
 }
 
