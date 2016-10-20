@@ -74,8 +74,8 @@ sub get_required_graph {
 
     my ($G) = @_;
 
-    Graph::Undirected::Hamiltonicity::output("Beginning a sweep to mark all edges adjacent to degree 2 "
-        . "vertices as required:<BR/>");
+    output("Beginning a sweep to mark all edges adjacent to degree 2 "
+           . "vertices as required:<BR/>");
 
     my $G1 = $G->deep_copy_graph();
     output($G1);
@@ -116,7 +116,6 @@ sub get_required_graph {
     }
 
     return ( $required_graph, $G1 );
-
 }
 
 ##########################################################################
