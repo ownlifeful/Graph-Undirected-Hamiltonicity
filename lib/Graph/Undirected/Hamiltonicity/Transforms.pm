@@ -80,7 +80,7 @@ sub get_required_graph {
     my $G1 = $G->deep_copy_graph();
     output($G1);
 
-    my @vertices = sort { $a <=> $b } $G1->vertices();
+    my @vertices = $G1->vertices();
     my $required_graph = new Graph::Undirected( vertices => \@vertices );
 
     foreach my $vertex ( @vertices ) {
@@ -291,7 +291,7 @@ sub string_to_graph {
         }
     }
 
-    my @vertices = sort { $a <=> $b } keys %vertices;
+    my @vertices = keys %vertices;
     my $G = new Graph::Undirected( vertices => \@vertices );
 
     foreach my $edge_ref ( @edges ) {

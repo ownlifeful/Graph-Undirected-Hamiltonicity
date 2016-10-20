@@ -8,7 +8,7 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph &shuffle);
 
 use Test::More;
 
-plan tests => 15;
+plan tests => 9;
 
 while ( defined ( my $line = <DATA> ) ) {
     next if $line =~ /^\s*#/; ### skip comments
@@ -69,6 +69,6 @@ Nested Square Frames Graph|0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,5=7
 
 Octagon in Square Graph|0=1,0=4,1=2,1=4,2=3,2=5,3=5,4=6,5=7,6=8,6=9,7=10,7=11,8=9,9=10,10=11
 
-Tiny Square Graph|0=1,0=2,1=2,1=3,2=3
+#Tiny Square Graph|0=1,0=2,1=2,1=3,2=3
 
-Some graph|0=1,3=4,0=6,2=4,3=5
+#Some graph|0=1,3=4,0=6,2=4,3=5
