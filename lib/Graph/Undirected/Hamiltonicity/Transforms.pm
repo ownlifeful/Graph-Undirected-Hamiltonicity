@@ -191,7 +191,8 @@ sub delete_non_required_neighbors {
 sub shrink_required_walks_longer_than_2_edges {
     my ( $required_graph, $G ) = @_;
 
-    my $G1 = $G->deep_copy_graph();
+    my $G1;
+    my $graph_cloned = 0;
     my $deleted_edges = 0;
 
     foreach my $vertex ( sort { $a <=> $b } $required_graph->vertices() ) {
@@ -201,6 +202,11 @@ sub shrink_required_walks_longer_than_2_edges {
         next
             if (( $required_graph->degree( $neighbors[0] ) == 1 )
             and ( $required_graph->degree( $neighbors[1] ) == 1 ) );
+
+        if ( ! $graph_cloned ) {
+            $G1 = $G->deep_copy_graph();
+            $graph_cloned = 1;
+        }
 
         unless ( $G1->has_edge(@neighbors) ) {
             $required_graph->add_edge(@neighbors);
@@ -216,7 +222,7 @@ sub shrink_required_walks_longer_than_2_edges {
         $deleted_edges++;
     }
 
-    return ( $deleted_edges, $G1 );
+    return ( $deleted_edges, $deleted_edges ? $G1 : $G );
 }
 
 ##########################################################################
