@@ -124,7 +124,6 @@ sub delete_unusable_edges {
 
     ### Delete edge connecting neighbors of degree 2 vertex.
     my ( $G ) = @_;
-    my $graph_cloned = 0;
     my $deleted_edges = 0;
     my $G1;
     foreach my $vertex ( $G->vertices() ) {
@@ -132,10 +131,9 @@ sub delete_unusable_edges {
         my @neighbors = $G->neighbors($vertex);
             
         if ( $G->has_edge(@neighbors) ) {
-            if ( ! $graph_cloned ) {
-                $G1 = $G->deep_copy_graph();
-                $graph_cloned = 1;
-            }
+
+            ### Clone graph lazily
+            $G1 //= $G->deep_copy_graph();
 
             next unless $G1->has_edge(@neighbors);
             $G1->delete_edge(@neighbors);
@@ -157,8 +155,6 @@ sub delete_non_required_neighbors {
     ### to 2 required edges.
 
     my $G1;
-
-    my $graph_cloned = 0;
     my $deleted_edges = 0;
     foreach my $required_vertex ( $required_graph->vertices() ) {
         next if $required_graph->degree($required_vertex) != 2;
@@ -168,10 +164,8 @@ sub delete_non_required_neighbors {
                                         $neighbor_vertex, 'required' );
             unless ($required) {
 
-                if ( ! $graph_cloned ) {
-                    $G1 = $G->deep_copy_graph();
-                    $graph_cloned = 1;
-                }
+                ### Clone graph lazily
+                $G1 //= $G->deep_copy_graph();
 
                 next unless $G1->has_edge( $required_vertex, $neighbor_vertex );
                 $G1->delete_edge( $required_vertex, $neighbor_vertex );
@@ -192,7 +186,6 @@ sub shrink_required_walks_longer_than_2_edges {
     my ( $required_graph, $G ) = @_;
 
     my $G1;
-    my $graph_cloned = 0;
     my $deleted_edges = 0;
 
     foreach my $vertex ( sort { $a <=> $b } $required_graph->vertices() ) {
@@ -203,10 +196,8 @@ sub shrink_required_walks_longer_than_2_edges {
             if (( $required_graph->degree( $neighbors[0] ) == 1 )
             and ( $required_graph->degree( $neighbors[1] ) == 1 ) );
 
-        if ( ! $graph_cloned ) {
-            $G1 = $G->deep_copy_graph();
-            $graph_cloned = 1;
-        }
+        ### Clone graph lazily
+        $G1 //= $G->deep_copy_graph();
 
         unless ( $G1->has_edge(@neighbors) ) {
             $required_graph->add_edge(@neighbors);
@@ -221,6 +212,8 @@ sub shrink_required_walks_longer_than_2_edges {
         $G1->delete_vertex($vertex);
         $deleted_edges++;
     }
+
+    output("Deleted $deleted_edges edges to shrink the graph.") if $deleted_edges;
 
     return ( $deleted_edges, $deleted_edges ? $G1 : $G );
 }
