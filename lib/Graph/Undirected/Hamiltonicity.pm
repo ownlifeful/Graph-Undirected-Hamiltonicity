@@ -7,8 +7,6 @@ use warnings;
 use Graph::Undirected::Hamiltonicity::Output qw(output);
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
-use Bit::Vector;
-use Data::Dumper;
 use Exporter qw(import);
 
 =head1 NAME
