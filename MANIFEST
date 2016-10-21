@@ -23,6 +23,7 @@ t/004-transform_delete_unusable_edges.t
 t/004-transform_shrink_required_walks_longer_than_2_edges.t
 t/004-transform_shuffle.t
 t/004-transform_string_to_graph.t
+t/004-transform_swap_vertices.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t

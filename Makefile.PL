@@ -19,7 +19,7 @@ WriteMakefile(
     },
     PREREQ_PM => {
         'Graph'              => '0', # '0.9704',
-        'Exporter'           => '0',
+        'Exporter'           => '0', # '5.68',
 #        'Bit::Vector'        => '0', # '7.4',
 #        'Data::Dumper'       => '0', # '2.145',
 #        'CGI'                => '0', # '4.31',
