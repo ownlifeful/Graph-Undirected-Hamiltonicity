@@ -11,9 +11,9 @@ use Exporter qw(import);
 
 our @EXPORT_OK =  qw(
                      &add_random_edges
-                     &common_neighbors
                      &delete_non_required_neighbors
                      &delete_unusable_edges
+                     &get_common_neighbors
                      &get_required_graph
                      &graph_to_bitvector
                      &shrink_required_walks_longer_than_2_edges
@@ -226,7 +226,7 @@ sub swap_vertices {
     my $G1 = $G->deep_copy_graph();
 
     my %common_neighbors =
-      common_neighbors( $G1, $vertex_1, $vertex_2 );
+      get_common_neighbors( $G1, $vertex_1, $vertex_2 );
 
     my @vertex_1_neighbors = grep { $_ != $vertex_2 } $G1->neighbors($vertex_1);
     my @vertex_2_neighbors = grep { $_ != $vertex_1 } $G1->neighbors($vertex_2);
@@ -248,7 +248,7 @@ sub swap_vertices {
 
 ##########################################################################
 
-sub common_neighbors {
+sub get_common_neighbors {
     my ( $G, $vertex_1, $vertex_2 ) = @_;
 
     my %common_neighbors;
