@@ -240,13 +240,9 @@ sub output_adjacency_matrix_svg {
 
     my %params =
         ( ( defined $hash_ref ) && ( ref $hash_ref ) ) ? %{$hash_ref} : ();
-    my $randomish = $$ . time . int(rand(1000));
 
-    print qq{<?xml version="1.0" standalone="no"?>
-
-<g id="adjacency_matrix_$randomish" 
- style="opacity:1; stroke: black; stroke-opacity: 1">
-};
+    print qq{<?xml version="1.0" standalone="no"?>\n};
+    print qq{<g style="opacity:1; stroke: black; stroke-opacity: 1">\n};
 
     my $square_size = 30;
     my @vertices = sort { $a <=> $b } $G->vertices();
