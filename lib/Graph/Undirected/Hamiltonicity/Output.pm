@@ -169,7 +169,7 @@ sub output_graph_svg {
 
         $vertices_xml .= qq{<circle cx="$x" cy="$y" id="$vertex" r="10" />\n};
         $text_xml     .= q{<text x="};
-        $text_xml     .= $x - 5;
+        $text_xml     .= $x - ( length("$vertex") == 1 ? 5 : 8 );
         $text_xml     .= q{" y="};
         $text_xml     .= $y + 5;
         $text_xml     .= qq{">$vertex</text>\n};
