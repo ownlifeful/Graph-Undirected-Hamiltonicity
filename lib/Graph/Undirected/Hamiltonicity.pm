@@ -255,7 +255,7 @@ sub is_hamiltonian {
     }
 
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN, "The graph passed all tests for Hamiltonicity." );
+    return ( $GRAPH_IS_NOT_HAMILTONIAN, "The graph did not pass any tests for Hamiltonicity." );
 
 }
 
