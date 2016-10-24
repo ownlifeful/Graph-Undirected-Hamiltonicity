@@ -139,7 +139,7 @@ sub get_textarea {
 sub print_instructions {
     print "Please enter an undirected graph's edge list.\n";
     print "e.g., <TT>0=1,1=2,0=2</TT><BR/>\n";
-    print "Each node should be 0, or a positive integer.<BR/>\n";
+    print "Each vertex should be 0, or a positive integer.<BR/>\n";
 }
 
 __END__

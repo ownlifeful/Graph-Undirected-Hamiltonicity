@@ -365,12 +365,16 @@ sub test_required_cyclic_old {
         my $cycle_string = join ', ', @cycle;
         output( $required_graph, { required => 1 } );
 
+        output("cycle_string=[$cycle_string]<BR/>\n"); ### DEBUG
+
         if ( $number_of_vertices_in_cycle < $v ) {
+            output("GRAPH_IS_NOT_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>\n"); ### DEBUG
             return ( $GRAPH_IS_NOT_HAMILTONIAN,
                       "The sub-graph of required edges has a cycle "
                     . "[$cycle_string] with fewer than $v vertices." );
         }
         elsif ( $number_of_vertices_in_cycle == $v ) {
+            output("GRAPH_IS_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>\n"); ### DEBUG
             return ( $GRAPH_IS_HAMILTONIAN,
                       "The sub-graph of required edges has a cycle "
                     . "[$cycle_string] with $v vertices." );

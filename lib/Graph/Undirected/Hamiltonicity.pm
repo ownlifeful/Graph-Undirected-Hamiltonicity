@@ -7,6 +7,8 @@ use warnings;
 use Graph::Undirected::Hamiltonicity::Output qw(output);
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
+
+use Math::Combinatorics;
 use Exporter qw(import);
 
 =head1 NAME
@@ -173,6 +175,7 @@ sub is_hamiltonian {
         ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);
         return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
 
+        output("Now calling deleted_non_required_neighbors()<BR/>"); ### DEBUG
         ( $deleted_edges, $G1 ) = delete_non_required_neighbors( $required_graph, $G1 );
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
@@ -197,66 +200,56 @@ sub is_hamiltonian {
     
     output("Now running an exhaustive, recursive, and conclusive search, only slightly better than brute force.<BR/>"); ### DEBUG
 
-    my %gain;
+    ####################################### BEGIN 2
     foreach my $vertex ( @vertices ) {
-        $gain{$vertex} = $G1->degree($vertex) - $required_graph->degree($vertex);
-    }
+        next unless $G1->degree($vertex) > 2;
 
-    my @sorted_vertices = sort {
-        $gain{$b} <=> $gain{$a}
-        ||
-        $a <=> $b
-    } 
-    grep {
-        $G1->degree($_) > 2
-    } @vertices;
+        my $G2 = $G1->deep_copy_graph();
 
-    foreach my $vertex ( @sorted_vertices ) {
-        my $G3 = $G1->deep_copy_graph();
-        my @neighbors = $G3->neighbors($vertex);
+        my @tentative_combinations = get_tentative_combinations($G2, $required_graph, $vertex);
 
-        output("vertex=$vertex<BR/>"); ### DEBUG
-        output("...has degree=" . $required_graph->degree($vertex) . "; in the required graph<BR/>"); ### DEBUG
-        output("...has neighbors=( " . ( join ", ", @neighbors ) . " )<BR/>"); ### DEBUG
-
-        my @selected_neighbors = ( 1 == $required_graph->degree($vertex) ) 
-            ? ( $required_graph->neighbors($vertex) )
-            : @neighbors;
-
-        output("selected_neighbors=(" . (join ",", @selected_neighbors) . ")<BR/>"); ### DEBUG
-
-        foreach my $protected_vertex_1 ( @selected_neighbors ) {
-            unless ( $G3->has_edge($vertex, $protected_vertex_1) ) {
-                output("<h2>Assertion on line:" . __LINE__ . " failed for $vertex=$protected_vertex_1</h2>"); ### DEBUG
+        foreach my $tentative_edge_pair ( @tentative_combinations ) {
+            foreach my $neighbor ( $G2->neighbors($vertex) ) {
+                next if $neighbor == $tentative_edge_pair->[0];
+                next if $neighbor == $tentative_edge_pair->[1];
+                output("Deleting edge: $vertex=$neighbor<BR/>");
+                $G2->delete_edge($vertex, $neighbor);
             }
 
-            foreach my $protected_vertex_2 ( @neighbors ) {
-                next if $protected_vertex_2 == $protected_vertex_1;
-                unless ( $G3->has_edge($vertex, $protected_vertex_2) ) {
-                    output("<h2>Assertion on line:" . __LINE__ . " failed for $vertex=$protected_vertex_2</h2>"); ### DEBUG
-                }
-                output("Protecting edges: $vertex=$protected_vertex_1, $vertex=$protected_vertex_2<BR/>");
-                foreach my $neighbor ( @neighbors ) {
-                    next if $neighbor == $protected_vertex_1;
-                    next if $neighbor == $protected_vertex_2;
-                    output("Deleting edge: $vertex=$neighbor<BR/>");
-                    $G3->delete_edge($vertex, $neighbor);
-                }
+            output("The Graph with $vertex=" . $tentative_edge_pair->[0] . 
+                   ", $vertex=" . $tentative_edge_pair->[1] . " protected:<BR/>");
+            output($G2);
 
-                output("The Graph with $vertex=$protected_vertex_1, $vertex=$protected_vertex_2 protected:<BR/>");
-                output($G3);
-
-                ( $is_hamiltonian, $reason ) = is_hamiltonian($G3);
-                return ( $is_hamiltonian, $reason )
-                    if $is_hamiltonian == $GRAPH_IS_HAMILTONIAN;
-
+            ( $is_hamiltonian, $reason ) = is_hamiltonian($G2);
+            if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
+                return ( $is_hamiltonian, $reason );
             }
         }
+
     }
+    ####################################### END 2
 
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN, "The graph did not pass any tests for Hamiltonicity." );
 
+}
+
+##########################################################################
+sub get_tentative_combinations {
+    my ($G, $required_graph, $vertex) = @_;
+    my @tentative_combinations;
+    if ( $required_graph->degree($vertex) == 1 ) {
+        my ( $fixed_neighbor ) = $required_graph->neighbors($vertex);
+
+        foreach my $tentative_neighbor ( $G->neighbors($vertex) ) {
+            push @tentative_combinations, [$fixed_neighbor, $tentative_neighbor];
+        }
+
+    } else {
+        @tentative_combinations = combine(2, $G->neighbors($vertex) );
+    }
+
+    return @tentative_combinations;
 }
 
 ##########################################################################
