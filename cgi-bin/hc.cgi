@@ -33,7 +33,7 @@ print start_html(
 print "<br/><br/>\n";
 print start_form( -name => 'mainForm', -action => url( -absolute => 1, -path_info => 0 ) );
 
-my $graph_text = param('graph_text');
+my $graph_text = param('graph_text') // '';
 $graph_text =~ s/[^0-9=,]+//g;
 $graph_text =~ s/([=,])\D+/$1/g;
 $graph_text =~ s/^\D+|\D+$//g;

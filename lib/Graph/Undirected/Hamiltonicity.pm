@@ -201,14 +201,29 @@ sub is_hamiltonian {
     output("Now running an exhaustive, recursive, and conclusive search, only slightly better than brute force.<BR/>"); ### DEBUG
 
     ####################################### BEGIN 2
-    foreach my $vertex ( @vertices ) {
-        next unless $G1->degree($vertex) > 2;
 
-        my $G2 = $G1->deep_copy_graph();
+    use Data::Dumper; ### DEBUG
 
-        my @tentative_combinations = get_tentative_combinations($G2, $required_graph, $vertex);
+    my @undecided_vertices = grep { $G1->degree($_) > 2 } $G1->vertices();
+
+    if ( @undecided_vertices ) {
+        my $vertex = $undecided_vertices[0];
+        my @tentative_combinations = get_tentative_combinations($G1, $required_graph, $vertex);
 
         foreach my $tentative_edge_pair ( @tentative_combinations ) {
+
+            my $G2 = $G1->deep_copy_graph();
+
+            foreach my $i ( 0 .. 1 ) {
+                unless ( $G2->has_edge($vertex, $tentative_edge_pair->[$i] ) ) {
+                    output("<h2>Assertion failed. Missing edge. $vertex=" . $tentative_edge_pair->[$i] ."</h2>\n")  ### DEBUG
+                }
+            }
+
+            output("For vertex=$vertex <PRE>" . Dumper(\@tentative_combinations) . "</PRE><BR/>"); ### DEBUG
+
+            output("For vertex: $vertex, protecting " . ( join ',', map { "$vertex=$_"  } @$tentative_edge_pair ) . "<BR/>"); ### DEBUG
+
             foreach my $neighbor ( $G2->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
@@ -219,6 +234,7 @@ sub is_hamiltonian {
             output("The Graph with $vertex=" . $tentative_edge_pair->[0] . 
                    ", $vertex=" . $tentative_edge_pair->[1] . " protected:<BR/>");
             output($G2);
+
 
             ( $is_hamiltonian, $reason ) = is_hamiltonian($G2);
             if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
@@ -242,6 +258,7 @@ sub get_tentative_combinations {
         my ( $fixed_neighbor ) = $required_graph->neighbors($vertex);
 
         foreach my $tentative_neighbor ( $G->neighbors($vertex) ) {
+            next if $fixed_neighbor == $tentative_neighbor;
             push @tentative_combinations, [$fixed_neighbor, $tentative_neighbor];
         }
 

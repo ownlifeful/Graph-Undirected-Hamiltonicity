@@ -92,8 +92,8 @@ sub output {
             ### Strip out HTML
             $input =~ s@<LI>@* @gi;
             $input =~ s@<BR/>@@gi;
-            $input =~ s@</?(LI|UL|OL|CODE|TT)>@@gi;
-            $input =~ s@<HR\s+NOSHADE>@=================@gi;
+            $input =~ s@</?(LI|UL|OL|CODE|TT|PRE)>@@gi;
+            $input =~ s@<HR[^>]*?>@=================@gi;
             print $input, "\n";
         }
     } else {
