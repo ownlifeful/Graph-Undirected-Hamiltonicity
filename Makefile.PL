@@ -20,8 +20,8 @@ WriteMakefile(
     PREREQ_PM => {
         'Graph'               => '0', # '0.9704',
         'Exporter'            => '0', # '5.68',
-        'Math::Combinatorics' => '0', # '0.09',
         'CGI'                 => '0', # '4.31',
+#        'Math::Combinatorics' => '0', # '0.09',
 #        'Bit::Vector'         => '0', # '7.4',
 #        'Data::Dumper'        => '0', # '2.145',
 #	 'Readonly'            => '0', # '2.05',

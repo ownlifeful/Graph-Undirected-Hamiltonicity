@@ -8,7 +8,6 @@ use Graph::Undirected::Hamiltonicity::Output qw(output);
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
 
-use Math::Combinatorics;
 use Exporter qw(import);
 
 =head1 NAME
@@ -263,7 +262,12 @@ sub get_tentative_combinations {
         }
 
     } else {
-        @tentative_combinations = combine(2, $G->neighbors($vertex) );
+        my @neighbors = $G->neighbors($vertex);
+        for ( my $i = 0; $i < scalar(@neighbors) - 1; $i++ ) {
+            for ( my $j = $i + 1; $j < scalar(@neighbors); $j++ ) {
+                push @tentative_combinations, [ $neighbors[$i], $neighbors[$j] ];
+            }
+        }
     }
 
     return @tentative_combinations;
