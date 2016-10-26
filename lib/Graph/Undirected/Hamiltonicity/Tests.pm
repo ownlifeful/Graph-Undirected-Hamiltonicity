@@ -289,7 +289,7 @@ sub test_graph_bridge {
     my ($G) = @_;
 
     foreach my $edge ( $G->edges() ) {
-        my $G1 = $G->deep_copy_graph;
+        my $G1 = $G->copy_graph;
         $G1->delete_edge($edge);
 
         unless ( $G1->is_connected() ) {
