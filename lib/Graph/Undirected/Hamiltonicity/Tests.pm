@@ -261,7 +261,7 @@ sub test_articulation_vertex {
     my ($G) = @_;
 
     foreach my $vertex ( $G->vertices() ) {
-        my $G1 = $G->deep_copy_graph;
+        my $G1 = $G->copy_graph();
         $G1->delete_vertex($vertex);
         unless ( $G1->is_connected() ) {
             return ( $GRAPH_IS_NOT_HAMILTONIAN,
