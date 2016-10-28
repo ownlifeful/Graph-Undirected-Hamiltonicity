@@ -110,7 +110,9 @@ To get more detailed help:
 
     perl bin/hamilton.pl --help
 
+# SUPPORT
 
+RT, CPAN's request tracker ([report bugs here](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Graph-Undirected-Hamiltonicity))
 
 
 # AUTHOR
