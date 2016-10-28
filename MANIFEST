@@ -5,8 +5,10 @@ lib/Graph/Undirected/Hamiltonicity/Spoof.pm
 lib/Graph/Undirected/Hamiltonicity/Tests.pm
 lib/Graph/Undirected/Hamiltonicity/Transforms.pm
 Makefile.PL
+LICENSE
 MANIFEST			This list of files
 README
+README.md
 bin/hamilton.pl
 t/000-load.t
 t/001-test_trivial.t
