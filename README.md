@@ -1,29 +1,15 @@
-# Graph::Undirected::Hamiltonicity
-Set of Perl modules to determine the Hamiltonicity of a given undirected graph.
+# NAME
 
-## INSTALLATION
+Graph::Undirected::Hamiltonicity
+- set of Perl modules to determine the Hamiltonicity of a given undirected graph.
 
-To install the core module:
+# VERSION
 
-
-    perl Makefile.PL
-    make
-    make test
-    make install
+version 0.01
 
 
+# SYNOPSIS
 
-
-To install the optional CGI script, simply copy the script to the appropriate location for your web server. For example, on macOS:
-
-
-    sudo cp cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
-
-
-## USAGE
-
-
-### Programmatic interface:
 
     use Graph::Undirected;
     use Graph::Undirected::Hamiltonicity;
@@ -44,6 +30,55 @@ To install the optional CGI script, simply copy the script to the appropriate lo
 
     print $result->{reason}, "\n";
     # prints a brief reason for the conclusion.
+
+# DESCRIPTION
+
+
+This module is dedicated to the Quixotic quest of determining whether "P=NP".
+It attempts to decide whether a given `Graph::Undirected` contains a Hamiltonian Cycle,
+using a series of polynomial time tests.
+
+The input graph is systematically simplified and traversed in a series of recursive tests.
+The underlying algorithm is non-deterministic. This module is not object-oriented, though once work on it is sufficiently advanced, it could be rolled up into an `is_hamiltonian()` method in `Graph::Undirected`. For now, it serves as a framework for explorers of this frontier of thought.
+
+The module includes several utility subroutines which might be generally useful in spoofing or transforming graphs. These subroutines are organized by broad functional area into submodules, and can be imported individually by name.
+
+To get per-module help:
+
+
+    perldoc Graph::Undirected::Hamiltonicity
+    perldoc Graph::Undirected::Hamiltonicity::Tests
+    perldoc Graph::Undirected::Hamiltonicity::Spoof
+    perldoc Graph::Undirected::Hamiltonicity::Transforms
+    perldoc Graph::Undirected::Hamiltonicity::Output
+
+## INSTALLATION
+
+To install the core module:
+
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+
+
+
+To install the optional CGI script, simply copy the script to the appropriate location for your web server.
+
+
+On macOS:
+
+
+    sudo cp cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
+
+On CentOS ( and presumably RHEL and Fedora Linux ):
+
+    sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
+
+
+## USAGE
 
 ### CGI script:
 The included CGI script ( `cgi-bin/hc.cgi` ) lets you visualize and edit graphs through a browser. It draws graphs using inline SVG.
@@ -77,23 +112,15 @@ To get more detailed help:
     perl bin/hamilton.pl --help
 
 
-To get per-module help:
 
 
-    perldoc Graph::Undirected::Hamiltonicity
-    perldoc Graph::Undirected::Hamiltonicity::Tests
-    perldoc Graph::Undirected::Hamiltonicity::Spoof
-    perldoc Graph::Undirected::Hamiltonicity::Transforms
-    perldoc Graph::Undirected::Hamiltonicity::Output
-
-
-## AUTHOR
+# AUTHOR
 
 
 Ashwin Dixit &lt;ashwin at ownlifeful dot com&gt;
 
 
-## COPYRIGHT AND LICENSE
+# COPYRIGHT AND LICENSE
 
 
 This software is copyright (c) 2016 by Ashwin Dixit.
