@@ -208,15 +208,19 @@ sub is_hamiltonian {
 
     if ( @undecided_vertices ) {
 
-        my ( $chosen_vertex, $chosen_vertex_count );
+        ### Choose the vertex with the highest degree first
+        my ( $chosen_vertex, $chosen_vertex_degree, $chosen_vertex_required_degree );
         foreach my $vertex ( @undecided_vertices ) {
-            my $count  = get_undecided_count($G1, $required_graph, $vertex);
-            if ( ( ! defined $chosen_vertex_count ) or 
-                 ( $count < $chosen_vertex_count ) or
-                 ( ($count == $chosen_vertex_count) and ( $vertex < $chosen_vertex ) )
+            my $degree = $G1->degree($vertex);
+            my $required_degree = $required_graph->degree($vertex);
+            if ( ( ! defined $chosen_vertex_degree ) or 
+                 ( $degree > $chosen_vertex_degree ) or
+                 ( ($degree == $chosen_vertex_degree) and ( $required_degree > $chosen_vertex_required_degree ) ) or
+                 ( ($degree == $chosen_vertex_degree) and ( $required_degree == $chosen_vertex_required_degree ) and ( $vertex < $chosen_vertex ) )
                 ) {
                 $chosen_vertex = $vertex;
-                $chosen_vertex_count = $count;
+                $chosen_vertex_degree = $degree;
+                $chosen_vertex_required_degree = $required_degree;
             }
         }
 

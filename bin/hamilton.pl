@@ -9,6 +9,8 @@ use Graph::Undirected::Hamiltonicity::Spoof qw(spoof_known_hamiltonian_graph);
 use warnings;
 use strict;
 
+$| = 1; # piping hot pipes
+
 =head2
 --graph_text=
 --graph_file=
