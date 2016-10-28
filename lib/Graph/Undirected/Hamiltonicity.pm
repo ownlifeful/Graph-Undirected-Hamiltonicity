@@ -237,7 +237,7 @@ sub is_hamiltonian {
                 }
             }
 
-            output("For vertex=$vertex <PRE>" . Dumper(\@tentative_combinations) . "</PRE><BR/>"); ### DEBUG
+            ### output("For vertex=$vertex <PRE>" . Dumper(\@tentative_combinations) . "</PRE><BR/>"); ### DEBUG
 
             output("For vertex: $vertex, protecting " . ( join ',', map { "$vertex=$_"  } @$tentative_edge_pair ) . "<BR/>"); ### DEBUG
 
