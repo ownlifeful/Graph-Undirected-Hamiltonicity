@@ -124,4 +124,4 @@ Ashwin Dixit &lt;ashwin at ownlifeful dot com&gt;
 
 This software is copyright (c) 2016 by Ashwin Dixit.
 
-This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself. See LICENSE.
+This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
