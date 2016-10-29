@@ -1,6 +1,6 @@
 # NAME
 
-Graph::Undirected::Hamiltonicity - set of Perl modules to determine the Hamiltonicity of a given undirected graph.
+Graph::Undirected::Hamiltonicity - determine the Hamiltonicity of a given undirected graph.
 
 # VERSION
 
