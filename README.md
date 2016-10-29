@@ -33,12 +33,10 @@ version 0.01
 # DESCRIPTION
 
 
-This module is dedicated to the Quixotic quest of determining whether "P=NP".
-It attempts to decide whether a given `Graph::Undirected` contains a Hamiltonian Cycle,
-using a series of polynomial time tests.
+This module is dedicated to the Quixotic quest of determining whether "[P=NP](https://en.wikipedia.org/wiki/P_versus_NP_problem "P versus NP")".
+It attempts to decide whether a given `Graph::Undirected` contains a Hamiltonian Cycle, using a series of polynomial time tests.
 
-The input graph is systematically simplified and traversed in a series of recursive tests.
-The underlying algorithm is non-deterministic. This module is not object-oriented, though once work on it is sufficiently advanced, it could be rolled up into an `is_hamiltonian()` method in `Graph::Undirected`. For now, it serves as a framework for explorers of this frontier of thought.
+The non-deterministic algorithm systematically simplifies and traverses the input graph in a series of recursive tests. This module is not object-oriented, though once work on it is sufficiently advanced, it could be rolled up into an `is_hamiltonian()` method in `Graph::Undirected`. For now, it serves as a framework for explorers of this frontier of Computer Science.
 
 The module includes several utility subroutines which might be generally useful in spoofing or transforming graphs. These subroutines are organized by broad functional area into submodules, and can be imported individually by name.
 
@@ -114,6 +112,16 @@ To get more detailed help:
 
 RT, CPAN's request tracker ([report bugs here](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Graph-Undirected-Hamiltonicity))
 
+# SEE ALSO
+
+1. [Graph](http://search.cpan.org/perldoc?Graph "Graph module")
+2. [Hamiltonian Cycle](http://mathworld.wolfram.com/HamiltonianCycle.html "Hamiltonian Cycle")
+3. [P versus NP](https://en.wikipedia.org/wiki/P_versus_NP_problem "P versus NP")
+
+
+# REPOSITORY
+
+[https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity](https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity "github repository")
 
 # AUTHOR
 
