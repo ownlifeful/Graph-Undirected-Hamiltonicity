@@ -12,7 +12,7 @@ use Exporter qw(import);
 
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity - Decide, in Polynomial Time, whether a given Graph::Undirected contains a Hamiltonian Cycle.
+Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected contains a Hamiltonian Cycle.
 
 =head1 VERSION
 
@@ -35,19 +35,18 @@ our %EXPORT_TAGS = (
 =head1 SYNOPSIS
 
 
-This module, which is mostly of esoteric interest, is dedicated to the Quixotic quest of determining whether "P=NP". 
-It attempts to decide whether a given Graph::Undirected contains a Hamiltonian Cycle.
+This module decides whether a given Graph::Undirected contains a Hamiltonian Cycle.
 
     use Graph::Undirected;
     use Graph::Undirected::Hamiltonicity;
 
-    ### Create and initialize a Graph::Undirected
-    my $graph = new Graph::Undirected( vertices => [ 1..4 ] );
+    ### Create and initialize an undirected graph
+    my $graph = new Graph::Undirected( vertices => [ 0..3 ] );
+    $graph->add_edge(0,1);
+    $graph->add_edge(0,3);
     $graph->add_edge(1,2);
-    $graph->add_edge(2,3);
-    $graph->add_edge(3,4);
-    $graph->add_edge(1,4);
     $graph->add_edge(1,3);
+    $graph->add_edge(2,3);
 
     my $result = graph_is_hamiltonian( $graph );
 
@@ -57,20 +56,9 @@ It attempts to decide whether a given Graph::Undirected contains a Hamiltonian C
     print $result->{reason}, "\n";
     # prints a brief reason for the conclusion.
 
-    # if graph is hamiltonian, a solution Hamiltonian Cycle is returned.
-    if ( $result->{is_hamiltonian} ) {
-        foreach my $solution_ref ( @{ $result->{solutions} } ) {
-            print join ",", @$solution_ref;
-            print "\n";
-        }
-    }
-
-
 =head1 EXPORT
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
+This module exports only one subroutine by default -- graph_is_hamiltonian()
 
 =cut
 
@@ -81,6 +69,8 @@ our $DEBUG = 0;
 ##########################################################################
 
 =head1 SUBROUTINES
+
+
 
 =cut
 
@@ -105,33 +95,32 @@ sub graph_is_hamiltonian {
         reason         => $reason,
     };
 
-    if ( $result->{is_hamiltonian} ) {
-        $result->{solutions} = [];
-    }
-
     return $result;
 }
 
 
 ##########################################################################
 
-=head2 is_hamiltonian
-
-Takes a Graph::Undirected object.
-
-Returns a result ( is_hamiltonian, reason ) indicating whether the given graph
-contains a Hamiltonian Cycle.
-
-=cut
+# is_hamiltonian()
+#
+# Takes a Graph::Undirected object.
+#
+# Returns a result ( is_hamiltonian, reason ) indicating whether the given graph
+# contains a Hamiltonian Cycle.
+#
+# This subroutine implements the core of the algorithm.
+# Its time complexity is still being calculated.
+# If P=NP, then by adding enough polynomial time tests to this subroutine,
+# its time complexity can be made polynomial time as well.
+#
 
 sub is_hamiltonian {
-    my ($G) = @_;
+    my ($G1) = @_;
 
     output("<HR NOSHADE>");
-    output("Calling is_hamiltonian($G)");
-    output($G);
+    output("Calling is_hamiltonian($G1)");
+    output($G1);
 
-    my $G1        = $G->deep_copy_graph();
     my $e         = scalar( $G1->edges() );
     my @vertices  = $G1->vertices;
     my $v         = @vertices;
@@ -170,7 +159,6 @@ sub is_hamiltonian {
 
     if ( $required_graph->edges() ) {
         output("Now calling test_required_cyclic()<BR/>"); ### DEBUG
-
         ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);
         return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
 
@@ -194,53 +182,18 @@ sub is_hamiltonian {
 
             return is_hamiltonian($G1);
         }
-
     }
     
     output("Now running an exhaustive, recursive, and conclusive search, only slightly better than brute force.<BR/>"); ### DEBUG
-
-    ####################################### BEGIN 2
-
-    use Data::Dumper; ### DEBUG
-
-
     my @undecided_vertices = grep { $G1->degree($_) > 2 } $G1->vertices();
-
     if ( @undecided_vertices ) {
-
-        ### Choose the vertex with the highest degree first
-        my ( $chosen_vertex, $chosen_vertex_degree, $chosen_vertex_required_degree );
-        foreach my $vertex ( @undecided_vertices ) {
-            my $degree = $G1->degree($vertex);
-            my $required_degree = $required_graph->degree($vertex);
-            if ( ( ! defined $chosen_vertex_degree ) or 
-                 ( $degree > $chosen_vertex_degree ) or
-                 ( ($degree == $chosen_vertex_degree) and ( $required_degree > $chosen_vertex_required_degree ) ) or
-                 ( ($degree == $chosen_vertex_degree) and ( $required_degree == $chosen_vertex_required_degree ) and ( $vertex < $chosen_vertex ) )
-                ) {
-                $chosen_vertex = $vertex;
-                $chosen_vertex_degree = $degree;
-                $chosen_vertex_required_degree = $required_degree;
-            }
-        }
-
-        my $vertex = $chosen_vertex;
+        my $vertex = get_chosen_vertex($G1, $required_graph, \@undecided_vertices);
         my @tentative_combinations = get_tentative_combinations($G1, $required_graph, $vertex);
 
         foreach my $tentative_edge_pair ( @tentative_combinations ) {
 
             my $G2 = $G1->deep_copy_graph();
-
-            foreach my $i ( 0 .. 1 ) {
-                unless ( $G2->has_edge($vertex, $tentative_edge_pair->[$i] ) ) {
-                    output("<h2>Assertion failed. Missing edge. $vertex=" . $tentative_edge_pair->[$i] ."</h2>\n")  ### DEBUG
-                }
-            }
-
-            ### output("For vertex=$vertex <PRE>" . Dumper(\@tentative_combinations) . "</PRE><BR/>"); ### DEBUG
-
             output("For vertex: $vertex, protecting " . ( join ',', map { "$vertex=$_"  } @$tentative_edge_pair ) . "<BR/>"); ### DEBUG
-
             foreach my $neighbor ( $G2->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
@@ -252,7 +205,6 @@ sub is_hamiltonian {
                    ", $vertex=" . $tentative_edge_pair->[1] . " protected:<BR/>");
             output($G2);
 
-
             ( $is_hamiltonian, $reason ) = is_hamiltonian($G2);
             if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
                 return ( $is_hamiltonian, $reason );
@@ -260,14 +212,13 @@ sub is_hamiltonian {
         }
 
     }
-    ####################################### END 2
-
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN, "The graph did not pass any tests for Hamiltonicity." );
 
 }
 
 ##########################################################################
+
 sub get_tentative_combinations {
     my ($G, $required_graph, $vertex) = @_;
     my @tentative_combinations;
@@ -306,6 +257,35 @@ sub get_undecided_count {
     return $count;
 }
 
+
+##########################################################################
+
+sub get_chosen_vertex {
+    my ( $G, $required_graph, $undecided_vertices ) = @_;
+
+    ### Choose the vertex with the highest degree first
+    my ( $chosen_vertex, $chosen_vertex_degree, $chosen_vertex_required_degree );
+    foreach my $vertex ( @$undecided_vertices ) {
+        my $degree = $G->degree($vertex);
+        my $required_degree = $required_graph->degree($vertex);
+        if ( ( ! defined $chosen_vertex_degree ) or 
+             ( $degree > $chosen_vertex_degree ) or
+             ( ($degree == $chosen_vertex_degree) 
+               and
+               ( $required_degree > $chosen_vertex_required_degree ) ) or
+             ( ($degree == $chosen_vertex_degree)
+               and
+               ( $required_degree == $chosen_vertex_required_degree )
+               and ( $vertex < $chosen_vertex ) )
+            ) {
+            $chosen_vertex = $vertex;
+            $chosen_vertex_degree = $degree;
+            $chosen_vertex_required_degree = $required_degree;
+        }
+    }
+
+    return $chosen_vertex;
+}
 
 ##########################################################################
 

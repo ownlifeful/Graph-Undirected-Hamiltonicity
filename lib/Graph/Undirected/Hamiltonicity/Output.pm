@@ -92,7 +92,7 @@ sub output {
             ### Strip out HTML
             $input =~ s@<LI>@* @gi;
             $input =~ s@<BR/>@@gi;
-            $input =~ s@</?(LI|UL|OL|CODE|TT|PRE)>@@gi;
+            $input =~ s@</?(LI|UL|OL|CODE|TT|PRE|H[1-6])>@@gi;
             $input =~ s@<HR[^>]*?>@=================@gi;
             print $input, "\n";
         }
