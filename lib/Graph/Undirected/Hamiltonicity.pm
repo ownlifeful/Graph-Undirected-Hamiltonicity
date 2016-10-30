@@ -4,7 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
-use Graph::Undirected::Hamiltonicity::Output qw(output);
+use Graph::Undirected::Hamiltonicity::Output qw(&output);
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
 
@@ -105,7 +105,7 @@ sub graph_is_hamiltonian {
 #
 # Takes a Graph::Undirected object.
 #
-# Returns a result ( is_hamiltonian, reason ) indicating whether the given graph
+# Returns a result ( $is_hamiltonian  [ , $reason ] ) indicating whether the given graph
 # contains a Hamiltonian Cycle.
 #
 # This subroutine implements the core of the algorithm.
@@ -121,10 +121,6 @@ sub is_hamiltonian {
     output("Calling is_hamiltonian($G1)");
     output($G1);
 
-    my $e         = scalar( $G1->edges() );
-    my @vertices  = $G1->vertices;
-    my $v         = @vertices;
-    my $max_edges = ( $v * $v - $v ) / 2;
     my ( $is_hamiltonian, $reason );
 
     my @tests_1 = (
@@ -158,11 +154,11 @@ sub is_hamiltonian {
     return is_hamiltonian($G1) if $deleted_edges;
 
     if ( $required_graph->edges() ) {
-        output("Now calling test_required_cyclic()<BR/>"); ### DEBUG
+        output("Now calling test_required_cyclic()<BR/>");
         ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);
         return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
 
-        output("Now calling deleted_non_required_neighbors()<BR/>"); ### DEBUG
+        output("Now calling deleted_non_required_neighbors()<BR/>");
         ( $deleted_edges, $G1 ) = delete_non_required_neighbors( $required_graph, $G1 );
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
@@ -170,30 +166,30 @@ sub is_hamiltonian {
             return is_hamiltonian($G1);
         }
 
-        my ( $shrank_graph, $G1 ) =
-            shrink_required_walks_longer_than_2_edges( $required_graph, $G1 );
-        if ($shrank_graph) {
-            if ( $shrank_graph == 1 ) {
+        ( $deleted_edges, $G1 ) =
+            shrink_required_walks_longer_than_2_edges( $G1, $required_graph );
+        if ($deleted_edges) {
+            if ( $deleted_edges == 1 ) {
                 output("Shrank the graph by removing one vertex and one edge.<BR/>");
             }
             else {
-                output("Shrank the graph by removing $shrank_graph edges and vertices.<BR/>");
+                output("Shrank the graph by removing $deleted_edges edges and vertices.<BR/>");
             }
 
             return is_hamiltonian($G1);
         }
     }
     
-    output("Now running an exhaustive, recursive, and conclusive search, only slightly better than brute force.<BR/>"); ### DEBUG
+    output("Now running an exhaustive, recursive, and conclusive search, " . 
+           "only slightly better than brute force.<BR/>");
     my @undecided_vertices = grep { $G1->degree($_) > 2 } $G1->vertices();
     if ( @undecided_vertices ) {
         my $vertex = get_chosen_vertex($G1, $required_graph, \@undecided_vertices);
-        my @tentative_combinations = get_tentative_combinations($G1, $required_graph, $vertex);
-
-        foreach my $tentative_edge_pair ( @tentative_combinations ) {
-
+        my $tentative_combinations = get_tentative_combinations($G1, $required_graph, $vertex);
+        foreach my $tentative_edge_pair ( @$tentative_combinations ) {
             my $G2 = $G1->deep_copy_graph();
-            output("For vertex: $vertex, protecting " . ( join ',', map { "$vertex=$_"  } @$tentative_edge_pair ) . "<BR/>"); ### DEBUG
+            output("For vertex: $vertex, protecting " . 
+                   ( join ',', map { "$vertex=$_"  } @$tentative_edge_pair ) . "<BR/>");
             foreach my $neighbor ( $G2->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
@@ -210,10 +206,10 @@ sub is_hamiltonian {
                 return ( $is_hamiltonian, $reason );
             }
         }
-
     }
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN, "The graph did not pass any tests for Hamiltonicity." );
+    return ( $GRAPH_IS_NOT_HAMILTONIAN,
+             "The graph did not pass any tests for Hamiltonicity." );
 
 }
 
@@ -239,7 +235,7 @@ sub get_tentative_combinations {
         }
     }
 
-    return @tentative_combinations;
+    return \@tentative_combinations;
 }
 
 ##########################################################################

@@ -85,7 +85,7 @@ foreach my $test ( @tests ) {
         $G->set_edge_attribute( @$edge_ref, 'required', 1 );
     }
 
-    my ( $deleted_edges, $output_graph ) = shrink_required_walks_longer_than_2_edges($required_graph, $G);
+    my ( $deleted_edges, $output_graph ) = shrink_required_walks_longer_than_2_edges($G, $required_graph);
 
     is( $deleted_edges, $test->{expected_deleted_edges}, "Deleted the expected number of edges.");
     is( "$output_graph", $test->{expected_output_graph_text}, "Resulting graph is as expected.");

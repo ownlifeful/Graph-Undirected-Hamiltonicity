@@ -183,7 +183,7 @@ sub delete_non_required_neighbors {
 ##########################################################################
 
 sub shrink_required_walks_longer_than_2_edges {
-    my ( $required_graph, $G ) = @_;
+    my ( $G, $required_graph ) = @_;
 
     my $G1;
     my $deleted_edges = 0;

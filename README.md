@@ -62,7 +62,7 @@ To install the core module:
 
 
 
-To install the optional CGI script, simply copy the script to the appropriate location for your web server.
+To install the optional CGI script, copy the script to the appropriate location for your web server.
 
 
 On macOS:
