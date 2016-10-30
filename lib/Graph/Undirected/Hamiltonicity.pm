@@ -218,16 +218,16 @@ sub is_hamiltonian {
 sub get_tentative_combinations {
     my ($G, $required_graph, $vertex) = @_;
     my @tentative_combinations;
+    my @neighbors = $G->neighbors($vertex);
     if ( $required_graph->degree($vertex) == 1 ) {
         my ( $fixed_neighbor ) = $required_graph->neighbors($vertex);
 
-        foreach my $tentative_neighbor ( $G->neighbors($vertex) ) {
+        foreach my $tentative_neighbor ( @neighbors ) {
             next if $fixed_neighbor == $tentative_neighbor;
             push @tentative_combinations, [$fixed_neighbor, $tentative_neighbor];
         }
 
     } else {
-        my @neighbors = $G->neighbors($vertex);
         for ( my $i = 0; $i < scalar(@neighbors) - 1; $i++ ) {
             for ( my $j = $i + 1; $j < scalar(@neighbors); $j++ ) {
                 push @tentative_combinations, [ $neighbors[$i], $neighbors[$j] ];
