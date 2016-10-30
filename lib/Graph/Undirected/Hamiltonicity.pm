@@ -58,15 +58,7 @@ This module decides whether a given Graph::Undirected contains a Hamiltonian Cyc
 
 =head1 EXPORT
 
-This module exports only one subroutine by default -- graph_is_hamiltonian()
-
-=cut
-
-########################################################################## the BEGIN
-
-our $DEBUG = 0;
-
-##########################################################################
+This module exports only one subroutine -- graph_is_hamiltonian()
 
 =head1 SUBROUTINES
 
@@ -105,8 +97,8 @@ sub graph_is_hamiltonian {
 #
 # Takes a Graph::Undirected object.
 #
-# Returns a result ( $is_hamiltonian  [ , $reason ] ) indicating whether the given graph
-# contains a Hamiltonian Cycle.
+# Returns a result ( $is_hamiltonian, $reason )
+# indicating whether the given graph contains a Hamiltonian Cycle.
 #
 # This subroutine implements the core of the algorithm.
 # Its time complexity is still being calculated.
@@ -184,12 +176,15 @@ sub is_hamiltonian {
            "only slightly better than brute force.<BR/>");
     my @undecided_vertices = grep { $G1->degree($_) > 2 } $G1->vertices();
     if ( @undecided_vertices ) {
-        my $vertex = get_chosen_vertex($G1, $required_graph, \@undecided_vertices);
-        my $tentative_combinations = get_tentative_combinations($G1, $required_graph, $vertex);
+        my $vertex = 
+            get_chosen_vertex($G1, $required_graph, \@undecided_vertices);
+        my $tentative_combinations = 
+            get_tentative_combinations($G1, $required_graph, $vertex);
         foreach my $tentative_edge_pair ( @$tentative_combinations ) {
             my $G2 = $G1->deep_copy_graph();
             output("For vertex: $vertex, protecting " . 
-                   ( join ',', map { "$vertex=$_"  } @$tentative_edge_pair ) . "<BR/>");
+                   ( join ',', map { "$vertex=$_"  } @$tentative_edge_pair ) .
+                   "<BR/>");
             foreach my $neighbor ( $G2->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
@@ -198,7 +193,8 @@ sub is_hamiltonian {
             }
 
             output("The Graph with $vertex=" . $tentative_edge_pair->[0] . 
-                   ", $vertex=" . $tentative_edge_pair->[1] . " protected:<BR/>");
+                   ", $vertex=" . $tentative_edge_pair->[1] . 
+                   " protected:<BR/>");
             output($G2);
 
             ( $is_hamiltonian, $reason ) = is_hamiltonian($G2);
@@ -224,13 +220,15 @@ sub get_tentative_combinations {
 
         foreach my $tentative_neighbor ( @neighbors ) {
             next if $fixed_neighbor == $tentative_neighbor;
-            push @tentative_combinations, [$fixed_neighbor, $tentative_neighbor];
+            push @tentative_combinations,
+                [$fixed_neighbor, $tentative_neighbor];
         }
 
     } else {
         for ( my $i = 0; $i < scalar(@neighbors) - 1; $i++ ) {
             for ( my $j = $i + 1; $j < scalar(@neighbors); $j++ ) {
-                push @tentative_combinations, [ $neighbors[$i], $neighbors[$j] ];
+                push @tentative_combinations,
+                    [ $neighbors[$i], $neighbors[$j] ];
             }
         }
     }
@@ -260,7 +258,9 @@ sub get_chosen_vertex {
     my ( $G, $required_graph, $undecided_vertices ) = @_;
 
     ### Choose the vertex with the highest degree first
-    my ( $chosen_vertex, $chosen_vertex_degree, $chosen_vertex_required_degree );
+    my $chosen_vertex;
+    my $chosen_vertex_degree;
+    my $chosen_vertex_required_degree;
     foreach my $vertex ( @$undecided_vertices ) {
         my $degree = $G->degree($vertex);
         my $required_degree = $required_graph->degree($vertex);
