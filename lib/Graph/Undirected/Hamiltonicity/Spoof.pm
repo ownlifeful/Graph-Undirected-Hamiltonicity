@@ -21,7 +21,7 @@ our %EXPORT_TAGS = (
 
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity::Spoof - Set of functions to spoof undirected graphs.
+Graph::Undirected::Hamiltonicity::Spoof - spoof undirected graphs.
 
 =head1 VERSION
 
@@ -33,10 +33,6 @@ our $VERSION = '0.01';
 
 
 =head1 SYNOPSIS
-
-This module is a collection of subroutines for spoofing random graphs with given
-properties.
-
 
     use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph);
 
@@ -51,7 +47,7 @@ properties.
 
 No symbols are exported by default.
 
-You can load all the subroutines of this package as shown:
+To load all the subroutines of this package:
 
     use Graph::Undirected::Hamiltonicity::Spoof qw(:all);
 
@@ -142,13 +138,6 @@ sub spoof_known_hamiltonian_graph {
 
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
 
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-graph-undirected-hamiltonicity at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Graph-Undirected-Hamiltonicity>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
 
 
 =head1 SUPPORT
@@ -158,38 +147,15 @@ You can find documentation for this module with the perldoc command.
     perldoc Graph::Undirected::Hamiltonicity::Spoof
 
 
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Graph-Undirected-Hamiltonicity>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Graph-Undirected-Hamiltonicity>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Graph-Undirected-Hamiltonicity>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Graph-Undirected-Hamiltonicity/>
-
-=back
 
 =head1 LICENSE AND COPYRIGHT
 
 Copyright 2016 Ashwin Dixit.
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of the the Artistic License (2.0). You may obtain a
-copy of the full license at:
+This software is copyright (c) 2016 by Ashwin Dixit.
 
-L<http://www.perlfoundation.org/artistic_license_2_0>
-
+This is free software; you can redistribute it and/or modify it
+under the same terms as the Perl 5 programming language system itself.
 
 =cut
 
