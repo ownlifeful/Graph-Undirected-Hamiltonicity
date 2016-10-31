@@ -146,17 +146,6 @@ You can find documentation for this module with the perldoc command.
 
     perldoc Graph::Undirected::Hamiltonicity::Spoof
 
-
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2016 Ashwin Dixit.
-
-This software is copyright (c) 2016 by Ashwin Dixit.
-
-This is free software; you can redistribute it and/or modify it
-under the same terms as the Perl 5 programming language system itself.
-
 =cut
 
 1; # End of Graph::Undirected::Hamiltonicity::Spoof

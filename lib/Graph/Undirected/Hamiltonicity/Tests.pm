@@ -15,10 +15,7 @@ our $GRAPH_IS_NOT_HAMILTONIAN = 2;
 
 our @EXPORT = qw($DONT_KNOW $GRAPH_IS_HAMILTONIAN $GRAPH_IS_NOT_HAMILTONIAN);
 
-our @EXPORT_OK =  qw(
-           $DONT_KNOW
-           $GRAPH_IS_HAMILTONIAN
-           $GRAPH_IS_NOT_HAMILTONIAN
+our @EXPORT_OK = ( @EXPORT,  qw(
            &test_articulation_vertex
            &test_canonical
            &test_connected
@@ -26,9 +23,8 @@ our @EXPORT_OK =  qw(
            &test_min_degree
            &test_required
            &test_required_cyclic
-           &test_required_cyclic_new
            &test_trivial
-        );
+        ) );
 
 our %EXPORT_TAGS = (
     all       =>  [ @EXPORT, @EXPORT_OK ],
@@ -37,8 +33,7 @@ our %EXPORT_TAGS = (
 
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity::Tests - a collection of subroutines that try to 
-detect whether the input Graph::Undirected is Hamiltonian.
+Graph::Undirected::Hamiltonicity::Tests - a collection of subroutines to decide whether the input Graph::Undirected is Hamiltonian.
 
 =head1 VERSION
 
@@ -64,8 +59,8 @@ Returns: ($is_hamilton, $reason)
 
 Here is an example:
 
-    use Graph::Undirected::Hamiltonicity::Tests qw(test_trivial);
-    use Graph::Undirected::Hamiltonicity::Spoof qw(spoof_known_hamiltonian_graph);
+    use Graph::Undirected::Hamiltonicity::Tests qw(&test_trivial);
+    use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph);
 
     my $G = spoof_known_hamiltonian_graph(30, 50); ### 30 vertices, 50 edges
 
@@ -107,8 +102,6 @@ The subroutines that can be imported individually, by name, are:
 =item * &test_required
 
 =item * &test_required_cyclic
-
-=item * &test_required_cyclic_new
 
 =item * &test_trivial
 
@@ -339,19 +332,12 @@ sub test_required {
 If the "required graph" contains a cycle with fewer than v vertices,
 then the input graph is not Hamiltonian.
 
+If the cycle has the same number of edges as vertices,
+then the input graph is Hamiltonian.
+
 =cut
 
 sub test_required_cyclic {
-    test_required_cyclic_old(@_);
-    ### test_required_cyclic_new(@_);
-}
-
-##########################################################################
-
-sub test_required_cyclic_old {
-
-    ### Test: If the graph of required edges only has a cycle consisting
-    ### of < v vertices, the graph is not Hamiltonian.
 
     my ($required_graph) = @_;
 
@@ -386,76 +372,6 @@ sub test_required_cyclic_old {
 
 ##########################################################################
 
-
-sub test_required_cyclic_new {
-
-    ### Test: If the graph of required edges only, has a cycle consisting
-    ### of < v vertices, the graph is not Hamiltonian.
-
-    my ($required_graph) = @_;
-
-    return $DONT_KNOW if $required_graph->is_acyclic();
-
-    my %potential_cycles;
-
-    foreach my $vertex ( $required_graph->vertices() ) {
-        next unless $required_graph->degree($vertex) == 2;
-        $potential_cycles{$vertex} = 1;
-    }
-
-    foreach my $vertex ( sort { $a <=> $b } ( keys %potential_cycles ) ) {
-        my (@neighbors) =
-            sort { $a <=> $b } ( $required_graph->neighbors($vertex) );
-        my ( %visited, @cycle );
-
-        $visited{$vertex} = 1;
-        push @cycle, $vertex;
-
-        foreach my $neighbor (@neighbors) {
-            ### First, check to see if we have already
-            ### visited this vertex. If so, we have found
-            ### a cycle.
-            if ( $visited{$neighbor} ) {
-                last;
-            }
-
-            if ( $required_graph->degree($neighbor) == 2 ) {
-                ### Store this neighbor in a cycle.
-                push @cycle, $neighbor;
-                $visited{$neighbor} = 1;
-            }
-            else {
-                ### A degree 1 neighbor. Abandon this walk.
-                ### This set of vertices does not form a cycle.
-                @cycle   = ();
-                %visited = ();
-            }
-        }
-
-        my $number_of_vertices_in_cycle = scalar(@cycle);
-        my $v = scalar( $required_graph->vertices() );
-        if ( $number_of_vertices_in_cycle > 2 ) {
-            my $cycle_string = join ', ', @cycle;
-            if ( $number_of_vertices_in_cycle < $v ) {
-                output( $required_graph, { required => 1 } );
-                return ( $GRAPH_IS_NOT_HAMILTONIAN,
-                          "The sub-graph of required edges has a cycle "
-                        . "[$cycle_string] with fewer than $v vertices." );
-            }
-            elsif ( $number_of_vertices_in_cycle == $v ) {
-                return ( $GRAPH_IS_HAMILTONIAN,
-                          "The sub-graph of required edges has a cycle "
-                        . "[$cycle_string] which covers all $v vertices." );
-            }
-        }
-
-    }
-
-    return $DONT_KNOW;
-}
-
-##########################################################################
-
 =head1 AUTHOR
 
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
@@ -469,39 +385,6 @@ No open bugs as of this writing.
 You can find documentation for this module with the perldoc command.
 
     perldoc Graph::Undirected::Hamiltonicity::Tests
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Graph-Undirected-Hamiltonicity>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Graph-Undirected-Hamiltonicity>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Graph-Undirected-Hamiltonicity>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Graph-Undirected-Hamiltonicity/>
-
-=back
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2016 Ashwin Dixit.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the the Artistic License (2.0). You may obtain a
-copy of the full license at:
-
-L<http://www.perlfoundation.org/artistic_license_2_0>
 
 =cut
 
