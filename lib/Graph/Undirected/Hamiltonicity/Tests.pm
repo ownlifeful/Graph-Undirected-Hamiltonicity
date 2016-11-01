@@ -281,20 +281,14 @@ Such an edge is called a Graph Bridge.
 sub test_graph_bridge {
     my ($G) = @_;
 
-    foreach my $edge ( $G->edges() ) {
-        my $G1 = $G->copy_graph;
-        $G1->delete_edge($edge);
+    return $DONT_KNOW unless $G->is_edge_separable();
+    
+    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $G->bridges();
 
-        unless ( $G1->is_connected() ) {
-            output($G1);    ### DEBUG
-            my $edge_string = sprintf "%d=%d", @$edge;
-            return ( $GRAPH_IS_NOT_HAMILTONIAN,
-                      "This graph contains an edge ($edge_string), "
-                    . "removing which would make it not connected." );
-        }
-    }
+    return ( $GRAPH_IS_NOT_HAMILTONIAN,
+             "This graph is edge separable, therefore not Hamiltonian. "
+             . " It contains the following bridges ($bridge_string)." );
 
-    return $DONT_KNOW;
 }
 
 ##########################################################################
