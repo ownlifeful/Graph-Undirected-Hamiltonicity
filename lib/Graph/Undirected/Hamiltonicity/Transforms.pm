@@ -15,7 +15,6 @@ our @EXPORT_OK =  qw(
                      &delete_unusable_edges
                      &get_common_neighbors
                      &get_required_graph
-                     &graph_to_bitvector
                      &shrink_required_walks_longer_than_2_edges
                      &shuffle
                      &string_to_graph
@@ -29,7 +28,7 @@ our %EXPORT_TAGS = (
 
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity::Transforms - The great new Graph::Undirected::Hamiltonicity::Transforms!
+Graph::Undirected::Hamiltonicity::Transforms - subroutines related to transformations on undirected graphs.
 
 =head1 VERSION
 

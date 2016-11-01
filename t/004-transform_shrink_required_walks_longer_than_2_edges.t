@@ -10,7 +10,7 @@ use Test::More;
 plan tests => 20;
 
 my $herschel_graph_text = '0=1,0=10,0=3,0=9,10=6,10=8,1=2,1=4,2=5,2=9,3=4,3=6,4=5,4=7,5=8,6=7,7=8,8=9';
-my $squares_graph_text  = '0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,5=7';
+my $squares_graph_text  = '0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,5=7,6=7';
 
 my @tests = (
     {
@@ -47,25 +47,25 @@ my @tests = (
         input_graph_text => $squares_graph_text,
         input_required_graph_text => '0=2,2=4,4=5',
         expected_deleted_edges => 1,
-        expected_output_graph_text => '0=1,0=4,0=6,1=3,1=7,3=5,4=5,5=7'
+        expected_output_graph_text => '0=1,0=4,0=6,1=3,1=7,3=5,4=5,5=7,6=7'
     },
     {
         input_graph_text => $squares_graph_text,
         input_required_graph_text => '0=2,2=4,4=5,5=7',
         expected_deleted_edges => 2,
-        expected_output_graph_text => '0=1,0=5,0=6,1=3,1=7,3=5,5=7'
+        expected_output_graph_text => '0=1,0=5,0=6,1=3,1=7,3=5,5=7,6=7'
     },
     {
         input_graph_text => $squares_graph_text,
         input_required_graph_text => '0=2,2=4,4=5,5=7,7=1',
         expected_deleted_edges => 3,
-        expected_output_graph_text => '0=1,0=6,0=7,1=3,1=7'
+        expected_output_graph_text => '0=1,0=6,0=7,1=3,1=7,6=7'
     },
     {
         input_graph_text => $squares_graph_text,
         input_required_graph_text => '0=2,2=3,3=1,6=4,4=5,5=7',
         expected_deleted_edges => 2,
-        expected_output_graph_text => '0=1,0=3,0=6,1=3,1=7,3=5,5=6,5=7'
+        expected_output_graph_text => '0=1,0=3,0=6,1=3,1=7,3=5,5=6,5=7,6=7'
     },
     {
         input_graph_text => $squares_graph_text,

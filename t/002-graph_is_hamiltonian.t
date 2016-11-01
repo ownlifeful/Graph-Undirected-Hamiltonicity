@@ -66,7 +66,7 @@ a 30 vertex, 50 edge hamiltonian graph|1|0=14,0=26,0=3,0=8,10=17,10=19,10=27,11=
 
 a 12 vertex hamiltonian graph|1|0=1,0=4,1=2,1=4,2=3,2=5,3=5,4=6,5=7,6=8,6=9,7=10,7=11,8=9,9=10,10=11
 
-Nested Square Frames Graph|1|0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,4=6,5=7
+Nested Square Frames Graph|1|0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,4=6,5=7,6=7
 
-Nested Square Frames Graph minus 1 edge|2|0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,5=7
+Nested Square Frames Graph minus 2 edges|2|0=1,0=2,0=6,1=3,1=7,2=4,3=5,4=5,4=6,5=7
 
