@@ -8,6 +8,7 @@ use Exporter qw(import);
 
 our @EXPORT_OK =  qw(
                      &output
+                     &output_graph_svg
                      &output_image_svg
                      &output_adjacency_matrix_svg
         );
@@ -19,7 +20,8 @@ our %EXPORT_TAGS = (
 
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity::Output - The great new Graph::Undirected::Hamiltonicity::Output!
+Graph::Undirected::Hamiltonicity::Output - convenience subroutines for printing output
+in various formats.
 
 =head1 VERSION
 
@@ -29,33 +31,9 @@ Version 0.01
 
 our $VERSION = '0.01';
 
-
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
-    use Graph::Undirected::Hamiltonicity::Output;
-
-    my $foo = Graph::Undirected::Hamiltonicity::Output->new();
-    ...
-
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 SUBROUTINES
-
-
-=cut
-
-##############################################################################
-
-=head2 output
-
-This subroutine examines an environment variable called HC_OUTPUT_FORMAT
+The output() subroutine examines an environment variable called HC_OUTPUT_FORMAT
 to determine the output format. The output format can be one of:
 
 =over 4
@@ -67,6 +45,43 @@ to determine the output format. The output format can be one of:
 =item * 'none' : do no generate any output.
 
 =back
+
+    use Graph::Undirected::Hamiltonicity::Output;
+
+    output("Foo<BR/>");
+    # in html mode, print "Foo<BR/>", "\n"
+    # in text mode, print "Foo", "\n"
+    # in none mode, print nothing.
+
+    output($G); # $G is a Graph::Undirected
+    # in html mode, print the SVG to draw this graph
+    # in text mode, print the adjacency-list of this graph
+    # in none mode, print nothing.
+
+
+    output($G, { required => 1 });
+    # Indicates that the graph should be formatted
+    # as a graph of "required" edges only.
+
+
+=head1 EXPORT
+
+Exports the output() subroutine by default.
+
+=head1 SUBROUTINES
+
+
+=cut
+
+##############################################################################
+
+=head2 output
+
+This subroutine produces output polymorphically, based on the state of the
+HC_OUTPUT_FORMAT environment variable, and on the input.
+
+It is overloaded to output literal HTML, text stripped from HTML, and 
+SVG embedded inline.
 
 =cut
 
@@ -86,7 +101,7 @@ sub output {
 
     } elsif ( $format eq 'text' ) {
         if ( ref $input ) {
-            ### Print the edge-list as a string.
+            ### Print the graph's edge-list as a string.
             print "$input\n";
         } else {
             ### Strip out HTML
@@ -304,55 +319,6 @@ sub output_adjacency_matrix_svg {
 =head1 AUTHOR
 
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-graph-undirected-hamiltonicity at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Graph-Undirected-Hamiltonicity>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Graph::Undirected::Hamiltonicity::Output
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Graph-Undirected-Hamiltonicity>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Graph-Undirected-Hamiltonicity>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Graph-Undirected-Hamiltonicity>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Graph-Undirected-Hamiltonicity/>
-
-=back
-
-=head1 LICENSE AND COPYRIGHT
-
-Copyright 2016 Ashwin Dixit.
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the the Artistic License (2.0). You may obtain a
-copy of the full license at:
-
-L<http://www.perlfoundation.org/artistic_license_2_0>
-
 
 =cut
 
