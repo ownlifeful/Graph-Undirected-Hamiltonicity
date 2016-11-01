@@ -253,17 +253,15 @@ Such a vertex is called an Articulation Vertex.
 sub test_articulation_vertex {
     my ($G) = @_;
 
-    foreach my $vertex ( $G->vertices() ) {
-        my $G1 = $G->copy_graph();
-        $G1->delete_vertex($vertex);
-        unless ( $G1->is_connected() ) {
-            return ( $GRAPH_IS_NOT_HAMILTONIAN,
-                      "This graph contains a vertex ( $vertex ), "
-                    . "removing which would make it not connected." );
-        }
-    }
+    return $DONT_KNOW if $G->is_biconnected();
+    
+    my $vertices_string = join ',', $G->articulation_points();
 
-    return $DONT_KNOW;
+    return ( $GRAPH_IS_NOT_HAMILTONIAN,
+             "This graph is not biconnected, therefore not Hamiltonian. "
+             . "It contains the following articulation vertices "
+             . "($vertices_string)" );
+
 }
 
 ##########################################################################
@@ -281,12 +279,12 @@ Such an edge is called a Graph Bridge.
 sub test_graph_bridge {
     my ($G) = @_;
 
-    return $DONT_KNOW unless $G->is_edge_separable();
+    return $DONT_KNOW if $G->is_edge_connected();
     
     my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $G->bridges();
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
-             "This graph is edge separable, therefore not Hamiltonian. "
+             "This graph is not edge-connected, therefore not Hamiltonian. "
              . " It contains the following bridges ($bridge_string)." );
 
 }
