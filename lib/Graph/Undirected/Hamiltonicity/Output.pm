@@ -123,9 +123,7 @@ sub output {
 sub output_image_svg {
     my ( $G, $hash_ref ) = @_;
 
-    my %params =
-        ( ( defined $hash_ref ) && ( ref $hash_ref ) ) ? %{$hash_ref} : ();
-
+    my %params = %{ $hash_ref // {} };
     my $image_size = $params{'size'} || 600;
 
     print qq{<div style="height: 600px; width: 1500px;">\n};
@@ -141,7 +139,9 @@ xmlns="http://www.w3.org/2000/svg">
 };
 
     output_graph_svg( $G, { %params, image_size => $image_size } );
-    output_adjacency_matrix_svg( $G, { %params, image_size => $image_size } );
+    unless ( $G->vertices() > 30 ) {
+        output_adjacency_matrix_svg( $G, { %params, image_size => $image_size } );
+    }
     print qq{</svg>\n};
     print qq{</div>\n\n};
 }
@@ -151,8 +151,7 @@ xmlns="http://www.w3.org/2000/svg">
 sub output_graph_svg {
     my ( $G, $hash_ref ) = @_;
 
-    my %params =
-        ( ( defined $hash_ref ) && ( ref $hash_ref ) ) ? %{$hash_ref} : ();
+    my %params = %{ $hash_ref // {} };
 
     my $Pi = 4 * atan2 1, 1;
     my $v = scalar( $G->vertices() );
@@ -253,8 +252,7 @@ sub output_adjacency_matrix_svg {
 
     my ( $G, $hash_ref ) = @_;
 
-    my %params =
-        ( ( defined $hash_ref ) && ( ref $hash_ref ) ) ? %{$hash_ref} : ();
+    my %params = %{ $hash_ref // {} };
 
     print qq{<?xml version="1.0" standalone="no"?>\n};
     print qq{<g style="opacity:1; stroke: black; stroke-opacity: 1">\n};
