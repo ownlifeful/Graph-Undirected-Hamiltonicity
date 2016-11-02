@@ -139,7 +139,7 @@ xmlns="http://www.w3.org/2000/svg">
 };
 
     output_graph_svg( $G, { %params, image_size => $image_size } );
-    unless ( $G->vertices() > 30 ) {
+    unless ( $G->vertices() > 20 ) {
         output_adjacency_matrix_svg( $G, { %params, image_size => $image_size } );
     }
     print qq{</svg>\n};
