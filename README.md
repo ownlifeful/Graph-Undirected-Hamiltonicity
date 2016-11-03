@@ -112,6 +112,14 @@ To get more detailed help:
 
 RT, CPAN's request tracker ([report bugs here](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Graph-Undirected-Hamiltonicity))
 
+
+# ACKNOWLEDGEMENTS
+
+Thanks to Larry Wall, for creating Perl.
+Thanks to Jarkko Hietaniemi, for creating the `Graph` module.
+
+
+
 # SEE ALSO
 
 1. [Graph](http://search.cpan.org/perldoc?Graph "Graph module")
