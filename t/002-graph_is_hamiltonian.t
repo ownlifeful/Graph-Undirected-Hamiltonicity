@@ -8,7 +8,7 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
 
 use Test::More;
 
-plan tests => 10;
+plan tests => 11;
 
 while ( defined ( my $line = <DATA> ) ) {
     next if $line =~ /^\s*#/; ### skip comments
@@ -70,3 +70,4 @@ Nested Square Frames Graph|1|0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,4=6,5=7,6=7
 
 Nested Square Frames Graph minus 2 edges|2|0=1,0=2,0=6,1=3,1=7,2=4,3=5,4=5,4=6,5=7
 
+Petersen graph|2|0=1,0=4,0=5,1=2,1=6,2=3,2=7,3=4,3=8,4=9,5=7,5=8,6=8,6=9,7=9
