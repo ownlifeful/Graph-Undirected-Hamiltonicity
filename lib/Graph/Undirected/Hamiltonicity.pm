@@ -143,7 +143,13 @@ sub is_hamiltonian {
 
     my $deleted_edges;
     ( $deleted_edges, $G1 ) = delete_unusable_edges($G1);
-    return is_hamiltonian($G1) if $deleted_edges;
+    if ( $deleted_edges ) {
+        # The following is equivalent to:
+        # return is_hamiltonian($G1);
+        @_ = ( $G1 );
+        goto &is_hamiltonian;
+    }
+
 
     if ( $required_graph->edges() ) {
         output("Now calling test_required_cyclic()<BR/>");
@@ -155,7 +161,8 @@ sub is_hamiltonian {
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
             output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
-            return is_hamiltonian($G1);
+            @_ = ( $G1 );
+            goto &is_hamiltonian;
         }
 
         ( $deleted_edges, $G1 ) =
@@ -168,7 +175,8 @@ sub is_hamiltonian {
                 output("Shrank the graph by removing $deleted_edges edges and vertices.<BR/>");
             }
 
-            return is_hamiltonian($G1);
+            @_ = ( $G1 );
+            goto &is_hamiltonian;
         }
     }
     
