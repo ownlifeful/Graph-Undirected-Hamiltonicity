@@ -3,6 +3,7 @@ package Graph::Undirected::Hamiltonicity;
 use 5.006;
 use strict;
 use warnings;
+no warnings 'recursion';
 
 use Graph::Undirected::Hamiltonicity::Output qw(&output);
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
