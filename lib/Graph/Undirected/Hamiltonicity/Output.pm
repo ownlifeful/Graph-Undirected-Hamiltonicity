@@ -124,7 +124,7 @@ sub output_image_svg {
     my ( $G, $hash_ref ) = @_;
 
     my %params = %{ $hash_ref // {} };
-    my $image_size = $params{'size'} || 600;
+    my $image_size = $params{size} || 600;
 
     print qq{<div style="height: 600px; width: 1500px;">\n};
 
@@ -159,7 +159,7 @@ sub output_graph_svg {
     ### Compute angle between vertices
     my $angle_between_vertices = 2 * $Pi / $v;
 
-    my $image_size = $params{'size'} || 600;
+    my $image_size = $params{size} || 600;
 
     ### Compute Center of image
     my $x_center = $image_size / 2;
@@ -203,7 +203,7 @@ sub output_graph_svg {
             $dest = $temp;
         }
 
-        my $required = $params{'required'}
+        my $required = $params{required}
             || $G->get_edge_attribute( $orig, $dest, 'required' );
         my $stroke_width = $required ? 3         : 1;
         my $color        = $required ? '#FF0000' : '#000000';
@@ -290,7 +290,7 @@ sub output_adjacency_matrix_svg {
 
             my $fill_color;
             if ( $G->has_edge( $i, $j ) ) {
-                $fill_color = $params{'required'}
+                $fill_color = $params{required}
                     || $G->get_edge_attribute( $i, $j, 'required' )
                     ? '#FF0000'
                     : '#000000';
