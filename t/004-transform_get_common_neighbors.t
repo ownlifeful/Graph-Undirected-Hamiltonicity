@@ -50,20 +50,16 @@ foreach my $test_graph ( @test_graphs ) {
     my $G = string_to_graph($test_graph->{graph_text});
 
     foreach my $test ( @{$test_graph->{tests}} ) {
-        my %actual_common_neighbors = get_common_neighbors($G, @{$test->{vertices}});
+        my %actual_common_neighbors = %{ get_common_neighbors($G, @{$test->{vertices}}) };
 
         foreach my $expected_common_neighbor ( @{$test->{expected_common_neighbors}} ) {
-            is($actual_common_neighbors{$expected_common_neighbor}, 1, "Found expected common neighbor: $expected_common_neighbor");
+            is($actual_common_neighbors{$expected_common_neighbor}, 1, 
+               "Found expected common neighbor: $expected_common_neighbor");
 
             delete $actual_common_neighbors{$expected_common_neighbor};
         }
 
-        # use Data::Dumper; ### DEBUG
-        # diag 'vertices:', join ', ', @{$test->{vertices}};
-        # diag Dumper(\%actual_common_neighbors);
-
         is(int(keys %actual_common_neighbors), 0, "Found all common neighbors.");
-
     }
 }
 

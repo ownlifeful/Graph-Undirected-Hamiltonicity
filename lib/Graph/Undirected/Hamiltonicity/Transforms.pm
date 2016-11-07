@@ -261,7 +261,7 @@ sub swap_vertices {
     my $G1 = $G->deep_copy_graph();
 
     my %common_neighbors =
-      get_common_neighbors( $G1, $vertex_1, $vertex_2 );
+      %{ get_common_neighbors( $G1, $vertex_1, $vertex_2 ) };
 
     my @vertex_1_neighbors = grep { $_ != $vertex_2 } $G1->neighbors($vertex_1);
     my @vertex_2_neighbors = grep { $_ != $vertex_1 } $G1->neighbors($vertex_2);
@@ -286,12 +286,12 @@ sub swap_vertices {
 
 =head2 get_common_neighbors
 
-For a given graph, and two specified vertices, return a hash
-whose keys are all the vertices that vertex1 and vertex2 share.
+For a given graph, and two specified vertices, return a reference to 
+a hash whose keys are all the vertices that vertex1 and vertex2 share.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&get_common_neighbors);
 
-     my %common_neighbors = get_common_neighbors( $G, 3, 7 );
+     my %common_neighbors = %{ get_common_neighbors( $G, 3, 7 ) };
 
 =cut
 
@@ -310,7 +310,7 @@ sub get_common_neighbors {
         $common_neighbors{$neighbor_vertex} = 1;
     }
 
-    return %common_neighbors;
+    return \%common_neighbors;
 }
 
 ##########################################################################
