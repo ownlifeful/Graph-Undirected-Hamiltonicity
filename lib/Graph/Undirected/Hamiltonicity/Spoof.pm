@@ -82,7 +82,7 @@ sub spoof_canonical_hamiltonian_graph {
     my $last_vertex = $v - 1;
     my @vertices = ( 0 .. $last_vertex );
 
-    my $G = new Graph::Undirected( vertices => \@vertices );
+    my $G = Graph::Undirected->new( vertices => \@vertices );
     $G->add_edge( 0, $last_vertex );
 
     for ( my $i = 0; $i < $last_vertex; $i++ ) {

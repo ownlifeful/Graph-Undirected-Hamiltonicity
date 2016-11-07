@@ -14,7 +14,7 @@ version 0.01
     use Graph::Undirected::Hamiltonicity;
 
     ### Create and initialize an undirected graph
-    my $graph = new Graph::Undirected( vertices => [ 0..3 ] );
+    my $graph = Graph::Undirected->new( vertices => [ 0..3 ] );
     $graph->add_edge(0,1);
     $graph->add_edge(0,3);
     $graph->add_edge(1,2);

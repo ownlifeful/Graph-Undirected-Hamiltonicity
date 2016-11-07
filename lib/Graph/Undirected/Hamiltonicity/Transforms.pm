@@ -72,7 +72,7 @@ sub get_required_graph {
     output($G1);
 
     my @vertices = $G1->vertices();
-    my $required_graph = new Graph::Undirected( vertices => \@vertices );
+    my $required_graph = Graph::Undirected->new( vertices => \@vertices );
 
     foreach my $vertex ( @vertices ) {
         my $degree = $G1->degree($vertex);
@@ -351,7 +351,7 @@ sub string_to_graph {
     }
 
     my @vertices = keys %vertices;
-    my $G = new Graph::Undirected( vertices => \@vertices );
+    my $G = Graph::Undirected->new( vertices => \@vertices );
 
     foreach my $edge_ref ( @edges ) {
         $G->add_edge(@$edge_ref) unless $G->has_edge(@$edge_ref);

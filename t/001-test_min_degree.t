@@ -11,14 +11,14 @@ use Test::More;
 plan tests => 6;
 
 subtest "A 2 vertex, 1 edge graph" => sub {
-    my $G = new Graph::Undirected( vertices => [ 0, 1 ] );
+    my $G = Graph::Undirected->new( vertices => [ 0, 1 ] );
     $G->add_edge(0,1);
     my ( $is_hamiltonian, $reason ) = test_min_degree($G);
     is( $is_hamiltonian, $GRAPH_IS_NOT_HAMILTONIAN, "A 2 vertex, 1 edge graph is not Hamiltonian.");
 };
 
 subtest "A 3 vertex, 2 edge graph" => sub {
-    my $G = new Graph::Undirected( vertices => [ 0 .. 2 ] );
+    my $G = Graph::Undirected->new( vertices => [ 0 .. 2 ] );
     $G->add_edge(0,1);
     $G->add_edge(0,2);
     my ( $is_hamiltonian, $reason ) = test_min_degree($G);
@@ -26,7 +26,7 @@ subtest "A 3 vertex, 2 edge graph" => sub {
 };
 
 subtest "A 3 vertex, 3 edge graph" => sub {
-    my $G = new Graph::Undirected( vertices => [ 0 .. 2 ] );
+    my $G = Graph::Undirected->new( vertices => [ 0 .. 2 ] );
     $G->add_edge(0,1);
     $G->add_edge(0,2);
     $G->add_edge(1,2);
@@ -35,7 +35,7 @@ subtest "A 3 vertex, 3 edge graph" => sub {
 };
 
 subtest "A 4 vertex, 5 edge graph" => sub {
-    my $G = new Graph::Undirected( vertices => [ 0 .. 3 ] );
+    my $G = Graph::Undirected->new( vertices => [ 0 .. 3 ] );
     $G->add_edge(0,1);
     $G->add_edge(0,2);
     $G->add_edge(1,2);
@@ -46,7 +46,7 @@ subtest "A 4 vertex, 5 edge graph" => sub {
 };
 
 subtest "A 4 vertex, 4 edge graph" => sub {
-    my $G = new Graph::Undirected( vertices => [ 0 .. 3 ] );
+    my $G = Graph::Undirected->new( vertices => [ 0 .. 3 ] );
     $G->add_edge(0,1);
     $G->add_edge(0,2);
     $G->add_edge(0,3);
@@ -58,7 +58,7 @@ subtest "A 4 vertex, 4 edge graph" => sub {
 
 
 subtest "A slightly more complex graph" => sub {
-    my $G = new Graph::Undirected( vertices => [ 0 .. 4 ] );
+    my $G = Graph::Undirected->new( vertices => [ 0 .. 4 ] );
     $G->add_edge(0,1);
     $G->add_edge(0,4);
     $G->add_edge(1,2);
