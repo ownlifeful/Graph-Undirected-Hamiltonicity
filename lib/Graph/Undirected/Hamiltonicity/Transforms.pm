@@ -335,11 +335,8 @@ sub string_to_graph {
     foreach my $chunk ( split ( /\,/, $string ) ) {
         if ( $chunk =~ /=/ ) {
 
-            my @endpoints;
-            foreach my $endpoint ( split ( /=/, $chunk ) ) {
-                my $vertex = ( $endpoint =~ s/\b0+([1-9])/$1/gr );
-                push @endpoints, $vertex;
-            }
+            my @endpoints = map { s/\b0+([1-9])/$1/gr }
+                split ( /=/, $chunk );
 
             next if $endpoints[0] == $endpoints[1];
             push @edges, \@endpoints;
