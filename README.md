@@ -47,6 +47,7 @@ To get per-module help:
     perldoc Graph::Undirected::Hamiltonicity::Tests
     perldoc Graph::Undirected::Hamiltonicity::Spoof
     perldoc Graph::Undirected::Hamiltonicity::Transforms
+    perldoc Graph::Undirected::Hamiltonicity::Wolfram
     perldoc Graph::Undirected::Hamiltonicity::Output
 
 ## INSTALLATION
@@ -74,12 +75,14 @@ On CentOS ( and presumably RHEL and Fedora Linux ):
 
     sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
 
+To activate the ( optional, but recommended  ) `Graph::Undirected::Hamiltonicity::Wolfram` module, which lets you cross-check results 
+with the Wolfram Open Cloud, please read [WOLFRAM.md](WOLFRAM.md "Verification via Wolfram Cloud").
 
 ## USAGE
 
 ### CGI script:
 The included CGI script ( `cgi-bin/hc.cgi` ) lets you visualize and edit graphs through a browser. It draws graphs using inline SVG.
-A demo of this script is hosted [here](http://ownlifeful.com/hamilton.html "Hamiltonian Cycle Detector" ).
+A demo of this script is hosted at: [http://ownlifeful.com/hamilton.html](http://ownlifeful.com/hamilton.html "Hamiltonian Cycle Detector" )
 
 
 ### Command-line tool:
@@ -115,8 +118,8 @@ RT, CPAN's request tracker ([report bugs here](http://rt.cpan.org/NoAuth/Bugs.ht
 
 # ACKNOWLEDGEMENTS
 
-Thanks to Larry Wall, for creating Perl.
-Thanks to Jarkko Hietaniemi, for creating the `Graph` module.
+Thanks to Larry Wall, for creating Perl; to Jarkko Hietaniemi, for creating the `Graph` module; and to Dr. Stephen Wolfram, 
+for creating the Wolfram Programming Language.
 
 
 
