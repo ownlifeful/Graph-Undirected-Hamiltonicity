@@ -75,6 +75,9 @@ Throws: an exception if an error is encountered.
 sub is_hamiltonian_per_wolfram {
     my ( $G ) = @_;
 
+    ### Cover up bug in Wolfram Language script
+    return 1 if $G->vertices() == 1;
+
     ### Create a user agent object
     my $ua = LWP::UserAgent->new;
     $ua->agent("HamiltonCycleFinder/0.1 ");

@@ -11,9 +11,9 @@ use Test::More;
 
 my $url = get_url_from_config();
 if ( $url ) {
-    plan tests => 26;
+    plan tests => 28;
 } else {
-    plan tests => 13;
+    plan tests => 14;
     print $ENV{HOME} . "/hamilton.ini doesn't exist. ";
     print "Skipping Wolfram verification.\n";
 }
@@ -59,8 +59,7 @@ __DATA__
 
 # Here are some test cases:
 
-### The following graph exposes a bug in the Wolfram Language. Uncomment later.
-# a single vertex|1|8
+a single vertex|1|8
 
 a two vertex graph|0|42=69
 
