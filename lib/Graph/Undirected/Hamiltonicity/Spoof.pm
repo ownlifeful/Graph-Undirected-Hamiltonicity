@@ -115,10 +115,7 @@ sub spoof_known_hamiltonian_graph {
     $v =~ s/\D+//g;
     die "Please provide the number of vertices\n" unless $v > 0;
 
-    if ( defined( $e ) and ( $e > 0 ) ) {
-	# Sanitize
-	$e =~ s/\D+//g;
-    }
+    $e =~ s/\D+//g if defined $e;
 
     # Generate random
     my $max_edges = ( $v * $v - $v ) / 2;
