@@ -247,22 +247,6 @@ sub get_tentative_combinations {
 
 ##########################################################################
 
-sub get_undecided_count {
-    my ($G, $required_graph, $vertex) = @_;
-    my $count;
-    if ( $required_graph->degree($vertex) == 1 ) {
-        $count = $G->degree($vertex) - 1;
-    } else {
-        my $neighbor_count = scalar( $G->neighbors($vertex) );
-        $count = $neighbor_count * ( $neighbor_count - 1 ) / 2;
-    }
-
-    return $count;
-}
-
-
-##########################################################################
-
 sub get_chosen_vertex {
     my ( $G, $required_graph, $undecided_vertices ) = @_;
 

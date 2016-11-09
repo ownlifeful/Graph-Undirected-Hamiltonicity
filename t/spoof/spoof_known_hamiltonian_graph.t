@@ -8,9 +8,10 @@ use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph);
 
 use Test::More;
 
-plan tests => 22;
+plan tests => 55;
 
 $ENV{HC_OUTPUT_FORMAT} = 'none';
+
 
 for my $v ( 3 .. 13 ) {
     my $G = spoof_known_hamiltonian_graph($v);
@@ -18,3 +19,13 @@ for my $v ( 3 .. 13 ) {
     my $result = graph_is_hamiltonian( $G );
     is( $result->{is_hamiltonian}, 1,  "Spoofed graph is Hamiltonian");
 }
+
+for my $v ( 10 .. 20 ) {
+    my $e = 2 * $v;
+    my $G = spoof_known_hamiltonian_graph($v,$e);
+    is( scalar( $G->vertices() ), $v, "Spoofed graph has $v vertices.");
+    is( scalar( $G->edges() ), $e, "Spoofed graph has $e edges.");
+    my $result = graph_is_hamiltonian( $G );
+    is( $result->{is_hamiltonian}, 1,  "Spoofed graph is Hamiltonian");
+}
+

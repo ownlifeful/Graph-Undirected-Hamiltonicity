@@ -11,9 +11,9 @@ use Test::More;
 
 my $url = get_url_from_config();
 if ( $url ) {
-    plan tests => 22;
+    plan tests => 24;
 } else {
-    plan tests => 11;
+    plan tests => 12;
     print $ENV{HOME} . "/hamilton.ini doesn't exist. ";
     print "Skipping Wolfram verification.\n";
 }
@@ -60,6 +60,8 @@ __DATA__
 # Here are some test cases:
 
 a simple 3 vertex, 3 edge graph|1|0=1,0=2,1=2
+
+a simple canonical Hamiltonian cycle|1|0=1,0=5,1=2,2=3,3=4,4=5
 
 a 6 vertex, 6 edge non-connected graph|0|0=1,0=2,1=2,3=4,3=5,4=5
 
