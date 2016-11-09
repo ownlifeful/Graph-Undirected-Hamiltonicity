@@ -12,24 +12,22 @@ README.md
 hamilton.ini
 bin/hamilton.pl
 t/000-load.t
-t/001-test_trivial.t
-t/001-test_min_degree.t
-t/001-test_connected.t
-t/001-test_all.t
-t/002-graph_is_hamiltonian.t
-t/003-spoof_canonical_hamiltonian_graph.t
-t/003-spoof_known_hamiltonian_graph.t
-t/004-transform_add_random_edges.t
-t/004-transform_get_common_neighbors.t
-t/004-transform_delete_non_required_neighbors.t
-t/004-transform_delete_unusable_edges.t
-t/004-transform_shrink_required_walks_longer_than_2_edges.t
-t/004-transform_shuffle.t
-t/004-transform_string_to_graph.t
-t/004-transform_swap_vertices.t
+t/graph_is_hamiltonian.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
+t/spoof/spoof_canonical_hamiltonian_graph.t
+t/spoof/spoof_known_hamiltonian_graph.t
+t/tests/test_all.t
+t/transforms/add_random_edges.t
+t/transforms/delete_non_required_neighbors.t
+t/transforms/delete_unusable_edges.t
+t/transforms/get_common_neighbors.t
+t/transforms/get_required_graph.t
+t/transforms/shrink_required_walks_longer_than_2_edges.t
+t/transforms/shuffle.t
+t/transforms/string_to_graph.t
+t/transforms/swap_vertices.t
 META.yml                                 Module YAML meta-data (added by MakeMaker)
 META.json                                Module JSON meta-data (added by MakeMaker)
 .gitignore

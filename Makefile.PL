@@ -26,4 +26,5 @@ WriteMakefile(
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Graph-Undirected-Hamiltonicity-*' },
+    test => { TESTS => join ' ', map { glob } qw( t/*.t t/*/*.t ) },
 );
