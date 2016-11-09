@@ -22,8 +22,7 @@ for my $v ( 1 .. 10 ) {
 
     if ( $v == 2 ) {
         is( scalar( $G->edges() ), 1, "Spoofed graph has 1 edge." );
-    }
-    else {
+    } else {
         is( scalar( $G->edges() ), $v, "Spoofed graph has $v edges." );
     }
 

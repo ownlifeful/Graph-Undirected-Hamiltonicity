@@ -10,7 +10,7 @@ use Graph::Undirected::Hamiltonicity::Spoof qw(spoof_known_hamiltonian_graph);
 use warnings;
 use strict;
 
-$| = 1; # piping hot pipes
+$| = 1;    # piping hot pipes
 
 =head2
 --graph_text=
@@ -21,63 +21,64 @@ $| = 1; # piping hot pipes
 --output_format=
 =cut
 
-my $graph_file = '';
-my $graph_text = '';
-my $v = 0;
-my $e = 0;
-my $count = 1;
+my $graph_file    = '';
+my $graph_text    = '';
+my $v             = 0;
+my $e             = 0;
+my $count         = 1;
 my $output_format = 'none';
-my $help = 0;
-my @G = ();
+my $help          = 0;
+my @G             = ();
 
-
-GetOptions ("graph_file|f=s"     => \$graph_file,
-	    "graph_text|t=s"     => \$graph_text,
-	    "vertices|v=i"       => \$v,
-	    "edges|e=i"          => \$e,
-	    "count|c=i"          => \$count,
-	    "output_format|o=s"  => \$output_format,
-	    "help|h"             => \$help
-	    )
-    or show_usage_and_exit("Error in command line arguments\n");
+GetOptions(
+    "graph_file|f=s"    => \$graph_file,
+    "graph_text|t=s"    => \$graph_text,
+    "vertices|v=i"      => \$v,
+    "edges|e=i"         => \$e,
+    "count|c=i"         => \$count,
+    "output_format|o=s" => \$output_format,
+    "help|h"            => \$help
+) or show_usage_and_exit("Error in command line arguments\n");
 
 show_usage_and_exit() if $help;
 
-if ( $graph_file )  {
-    open ( my $fh, "<", $graph_file ) or croak "Could not open [$graph_file][$!]\n";
-    while ( defined ( my $line = <$fh> ) ) {
-	chomp $line;
-	next if $line =~ /^\s*#/; ### allow comments
-	$line =~ s/[^0-9,=]+//g;
-	next unless $line;
-	push @G, string_to_graph($line);
+if ($graph_file) {
+    open( my $fh, "<", $graph_file )
+        or croak "Could not open [$graph_file][$!]\n";
+    while ( defined( my $line = <$fh> ) ) {
+        chomp $line;
+        next if $line =~ /^\s*#/;    ### allow comments
+        $line =~ s/[^0-9,=]+//g;
+        next unless $line;
+        push @G, string_to_graph($line);
     }
     close($fh);
 
-} elsif ( $graph_text ) {
+} elsif ($graph_text) {
     push @G, string_to_graph($graph_text);
-} elsif ( $v ) {
+} elsif ($v) {
     $count ||= 1;
     for ( my $i = 0; $i < $count; $i++ ) {
-	push @G, spoof_known_hamiltonian_graph($v, $e);
+        push @G, spoof_known_hamiltonian_graph( $v, $e );
     }
 
 } else {
     show_usage_and_exit("Please provide --f, or --t, or --v");
 }
 
-$ENV{HC_OUTPUT_FORMAT} = ( $output_format =~ /^(html|text|none)$/ ) ? $output_format : 'none';
+$ENV{HC_OUTPUT_FORMAT} =
+    ( $output_format =~ /^(html|text|none)$/ ) ? $output_format : 'none';
 
-foreach my $G ( @G ) {
+foreach my $G (@G) {
     print "graph=($G)\n";
 
     my $result = graph_is_hamiltonian($G);
 
     print "Conclusion:\n";
     if ( $result->{is_hamiltonian} ) {
-	print "The graph is Hamiltonian.\n";
+        print "The graph is Hamiltonian.\n";
     } else {
-	print "The graph is not Hamiltonian.\n";
+        print "The graph is not Hamiltonian.\n";
     }
 
     print "(", $result->{reason}, ")\n" if defined $result->{reason};
@@ -160,9 +161,7 @@ END_OF_USAGE_INSTRUCTIONS
 
     exit($exit_code);
 
-
 }
 
 ##############################################################################
-
 

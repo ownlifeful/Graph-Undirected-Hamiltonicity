@@ -97,8 +97,7 @@ sub get_required_graph {
                         . "as required</LI>" );
             }
             output("</UL>");
-        }
-        else {
+        } else {
             output(" ...skipping.<BR/>");
         }
     }
@@ -344,8 +343,7 @@ sub string_to_graph {
             push @edges, \@endpoints;
             $vertices{ $endpoints[0] } = 1;
             $vertices{ $endpoints[1] } = 1;
-        }
-        else {
+        } else {
             $vertices{$chunk} = 1;
         }
     }

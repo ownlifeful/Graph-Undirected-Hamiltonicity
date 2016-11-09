@@ -191,8 +191,7 @@ sub test_canonical {
         return ( $GRAPH_IS_HAMILTONIAN,
                   "This graph is a supergraph of "
                 . "the canonical Hamiltonian Cycle." );
-    }
-    else {
+    } else {
         return ( $DONT_KNOW,
                   "This graph is not a supergraph of "
                 . "the canonical Hamiltonian Cycle." );
@@ -352,8 +351,7 @@ sub test_required_cyclic {
         return ( $GRAPH_IS_NOT_HAMILTONIAN,
                   "The sub-graph of required edges has a cycle "
                 . "[$cycle_string] with fewer than $v vertices." );
-    }
-    elsif ( $number_of_vertices_in_cycle == $v ) {
+    } elsif ( $number_of_vertices_in_cycle == $v ) {
         output(
             "GRAPH_IS_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"
         );                                          ### DEBUG

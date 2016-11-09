@@ -133,8 +133,7 @@ sub is_hamiltonian {
     if ( scalar( $required_graph->edges() ) ) {
         output("required graph:");
         output( $required_graph, { required => 1 } );
-    }
-    else {
+    } else {
         output("required graph has no edges.<BR/>");
     }
 
@@ -175,11 +174,9 @@ sub is_hamiltonian {
                 output(
                     "Shrank the graph by removing one vertex and one edge.<BR/>"
                 );
-            }
-            else {
-                output( "Shrank the graph by removing " . 
-                        "$deleted_edges edges and vertices.<BR/>"                    
-                );
+            } else {
+                output(   "Shrank the graph by removing "
+                        . "$deleted_edges edges and vertices.<BR/>" );
             }
 
             @_ = ($G1);
@@ -241,8 +238,7 @@ sub get_tentative_combinations {
                 [ $fixed_neighbor, $tentative_neighbor ];
         }
 
-    }
-    else {
+    } else {
         for ( my $i = 0; $i < scalar(@neighbors) - 1; $i++ ) {
             for ( my $j = $i + 1; $j < scalar(@neighbors); $j++ ) {
                 push @tentative_combinations,

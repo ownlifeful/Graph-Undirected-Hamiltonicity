@@ -93,8 +93,7 @@ sub is_hamiltonian_per_wolfram {
     if ( $res->is_success ) {
         my $output = $res->content;
         return $output;
-    }
-    else {
+    } else {
         my $message = "ERROR:" . $res->status_line;
         croak $message;
     }

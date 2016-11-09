@@ -93,18 +93,15 @@ sub output {
     if ( $format eq 'html' ) {
         if ( ref $input ) {
             output_image_svg(@_);
-        }
-        else {
+        } else {
             print $input, "\n";
         }
 
-    }
-    elsif ( $format eq 'text' ) {
+    } elsif ( $format eq 'text' ) {
         if ( ref $input ) {
             ### Print the graph's edge-list as a string.
             print "$input\n";
-        }
-        else {
+        } else {
             ### Strip out HTML
             $input =~ s@<LI>@* @gi;
             $input =~ s@<BR/>@@gi;
@@ -112,8 +109,7 @@ sub output {
             $input =~ s@<HR[^>]*?>@=================@gi;
             print $input, "\n";
         }
-    }
-    else {
+    } else {
         croak "Environment variable HC_OUTPUT_FORMAT should be "
             . "one of: 'html', 'text', or 'none'\n";
     }
@@ -297,8 +293,7 @@ sub output_adjacency_matrix_svg {
                     || $G->get_edge_attribute( $i, $j, 'required' )
                     ? '#FF0000'
                     : '#000000';
-            }
-            else {
+            } else {
                 $fill_color = '#FFFFFF';
             }
             print qq{<rect x="$x" y="$y" width="$square_size" };

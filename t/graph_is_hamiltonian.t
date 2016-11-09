@@ -12,8 +12,7 @@ use Test::More;
 my $url = get_url_from_config();
 if ($url) {
     plan tests => 28;
-}
-else {
+} else {
     plan tests => 14;
     print $ENV{HOME} . "/hamilton.ini doesn't exist. ";
     print "Skipping Wolfram verification.\n";

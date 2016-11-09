@@ -80,8 +80,7 @@ foreach my $test (@tests) {
         is( "$G", $test->{input_graph_text},
             "Graph to string is the same as string to graph. [$test->{label}]"
         );
-    }
-    else {
+    } else {
         isnt( "$G", $test->{input_graph_text},
             "Graph to string is NOT the same as string to graph. [$test->{label}]"
         );
