@@ -113,14 +113,14 @@ sub spoof_known_hamiltonian_graph {
 
     my ( $v, $e ) = @_;
 
-    $v =~ s/\D+//g if defined $v;
-    carp "Please provide the number of vertices." unless defined $v and $v > 0;
-
-    $e =~ s/\D+//g if defined $e;
+    croak "Please provide the number of vertices." unless defined $v and $v;
+    croak "A graph with 2 vertices cannot be Hamiltonian." if $v == 2;
 
     # Generate random
     my $max_edges = ( $v * $v - $v ) / 2;
     $e ||= int( rand( $max_edges - 2 * $v + 2  )  ) + $v;
+
+    croak "The number of edges must be >= number of vertices." if $e < $v;
 
     my $G = spoof_canonical_hamiltonian_graph($v);
     $G = shuffle( $G );
