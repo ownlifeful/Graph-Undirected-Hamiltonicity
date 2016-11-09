@@ -84,3 +84,5 @@ test_required_cyclic|2|a 6 vertex, 6 edge non-connected graph|0=1,0=2,1=2,3=4,3=
 
 test_required_cyclic|1|a simple 3 vertex, 3 edge graph|0=1,0=2,1=2
 
+test_required_cyclic|1|a simple 4 vertex, 3 edge graph|0=1,0=2,1=2,3
+
