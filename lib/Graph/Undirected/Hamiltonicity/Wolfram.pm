@@ -4,6 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
+use Carp;
 use Config::INI::Reader;
 use LWP::UserAgent;
 
@@ -99,7 +100,7 @@ sub is_hamiltonian_per_wolfram {
     }
     else {
         my $message = "ERROR:" . $res->status_line;
-        die $message;
+        croak $message;
     }
 
 }

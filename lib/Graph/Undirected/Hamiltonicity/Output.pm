@@ -4,6 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
+use Carp;
 use Exporter qw(import);
 
 our @EXPORT_OK =  qw(
@@ -112,7 +113,7 @@ sub output {
             print $input, "\n";
         }
     } else {
-        die "Environment variable HC_OUTPUT_FORMAT should be " . 
+        croak "Environment variable HC_OUTPUT_FORMAT should be " . 
             "one of: 'html', 'text', or 'none'\n";
     }
 

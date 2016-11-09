@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+use Carp;
 use Getopt::Long;
 
 use Graph::Undirected::Hamiltonicity;
@@ -38,12 +39,12 @@ GetOptions ("graph_file|f=s"     => \$graph_file,
 	    "output_format|o=s"  => \$output_format,
 	    "help|h"             => \$help
 	    )
-    or show_usage_and_die("Error in command line arguments\n");
+    or show_usage_and_exit("Error in command line arguments\n");
 
-show_usage_and_die() if $help;
+show_usage_and_exit() if $help;
 
 if ( $graph_file )  {
-    open ( my $fh, "<", $graph_file ) or die "Could not open [$graph_file][$!]\n";
+    open ( my $fh, "<", $graph_file ) or croak "Could not open [$graph_file][$!]\n";
     while ( defined ( my $line = <$fh> ) ) {
 	chomp $line;
 	next if $line =~ /^\s*#/; ### allow comments
@@ -62,7 +63,7 @@ if ( $graph_file )  {
     }
 
 } else {
-    show_usage_and_die("Please provide --f, or --t, or --v");
+    show_usage_and_exit("Please provide --f, or --t, or --v");
 }
 
 $ENV{HC_OUTPUT_FORMAT} = ( $output_format =~ /^(html|text|none)$/ ) ? $output_format : 'none';
@@ -86,7 +87,7 @@ foreach my $G ( @G ) {
 
 ##############################################################################
 
-sub show_usage_and_die {
+sub show_usage_and_exit {
 
     my $exit_code = 0;
     if ( $_[0] ) {
