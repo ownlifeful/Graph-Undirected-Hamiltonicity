@@ -46,7 +46,7 @@ foreach my $test ( @tests ) {
     my %after_degree_hash = get_degree_hash($after_graph);
     is_deeply( \%after_degree_hash, \%before_degree_hash, "[$label] degree hash unchanged after shuffle()");
 
-    ### The Hamiltonicity of the graphj remains unchanged after shuffle
+    ### The Hamiltonicity of the graph remains unchanged after shuffle
     my $after_result = graph_is_hamiltonian($after_graph);
     is( $after_result->{is_hamiltonian}, $test->{expected_is_hamiltonian}, "[$label] Hamiltonicity unchanged after shuffle()" );
 }
