@@ -336,30 +336,25 @@ sub test_required_cyclic {
     return $DONT_KNOW if $required_graph->is_acyclic();
 
     my $v = scalar( $required_graph->vertices() );
-
     my @cycle                       = $required_graph->find_a_cycle();
     my $number_of_vertices_in_cycle = scalar(@cycle);
-    if ( $number_of_vertices_in_cycle > 0 ) {
-        my $cycle_string = join ', ', @cycle;
-        output( $required_graph, { required => 1 } );
 
-        output("cycle_string=[$cycle_string]<BR/>"); ### DEBUG
+    my $cycle_string = join ', ', @cycle;
+    output( $required_graph, { required => 1 } );
+    output("cycle_string=[$cycle_string]<BR/>"); ### DEBUG
 
-        if ( $number_of_vertices_in_cycle < $v ) {
-            output("GRAPH_IS_NOT_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"); ### DEBUG
-            return ( $GRAPH_IS_NOT_HAMILTONIAN,
-                      "The sub-graph of required edges has a cycle "
-                    . "[$cycle_string] with fewer than $v vertices." );
-        }
-        elsif ( $number_of_vertices_in_cycle == $v ) {
-            output("GRAPH_IS_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"); ### DEBUG
-            return ( $GRAPH_IS_HAMILTONIAN,
-                      "The sub-graph of required edges has a cycle "
-                    . "[$cycle_string] with $v vertices." );
-        }
+    if ( $number_of_vertices_in_cycle < $v ) {
+        output("GRAPH_IS_NOT_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"); ### DEBUG
+        return ( $GRAPH_IS_NOT_HAMILTONIAN,
+                 "The sub-graph of required edges has a cycle "
+                 . "[$cycle_string] with fewer than $v vertices." );
     }
-
-    return $DONT_KNOW;
+    elsif ( $number_of_vertices_in_cycle == $v ) {
+        output("GRAPH_IS_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"); ### DEBUG
+        return ( $GRAPH_IS_HAMILTONIAN,
+                 "The sub-graph of required edges has a cycle "
+                 . "[$cycle_string] with $v vertices." );
+    }
 }
 
 ##########################################################################

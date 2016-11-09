@@ -23,6 +23,7 @@ WriteMakefile(
         'CGI'                 => '4',     # '4.31',
         'LWP::UserAgent'      => '6',     # '6.15'
         'Config::INI::Reader' => '0.025',
+        'Carp'                => '1.29',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Graph-Undirected-Hamiltonicity-*' },

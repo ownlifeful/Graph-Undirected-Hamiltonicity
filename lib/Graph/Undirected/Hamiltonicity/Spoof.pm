@@ -4,6 +4,7 @@ use 5.006;
 use strict;
 use warnings;
 
+use Carp;
 use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity::Transforms qw(add_random_edges shuffle);
 
@@ -112,8 +113,8 @@ sub spoof_known_hamiltonian_graph {
 
     my ( $v, $e ) = @_;
 
-    $v =~ s/\D+//g;
-    die "Please provide the number of vertices\n" unless $v > 0;
+    $v =~ s/\D+//g if defined $v;
+    carp "Please provide the number of vertices." unless defined $v and $v > 0;
 
     $e =~ s/\D+//g if defined $e;
 
