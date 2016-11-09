@@ -10,14 +10,11 @@ use LWP::UserAgent;
 
 use Exporter qw(import);
 
-our @EXPORT_OK =  qw(&is_hamiltonian_per_wolfram
-                     &get_url_from_config);
-our @EXPORT =  qw(&is_hamiltonian_per_wolfram);
+our @EXPORT_OK = qw(&is_hamiltonian_per_wolfram
+    &get_url_from_config);
+our @EXPORT = qw(&is_hamiltonian_per_wolfram);
 
-our %EXPORT_TAGS = (
-    all       =>  \@EXPORT_OK,
-);
-
+our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 =head1 NAME
 
@@ -30,7 +27,6 @@ Version 0.01
 =cut
 
 our $VERSION = '0.01';
-
 
 =head1 SYNOPSIS
 
@@ -74,7 +70,7 @@ Throws: an exception if an error is encountered.
 =cut
 
 sub is_hamiltonian_per_wolfram {
-    my ( $G ) = @_;
+    my ($G) = @_;
 
     ### Cover up bug in Wolfram Language script
     return 1 if $G->vertices() == 1;
@@ -86,7 +82,7 @@ sub is_hamiltonian_per_wolfram {
     my $url = get_url_from_config();
 
     ### Create a request
-    my $req = HTTP::Request->new(POST => $url);
+    my $req = HTTP::Request->new( POST => $url );
     $req->content_type('application/x-www-form-urlencoded');
     $req->content("x=$G");
 
@@ -94,7 +90,7 @@ sub is_hamiltonian_per_wolfram {
     my $res = $ua->request($req);
 
     # Check the outcome of the response
-    if ($res->is_success) {
+    if ( $res->is_success ) {
         my $output = $res->content;
         return $output;
     }
@@ -112,7 +108,7 @@ sub get_url_from_config {
     return unless ( -e $file && -f _ && -r _ );
 
     my $hash = Config::INI::Reader->read_file($file);
-    my $url = $hash->{wolfram}->{url};
+    my $url  = $hash->{wolfram}->{url};
 
     if ( $url =~ /^http/ ) {
         $url =~ s{^https://}{http://};
@@ -124,7 +120,6 @@ sub get_url_from_config {
 
 ##############################################################################
 ##############################################################################
-
 
 =head1 AUTHOR
 
@@ -140,4 +135,4 @@ You can find documentation for this module with the perldoc command.
 
 =cut
 
-1; # End of Graph::Undirected::Hamiltonicity::Wolfram
+1;    # End of Graph::Undirected::Hamiltonicity::Wolfram

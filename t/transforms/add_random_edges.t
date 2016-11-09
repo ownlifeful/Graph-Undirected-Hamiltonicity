@@ -3,7 +3,8 @@ use 5.006;
 use strict;
 use warnings;
 
-use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph &add_random_edges);
+use Graph::Undirected::Hamiltonicity::Transforms
+    qw(&string_to_graph &add_random_edges);
 
 use Test::More;
 
@@ -11,8 +12,8 @@ plan tests => 6;
 
 $ENV{HC_OUTPUT_FORMAT} = 'none';
 
-while ( defined ( my $line = <DATA> ) ) {
-    next if $line =~ /^\s*#/; ### skip comments
+while ( defined( my $line = <DATA> ) ) {
+    next if $line =~ /^\s*#/;    ### skip comments
     chomp $line;
 
     if ( $line =~ /^\d+=\d+(,\d+=\d+)*$/ ) {
@@ -23,16 +24,18 @@ while ( defined ( my $line = <DATA> ) ) {
         my $v         = @vertices;
         my $max_edges = ( $v * $v - $v ) / 2;
 
-        my $edges_to_add = int(rand( $max_edges - $e ));
+        my $edges_to_add = int( rand( $max_edges - $e ) );
 
-        my $G1 = add_random_edges($G, $edges_to_add);
+        my $G1 = add_random_edges( $G, $edges_to_add );
 
-        is( scalar( $G1->edges() ) , $e + $edges_to_add,  "Succesfully added $edges_to_add edges.");
+        is( scalar( $G1->edges() ),
+            $e + $edges_to_add,
+            "Succesfully added $edges_to_add edges."
+        );
     }
 }
 
 1;
-
 
 __DATA__
 ###

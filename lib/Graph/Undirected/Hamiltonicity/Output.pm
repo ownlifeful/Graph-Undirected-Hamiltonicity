@@ -7,17 +7,14 @@ use warnings;
 use Carp;
 use Exporter qw(import);
 
-our @EXPORT_OK =  qw(
-                     &output
-                     &output_graph_svg
-                     &output_image_svg
-                     &output_adjacency_matrix_svg
-        );
-
-our %EXPORT_TAGS = (
-    all       =>  \@EXPORT_OK,
+our @EXPORT_OK = qw(
+    &output
+    &output_graph_svg
+    &output_image_svg
+    &output_adjacency_matrix_svg
 );
 
+our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 =head1 NAME
 
@@ -87,7 +84,7 @@ SVG embedded inline.
 =cut
 
 sub output {
-    my ( $input ) = @_;
+    my ($input) = @_;
 
     my $format = $ENV{HC_OUTPUT_FORMAT} || 'none';
 
@@ -96,15 +93,18 @@ sub output {
     if ( $format eq 'html' ) {
         if ( ref $input ) {
             output_image_svg(@_);
-        } else {
+        }
+        else {
             print $input, "\n";
         }
 
-    } elsif ( $format eq 'text' ) {
+    }
+    elsif ( $format eq 'text' ) {
         if ( ref $input ) {
             ### Print the graph's edge-list as a string.
             print "$input\n";
-        } else {
+        }
+        else {
             ### Strip out HTML
             $input =~ s@<LI>@* @gi;
             $input =~ s@<BR/>@@gi;
@@ -112,9 +112,10 @@ sub output {
             $input =~ s@<HR[^>]*?>@=================@gi;
             print $input, "\n";
         }
-    } else {
-        croak "Environment variable HC_OUTPUT_FORMAT should be " . 
-            "one of: 'html', 'text', or 'none'\n";
+    }
+    else {
+        croak "Environment variable HC_OUTPUT_FORMAT should be "
+            . "one of: 'html', 'text', or 'none'\n";
     }
 
 }
@@ -141,7 +142,8 @@ xmlns="http://www.w3.org/2000/svg">
 
     output_graph_svg( $G, { %params, image_size => $image_size } );
     unless ( $G->vertices() > 20 ) {
-        output_adjacency_matrix_svg( $G, { %params, image_size => $image_size } );
+        output_adjacency_matrix_svg( $G,
+            { %params, image_size => $image_size } );
     }
     print qq{</svg>\n};
     print qq{</div>\n\n};
@@ -222,7 +224,6 @@ sub output_graph_svg {
         $edges_xml .= "\n";
     }
 
-
     ### Output image
     print qq{<?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
@@ -291,7 +292,8 @@ sub output_adjacency_matrix_svg {
 
             my $fill_color;
             if ( $G->has_edge( $i, $j ) ) {
-                $fill_color = $params{required}
+                $fill_color =
+                       $params{required}
                     || $G->get_edge_attribute( $i, $j, 'required' )
                     ? '#FF0000'
                     : '#000000';
@@ -314,11 +316,10 @@ sub output_adjacency_matrix_svg {
 
 ##########################################################################
 
-
 =head1 AUTHOR
 
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
 
 =cut
 
-1; # End of Graph::Undirected::Hamiltonicity::Output
+1;    # End of Graph::Undirected::Hamiltonicity::Output

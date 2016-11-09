@@ -13,7 +13,8 @@ use Exporter qw(import);
 
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected contains a Hamiltonian Cycle.
+Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
+contains a Hamiltonian Cycle.
 
 =head1 VERSION
 
@@ -23,20 +24,17 @@ Version 0.01
 
 our $VERSION = '0.01';
 
-our @EXPORT = qw(graph_is_hamiltonian); # exported by default
+our @EXPORT = qw(graph_is_hamiltonian);    # exported by default
 
 our @EXPORT_OK = qw(graph_is_hamiltonian);
 
-our %EXPORT_TAGS = (
-    all       =>  \@EXPORT_OK,
-);
-
-
+our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 =head1 SYNOPSIS
 
 
-This module decides whether a given Graph::Undirected contains a Hamiltonian Cycle.
+This module decides whether a given Graph::Undirected contains 
+a Hamiltonian Cycle.
 
     use Graph::Undirected;
     use Graph::Undirected::Hamiltonicity;
@@ -81,16 +79,16 @@ contains a Hamiltonian Cycle.
 sub graph_is_hamiltonian {
     my ($G) = @_;
 
-    my ( $is_hamiltonian, $reason ) = is_hamiltonian( $G );
+    my ( $is_hamiltonian, $reason ) = is_hamiltonian($G);
 
     my $result = {
-        is_hamiltonian => ( ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0 ),
-        reason         => $reason,
+        is_hamiltonian =>
+            ( ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0 ),
+        reason => $reason,
     };
 
     return $result;
 }
-
 
 ##########################################################################
 
@@ -117,9 +115,9 @@ sub is_hamiltonian {
     my ( $is_hamiltonian, $reason );
 
     my @tests_1 = (
-        \&test_trivial,      \&test_min_degree,
-        \&test_connected,    \&test_articulation_vertex,
-        \&test_graph_bridge, # \&test_canonical
+        \&test_trivial,   \&test_min_degree,
+        \&test_connected, \&test_articulation_vertex,
+        \&test_graph_bridge,    # \&test_canonical
     );
 
     foreach my $test_sub (@tests_1) {
@@ -135,8 +133,9 @@ sub is_hamiltonian {
     if ( scalar( $required_graph->edges() ) ) {
         output("required graph:");
         output( $required_graph, { required => 1 } );
-    } else {
-        output("required graph has no edges.<BR/>");        
+    }
+    else {
+        output("required graph has no edges.<BR/>");
     }
 
     ( $is_hamiltonian, $reason ) = test_required($required_graph);
@@ -144,25 +143,28 @@ sub is_hamiltonian {
 
     my $deleted_edges;
     ( $deleted_edges, $G1 ) = delete_unusable_edges($G1);
-    if ( $deleted_edges ) {
+    if ($deleted_edges) {
+
         # The following is equivalent to:
         # return is_hamiltonian($G1);
-        @_ = ( $G1 );
+        @_ = ($G1);
         goto &is_hamiltonian;
     }
-
 
     if ( $required_graph->edges() ) {
         output("Now calling test_required_cyclic()<BR/>");
         ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);
-        return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
+        return ( $is_hamiltonian, $reason )
+            unless $is_hamiltonian == $DONT_KNOW;
 
         output("Now calling deleted_non_required_neighbors()<BR/>");
-        ( $deleted_edges, $G1 ) = delete_non_required_neighbors( $required_graph, $G1 );
+        ( $deleted_edges, $G1 ) =
+            delete_non_required_neighbors( $required_graph, $G1 );
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
-            output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
-            @_ = ( $G1 );
+            output(
+                "Shrank the graph by removing $deleted_edges edge$s.<BR/>");
+            @_ = ($G1);
             goto &is_hamiltonian;
         }
 
@@ -170,40 +172,46 @@ sub is_hamiltonian {
             shrink_required_walks_longer_than_2_edges( $G1, $required_graph );
         if ($deleted_edges) {
             if ( $deleted_edges == 1 ) {
-                output("Shrank the graph by removing one vertex and one edge.<BR/>");
+                output(
+                    "Shrank the graph by removing one vertex and one edge.<BR/>"
+                );
             }
             else {
-                output("Shrank the graph by removing $deleted_edges edges and vertices.<BR/>");
+                output( "Shrank the graph by removing " . 
+                        "$deleted_edges edges and vertices.<BR/>"                    
+                );
             }
 
-            @_ = ( $G1 );
+            @_ = ($G1);
             goto &is_hamiltonian;
         }
     }
-    
-    output("Now running an exhaustive, recursive, and conclusive search, " . 
-           "only slightly better than brute force.<BR/>");
+
+    output(   "Now running an exhaustive, recursive, and conclusive search, "
+            . "only slightly better than brute force.<BR/>" );
     my @undecided_vertices = grep { $G1->degree($_) > 2 } $G1->vertices();
-    if ( @undecided_vertices ) {
-        my $vertex = 
-            get_chosen_vertex($G1, $required_graph, \@undecided_vertices);
-        my $tentative_combinations = 
-            get_tentative_combinations($G1, $required_graph, $vertex);
-        foreach my $tentative_edge_pair ( @$tentative_combinations ) {
+    if (@undecided_vertices) {
+        my $vertex =
+            get_chosen_vertex( $G1, $required_graph, \@undecided_vertices );
+        my $tentative_combinations =
+            get_tentative_combinations( $G1, $required_graph, $vertex );
+        foreach my $tentative_edge_pair (@$tentative_combinations) {
             my $G2 = $G1->deep_copy_graph();
-            output("For vertex: $vertex, protecting " . 
-                   ( join ',', map { "$vertex=$_"  } @$tentative_edge_pair ) .
-                   "<BR/>");
+            output(   "For vertex: $vertex, protecting "
+                    . ( join ',', map {"$vertex=$_"} @$tentative_edge_pair )
+                    . "<BR/>" );
             foreach my $neighbor ( $G2->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
                 output("Deleting edge: $vertex=$neighbor<BR/>");
-                $G2->delete_edge($vertex, $neighbor);
+                $G2->delete_edge( $vertex, $neighbor );
             }
 
-            output("The Graph with $vertex=" . $tentative_edge_pair->[0] . 
-                   ", $vertex=" . $tentative_edge_pair->[1] . 
-                   " protected:<BR/>");
+            output(   "The Graph with $vertex="
+                    . $tentative_edge_pair->[0]
+                    . ", $vertex="
+                    . $tentative_edge_pair->[1]
+                    . " protected:<BR/>" );
             output($G2);
 
             ( $is_hamiltonian, $reason ) = is_hamiltonian($G2);
@@ -214,26 +222,27 @@ sub is_hamiltonian {
     }
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
-             "The graph did not pass any tests for Hamiltonicity." );
+        "The graph did not pass any tests for Hamiltonicity." );
 
 }
 
 ##########################################################################
 
 sub get_tentative_combinations {
-    my ($G, $required_graph, $vertex) = @_;
+    my ( $G, $required_graph, $vertex ) = @_;
     my @tentative_combinations;
     my @neighbors = $G->neighbors($vertex);
     if ( $required_graph->degree($vertex) == 1 ) {
-        my ( $fixed_neighbor ) = $required_graph->neighbors($vertex);
+        my ($fixed_neighbor) = $required_graph->neighbors($vertex);
 
-        foreach my $tentative_neighbor ( @neighbors ) {
+        foreach my $tentative_neighbor (@neighbors) {
             next if $fixed_neighbor == $tentative_neighbor;
             push @tentative_combinations,
-                [$fixed_neighbor, $tentative_neighbor];
+                [ $fixed_neighbor, $tentative_neighbor ];
         }
 
-    } else {
+    }
+    else {
         for ( my $i = 0; $i < scalar(@neighbors) - 1; $i++ ) {
             for ( my $j = $i + 1; $j < scalar(@neighbors); $j++ ) {
                 push @tentative_combinations,
@@ -254,21 +263,20 @@ sub get_chosen_vertex {
     my $chosen_vertex;
     my $chosen_vertex_degree;
     my $chosen_vertex_required_degree;
-    foreach my $vertex ( @$undecided_vertices ) {
-        my $degree = $G->degree($vertex);
+    foreach my $vertex (@$undecided_vertices) {
+        my $degree          = $G->degree($vertex);
         my $required_degree = $required_graph->degree($vertex);
-        if ( ( ! defined $chosen_vertex_degree ) or 
-             ( $degree > $chosen_vertex_degree ) or
-             ( ($degree == $chosen_vertex_degree) 
-               and
-               ( $required_degree > $chosen_vertex_required_degree ) ) or
-             ( ($degree == $chosen_vertex_degree)
-               and
-               ( $required_degree == $chosen_vertex_required_degree )
-               and ( $vertex < $chosen_vertex ) )
-            ) {
-            $chosen_vertex = $vertex;
-            $chosen_vertex_degree = $degree;
+        if (   ( !defined $chosen_vertex_degree )
+            or ( $degree > $chosen_vertex_degree )
+            or (    ( $degree == $chosen_vertex_degree )
+                and ( $required_degree > $chosen_vertex_required_degree ) )
+            or (    ( $degree == $chosen_vertex_degree )
+                and ( $required_degree == $chosen_vertex_required_degree )
+                and ( $vertex < $chosen_vertex ) )
+            )
+        {
+            $chosen_vertex                 = $vertex;
+            $chosen_vertex_degree          = $degree;
             $chosen_vertex_required_degree = $required_degree;
         }
     }
@@ -277,8 +285,6 @@ sub get_chosen_vertex {
 }
 
 ##########################################################################
-
-########################################################################## the END
 
 =head1 AUTHOR
 
@@ -324,4 +330,4 @@ L<http://search.cpan.org/dist/Graph-Undirected-Hamiltonicity/>
 
 =cut
 
-1; # End of Graph::Undirected::Hamiltonicity
+1;    # End of Graph::Undirected::Hamiltonicity

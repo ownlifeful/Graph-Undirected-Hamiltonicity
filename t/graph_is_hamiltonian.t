@@ -10,33 +10,34 @@ use Graph::Undirected::Hamiltonicity::Wolfram qw(:all);
 use Test::More;
 
 my $url = get_url_from_config();
-if ( $url ) {
+if ($url) {
     plan tests => 28;
-} else {
+}
+else {
     plan tests => 14;
     print $ENV{HOME} . "/hamilton.ini doesn't exist. ";
     print "Skipping Wolfram verification.\n";
 }
 
-while ( defined ( my $line = <DATA> ) ) {
-    next if $line =~ /^\s*#/; ### skip comments
+while ( defined( my $line = <DATA> ) ) {
+    next if $line =~ /^\s*#/;    ### skip comments
     chomp $line;
 
     if ( $line =~ /^([^|]+)\|([01])\|(\d+|\d+=\d+(,\d+=\d+)*)$/ ) {
-        my ($label, $expected_result, $graph_text ) = ($1, $2, $3);
+        my ( $label, $expected_result, $graph_text ) = ( $1, $2, $3 );
         my $G = string_to_graph($graph_text);
 
-        my $result = graph_is_hamiltonian( $G );
-        is( $result->{is_hamiltonian}, $expected_result,  $label);
+        my $result = graph_is_hamiltonian($G);
+        is( $result->{is_hamiltonian}, $expected_result, $label );
 
-        if ( $url ) {
-            is( is_hamiltonian_per_wolfram($G), $expected_result,  "Wolfram: $label");
+        if ($url) {
+            is( is_hamiltonian_per_wolfram($G),
+                $expected_result, "Wolfram: $label" );
         }
     }
 }
 
 1;
-
 
 __DATA__
 ###

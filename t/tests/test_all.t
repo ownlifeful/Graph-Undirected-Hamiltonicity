@@ -10,23 +10,22 @@ use Test::More;
 
 plan tests => 17;
 
-while ( defined ( my $line = <DATA> ) ) {
-    next if $line =~ /^\s*#/; ### skip comments
+while ( defined( my $line = <DATA> ) ) {
+    next if $line =~ /^\s*#/;    ### skip comments
     chomp $line;
 
     if ( $line =~ /^([^|]+)\|([012])\|([^|]+)\|(\d+=\d+(,\d+=\d+)*)$/ ) {
-        my ($test_sub_name, $expected_result, $label, $graph_text ) = ($1, $2, $3, $4);
+        my ( $test_sub_name, $expected_result, $label, $graph_text ) =
+            ( $1, $2, $3, $4 );
         my $G = string_to_graph($graph_text);
         no strict 'refs';
         my ( $is_hamiltonian, $reason ) = &$test_sub_name($G);
         use strict 'refs';
-        is( $is_hamiltonian, $expected_result, "$test_sub_name: $label");
+        is( $is_hamiltonian, $expected_result, "$test_sub_name: $label" );
     }
 }
 
 1;
-
-
 
 __DATA__
 ###

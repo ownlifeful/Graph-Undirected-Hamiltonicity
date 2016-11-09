@@ -10,15 +10,12 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(add_random_edges shuffle);
 
 use Exporter qw(import);
 
-our @EXPORT_OK =  qw(
-                     &spoof_canonical_hamiltonian_graph
-                     &spoof_known_hamiltonian_graph
-        );
-
-our %EXPORT_TAGS = (
-    all       =>  \@EXPORT_OK,
+our @EXPORT_OK = qw(
+    &spoof_canonical_hamiltonian_graph
+    &spoof_known_hamiltonian_graph
 );
 
+our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 =head1 NAME
 
@@ -31,7 +28,6 @@ Version 0.01
 =cut
 
 our $VERSION = '0.01';
-
 
 =head1 SYNOPSIS
 
@@ -78,23 +74,22 @@ Returns: a Graph::Undirected with $v vertices, and $v edges.
 =cut
 
 sub spoof_canonical_hamiltonian_graph {
-    my ( $v ) = @_;
+    my ($v) = @_;
 
     my $last_vertex = $v - 1;
-    my @vertices = ( 0 .. $last_vertex );
+    my @vertices    = ( 0 .. $last_vertex );
 
     my $G = Graph::Undirected->new( vertices => \@vertices );
     $G->add_edge( 0, $last_vertex );
 
     for ( my $i = 0; $i < $last_vertex; $i++ ) {
-	$G->add_edge( $i, $i + 1 );
+        $G->add_edge( $i, $i + 1 );
     }
 
     return $G;
 }
 
 ##############################################################################
-
 
 =head2 spoof_known_hamiltonian_graph
 
@@ -118,19 +113,18 @@ sub spoof_known_hamiltonian_graph {
 
     # Generate random
     my $max_edges = ( $v * $v - $v ) / 2;
-    $e ||= int( rand( $max_edges - 2 * $v + 2  )  ) + $v;
+    $e ||= int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
 
     croak "The number of edges must be >= number of vertices." if $e < $v;
 
     my $G = spoof_canonical_hamiltonian_graph($v);
-    $G = shuffle( $G );
-    $G = add_random_edges($G, $e - $v);
+    $G = shuffle($G);
+    $G = add_random_edges( $G, $e - $v );
 
     return $G;
 }
 
 ##############################################################################
-
 
 =head1 AUTHOR
 
@@ -146,4 +140,4 @@ You can find documentation for this module with the perldoc command.
 
 =cut
 
-1; # End of Graph::Undirected::Hamiltonicity::Spoof
+1;    # End of Graph::Undirected::Hamiltonicity::Spoof

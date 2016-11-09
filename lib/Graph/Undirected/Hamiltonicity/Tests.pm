@@ -16,21 +16,20 @@ our $GRAPH_IS_NOT_HAMILTONIAN = 2;
 
 our @EXPORT = qw($DONT_KNOW $GRAPH_IS_HAMILTONIAN $GRAPH_IS_NOT_HAMILTONIAN);
 
-our @EXPORT_OK = ( @EXPORT,  qw(
-           &test_articulation_vertex
-           &test_canonical
-           &test_connected
-           &test_graph_bridge
-           &test_min_degree
-           &test_required
-           &test_required_cyclic
-           &test_trivial
-        ) );
-
-our %EXPORT_TAGS = (
-    all       =>  [ @EXPORT, @EXPORT_OK ],
+our @EXPORT_OK = (
+    @EXPORT, qw(
+        &test_articulation_vertex
+        &test_canonical
+        &test_connected
+        &test_graph_bridge
+        &test_min_degree
+        &test_required
+        &test_required_cyclic
+        &test_trivial
+        )
 );
 
+our %EXPORT_TAGS = ( all => [ @EXPORT, @EXPORT_OK ], );
 
 =head1 NAME
 
@@ -43,7 +42,6 @@ Version 0.01
 =cut
 
 our $VERSION = '0.01';
-
 
 =head1 SYNOPSIS
 
@@ -173,26 +171,31 @@ in which all the edges can be arranged into a regular polygon.
 =cut
 
 sub test_canonical {
-    my ( $G ) = @_;
-    my @vertices  = sort { $a <=> $b } $G->vertices();
-    my $v         = scalar(@vertices);
+    my ($G) = @_;
+    my @vertices = sort { $a <=> $b } $G->vertices();
+    my $v = scalar(@vertices);
 
-    if ( $G->has_edge( $vertices[0] , $vertices[-1] ) ) {
-        for (my $counter = 0; $counter < $v - 1; $counter++ ) {
-            unless ( $G->has_edge( $vertices[$counter] , 
-                                    $vertices[ $counter + 1 ] ) ) {
+    if ( $G->has_edge( $vertices[0], $vertices[-1] ) ) {
+        for ( my $counter = 0; $counter < $v - 1; $counter++ ) {
+            unless (
+                $G->has_edge(
+                    $vertices[$counter], $vertices[ $counter + 1 ]
+                )
+                )
+            {
                 return ( $DONT_KNOW,
-                         "This graph is not a supergraph of " . 
-                         "the canonical Hamiltonian Cycle." );
+                          "This graph is not a supergraph of "
+                        . "the canonical Hamiltonian Cycle." );
             }
         }
         return ( $GRAPH_IS_HAMILTONIAN,
-                 "This graph is a supergraph of " . 
-                 "the canonical Hamiltonian Cycle." );               
-    } else {
+                  "This graph is a supergraph of "
+                . "the canonical Hamiltonian Cycle." );
+    }
+    else {
         return ( $DONT_KNOW,
-                 "This graph is not a supergraph of " . 
-                 "the canonical Hamiltonian Cycle." );
+                  "This graph is not a supergraph of "
+                . "the canonical Hamiltonian Cycle." );
     }
 }
 
@@ -219,7 +222,6 @@ sub test_min_degree {
 }
 
 ##########################################################################
-
 
 =head2 test_connected
 
@@ -255,18 +257,17 @@ sub test_articulation_vertex {
     my ($G) = @_;
 
     return $DONT_KNOW if $G->is_biconnected();
-    
+
     my $vertices_string = join ',', $G->articulation_points();
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
-             "This graph is not biconnected, therefore not Hamiltonian. "
-             . "It contains the following articulation vertices: "
-             . "($vertices_string)" );
+              "This graph is not biconnected, therefore not Hamiltonian. "
+            . "It contains the following articulation vertices: "
+            . "($vertices_string)" );
 
 }
 
 ##########################################################################
-
 
 =head2 test_graph_bridge
 
@@ -281,12 +282,12 @@ sub test_graph_bridge {
     my ($G) = @_;
 
     return $DONT_KNOW if $G->is_edge_connected();
-    
+
     my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $G->bridges();
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
-             "This graph is not edge-connected, therefore not Hamiltonian. "
-             . " It contains the following bridges ($bridge_string)." );
+              "This graph is not edge-connected, therefore not Hamiltonian. "
+            . " It contains the following bridges ($bridge_string)." );
 
 }
 
@@ -304,7 +305,7 @@ then the input graph cannot be Hamiltonian.
 =cut
 
 sub test_required {
-    my ( $required_graph ) = @_;
+    my ($required_graph) = @_;
 
     foreach my $vertex ( $required_graph->vertices() ) {
         my $degree = $required_graph->degree($vertex);
@@ -336,25 +337,29 @@ sub test_required_cyclic {
 
     return $DONT_KNOW if $required_graph->is_acyclic();
 
-    my $v = scalar( $required_graph->vertices() );
+    my $v                           = scalar( $required_graph->vertices() );
     my @cycle                       = $required_graph->find_a_cycle();
     my $number_of_vertices_in_cycle = scalar(@cycle);
 
     my $cycle_string = join ', ', @cycle;
     output( $required_graph, { required => 1 } );
-    output("cycle_string=[$cycle_string]<BR/>"); ### DEBUG
+    output("cycle_string=[$cycle_string]<BR/>");    ### DEBUG
 
     if ( $number_of_vertices_in_cycle < $v ) {
-        output("GRAPH_IS_NOT_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"); ### DEBUG
+        output(
+            "GRAPH_IS_NOT_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"
+        );                                          ### DEBUG
         return ( $GRAPH_IS_NOT_HAMILTONIAN,
-                 "The sub-graph of required edges has a cycle "
-                 . "[$cycle_string] with fewer than $v vertices." );
+                  "The sub-graph of required edges has a cycle "
+                . "[$cycle_string] with fewer than $v vertices." );
     }
     elsif ( $number_of_vertices_in_cycle == $v ) {
-        output("GRAPH_IS_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"); ### DEBUG
+        output(
+            "GRAPH_IS_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"
+        );                                          ### DEBUG
         return ( $GRAPH_IS_HAMILTONIAN,
-                 "The sub-graph of required edges has a cycle "
-                 . "[$cycle_string] with $v vertices." );
+                  "The sub-graph of required edges has a cycle "
+                . "[$cycle_string] with $v vertices." );
     }
 }
 
@@ -376,4 +381,4 @@ You can find documentation for this module with the perldoc command.
 
 =cut
 
-1; # End of Graph::Undirected::Hamiltonicity::Tests
+1;    # End of Graph::Undirected::Hamiltonicity::Tests
