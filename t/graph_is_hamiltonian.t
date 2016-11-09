@@ -11,9 +11,9 @@ use Test::More;
 
 my $url = get_url_from_config();
 if ( $url ) {
-    plan tests => 24;
+    plan tests => 26;
 } else {
-    plan tests => 12;
+    plan tests => 13;
     print $ENV{HOME} . "/hamilton.ini doesn't exist. ";
     print "Skipping Wolfram verification.\n";
 }
@@ -22,7 +22,7 @@ while ( defined ( my $line = <DATA> ) ) {
     next if $line =~ /^\s*#/; ### skip comments
     chomp $line;
 
-    if ( $line =~ /^([^|]+)\|([01])\|(\d+=\d+(,\d+=\d+)*)$/ ) {
+    if ( $line =~ /^([^|]+)\|([01])\|(\d+|\d+=\d+(,\d+=\d+)*)$/ ) {
         my ($label, $expected_result, $graph_text ) = ($1, $2, $3);
         my $G = string_to_graph($graph_text);
 
@@ -58,6 +58,11 @@ __DATA__
 ### Note: Every time you add a test case, remember to update the "plan tests => NUMBER";
 
 # Here are some test cases:
+
+### The following graph exposes a bug in the Wolfram Language. Uncomment later.
+# a single vertex|1|8
+
+a two vertex graph|0|42=69
 
 a simple 3 vertex, 3 edge graph|1|0=1,0=2,1=2
 
