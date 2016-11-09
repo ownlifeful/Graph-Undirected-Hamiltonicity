@@ -18,7 +18,7 @@ my @tests = (
         expected_is_hamiltonian => 0,
     },
     {
-        label => 'Nested Square Frames Graph',
+        label => 'Cube Graph',
         input_graph_text => '0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,4=6,5=7,6=7',
         expected_is_hamiltonian => 1,
     },
