@@ -13,28 +13,24 @@ version 0.01
     use Graph::Undirected;
     use Graph::Undirected::Hamiltonicity;
 
-    ### Create and initialize an undirected graph
-    my $graph = Graph::Undirected->new( vertices => [ 0..3 ] );
-    $graph->add_edge(0,1);
-    $graph->add_edge(0,3);
-    $graph->add_edge(1,2);
-    $graph->add_edge(1,3);
-    $graph->add_edge(2,3);
+    # Create and initialize an undirected graph.
+    my $g = Graph::Undirected->new( vertices => [ 0..3 ] );
+    $g->add_edge(0,1);
+    $g->add_edge(0,3);
+    $g->add_edge(1,2);
+    $g->add_edge(1,3);
 
-    ### Test whether the graph is Hamiltonian
-    my $result = graph_is_hamiltonian( $graph );
-
-    print $result->{is_hamiltonian}, "\n";
-    # prints 1 if the graph contains a Hamiltonian Cycle, 0 otherwise.
-
-    print $result->{reason}, "\n";
-    # prints a brief reason for the conclusion.
+    if( graph_is_hamiltonian( $g ) ) {
+        print "The graph contains a Hamiltonian Cycle.\n";
+    } else {
+        print "The graph does not contain a Hamiltonian Cycle.\n";
+    }
 
 # DESCRIPTION
 
 
 This module is dedicated to the Quixotic quest of determining whether "[P=NP](https://en.wikipedia.org/wiki/P_versus_NP_problem "P versus NP")".
-It attempts to decide whether a given `Graph::Undirected` contains a Hamiltonian Cycle, using a series of polynomial time tests.
+It decides whether a given `Graph::Undirected` contains a Hamiltonian Cycle.
 
 The non-deterministic algorithm systematically simplifies and traverses the input graph in a series of recursive tests. This module is not object-oriented, though once work on it is sufficiently advanced, it could be rolled up into an `is_hamiltonian()` method in `Graph::Undirected`. For now, it serves as a framework for explorers of this frontier of Computer Science.
 
@@ -75,8 +71,17 @@ On CentOS ( and presumably RHEL and Fedora Linux ):
 
     sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
 
+## Verification via Wolfram Cloud
 To activate the ( optional, but recommended  ) `Graph::Undirected::Hamiltonicity::Wolfram` module, which lets you cross-check results 
 with the Wolfram Open Cloud, please read [WOLFRAM.md](WOLFRAM.md "Verification via Wolfram Cloud").
+
+    use Graph::Undirected::Hamiltonicity::Wolfram;
+
+    if( is_hamiltonian_per_wolfram( $g ) ) {
+        print "The graph contains a Hamiltonian Cycle.\n";
+    } else {
+        print "The graph does not contain a Hamiltonian Cycle.\n";
+    }
 
 ## USAGE
 
@@ -113,7 +118,7 @@ To get more detailed help:
 
 # SUPPORT
 
-RT, CPAN's request tracker ([report bugs here](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Graph-Undirected-Hamiltonicity))
+Please report issues [on github](https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/issues).
 
 
 # ACKNOWLEDGEMENTS

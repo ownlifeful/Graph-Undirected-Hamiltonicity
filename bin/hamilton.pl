@@ -72,17 +72,16 @@ $ENV{HC_OUTPUT_FORMAT} =
 foreach my $G (@G) {
     print "graph=($G)\n";
 
-    my $result = graph_is_hamiltonian($G);
+    my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($G);
 
-    print "Conclusion:\n";
-    if ( $result->{is_hamiltonian} ) {
+    print "Conclusion: ";
+    if ( $is_hamiltonian ) {
         print "The graph is Hamiltonian.\n";
     } else {
         print "The graph is not Hamiltonian.\n";
     }
 
-    print "(", $result->{reason}, ")\n" if defined $result->{reason};
-
+    print "($reason)\n";
     print "\n\n";
 }
 

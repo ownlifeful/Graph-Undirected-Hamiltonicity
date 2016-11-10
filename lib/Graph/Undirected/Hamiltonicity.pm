@@ -40,20 +40,17 @@ a Hamiltonian Cycle.
     use Graph::Undirected::Hamiltonicity;
 
     ### Create and initialize an undirected graph
-    my $graph = Graph::Undirected->new( vertices => [ 0..3 ] );
-    $graph->add_edge(0,1);
-    $graph->add_edge(0,3);
-    $graph->add_edge(1,2);
-    $graph->add_edge(1,3);
-    $graph->add_edge(2,3);
+    my $g = Graph::Undirected->new( vertices => [ 0..3 ] );
+    $g->add_edge(0,1);
+    $g->add_edge(0,3);
+    $g->add_edge(1,2);
+    $g->add_edge(1,3);
 
-    my $result = graph_is_hamiltonian( $graph );
-
-    print $result->{is_hamiltonian}, "\n";
-    # prints 1 if the graph contains a Hamiltonian Cycle, 0 otherwise.
-
-    print $result->{reason}, "\n";
-    # prints a brief reason for the conclusion.
+    if( graph_is_hamiltonian( $g ) ) {
+        print "The graph contains a Hamiltonian Cycle.\n";
+    } else {
+        print "The graph does not contain a Hamiltonian Cycle.\n";
+    }
 
 =head1 EXPORT
 
@@ -81,13 +78,9 @@ sub graph_is_hamiltonian {
 
     my ( $is_hamiltonian, $reason ) = is_hamiltonian($G);
 
-    my $result = {
-        is_hamiltonian =>
-            ( ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0 ),
-        reason => $reason,
-    };
+    my $final_bit = $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ? 1 : 0;
 
-    return $result;
+    return wantarray ? ( $final_bit, $reason ) : $final_bit;
 }
 
 ##########################################################################
