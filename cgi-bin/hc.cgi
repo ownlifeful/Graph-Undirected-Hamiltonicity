@@ -71,17 +71,17 @@ if ( $graph_text =~ /\d=\d/ ) {
     print
         qq{You can read the program's trace output below, or jump to the <A HREF="#conclusion">conclusion</A>.<BR/>\n};
 
-    my $result = graph_is_hamiltonian($G);
+    my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($G);
     print qq{<BR/>\n};
     print qq{<A NAME="conclusion"><B>Conclusion:</B></A>\n};
     print qq{<span style="background: yellow;">\n};
-    if ( $result->{is_hamiltonian} ) {
+    if ( $is_hamiltonian ) {
         print "The graph is Hamiltonian.\n";
     } else {
         print "The graph is not Hamiltonian.\n";
     }
     print qq{</span>\n};
-    print "(", $result->{reason}, ")\n" if defined $result->{reason};
+    print "($reason)\n";
 
 }
 
