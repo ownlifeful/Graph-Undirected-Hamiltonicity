@@ -75,11 +75,8 @@ contains a Hamiltonian Cycle.
 
 sub graph_is_hamiltonian {
     my ($G) = @_;
-
     my ( $is_hamiltonian, $reason ) = is_hamiltonian($G);
-
-    my $final_bit = $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ? 1 : 0;
-
+    my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
     return wantarray ? ( $final_bit, $reason ) : $final_bit;
 }
 

@@ -29,8 +29,8 @@ qr/The number of edges must be >= number of vertices/,
 for my $v ( 3 .. 13 ) {
     my $G = spoof_known_hamiltonian_graph($v);
     is( scalar( $G->vertices() ), $v, "Spoofed graph has $v vertices." );
-    my $result = graph_is_hamiltonian($G);
-    is( $result->{is_hamiltonian}, 1, "Spoofed graph is Hamiltonian" );
+    my $is_hamiltonian = graph_is_hamiltonian($G);
+    is( $is_hamiltonian, 1, "Spoofed graph is Hamiltonian" );
 }
 
 for my $v ( 10 .. 20 ) {
@@ -38,7 +38,7 @@ for my $v ( 10 .. 20 ) {
     my $G = spoof_known_hamiltonian_graph( $v, $e );
     is( scalar( $G->vertices() ), $v, "Spoofed graph has $v vertices." );
     is( scalar( $G->edges() ),    $e, "Spoofed graph has $e edges." );
-    my $result = graph_is_hamiltonian($G);
-    is( $result->{is_hamiltonian}, 1, "Spoofed graph is Hamiltonian" );
+    my $is_hamiltonian = graph_is_hamiltonian($G);
+    is( $is_hamiltonian, 1, "Spoofed graph is Hamiltonian" );
 }
 

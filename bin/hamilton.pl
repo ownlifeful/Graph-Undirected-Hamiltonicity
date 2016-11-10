@@ -74,6 +74,7 @@ foreach my $G (@G) {
 
     my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($G);
 
+    print "\n\n";
     print "Conclusion: ";
     if ( $is_hamiltonian ) {
         print "The graph is Hamiltonian.\n";

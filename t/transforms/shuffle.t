@@ -48,8 +48,8 @@ foreach my $test (@tests) {
         "[$label] degree hash unchanged after shuffle()" );
 
     ### The Hamiltonicity of the graph remains unchanged after shuffle
-    my $after_result = graph_is_hamiltonian($after_graph);
-    is( $after_result->{is_hamiltonian},
+    my $is_hamiltonian = graph_is_hamiltonian($after_graph);
+    is( $is_hamiltonian,
         $test->{expected_is_hamiltonian},
         "[$label] Hamiltonicity unchanged after shuffle()"
     );

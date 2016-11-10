@@ -26,8 +26,8 @@ while ( defined( my $line = <DATA> ) ) {
         my ( $label, $expected_result, $graph_text ) = ( $1, $2, $3 );
         my $G = string_to_graph($graph_text);
 
-        my $result = graph_is_hamiltonian($G);
-        is( $result->{is_hamiltonian}, $expected_result, $label );
+        my $is_hamiltonian = graph_is_hamiltonian($G);
+        is( $is_hamiltonian, $expected_result, $label );
 
         if ($url) {
             is( is_hamiltonian_per_wolfram($G),
