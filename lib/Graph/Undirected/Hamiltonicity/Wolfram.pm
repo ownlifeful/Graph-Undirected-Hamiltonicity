@@ -72,8 +72,11 @@ Throws: an exception if an error is encountered.
 sub is_hamiltonian_per_wolfram {
     my ($G) = @_;
 
-    ### Cover up bug in Wolfram Language script
-    return 1 if $G->vertices() == 1;
+    ### Cover up limitations of Wolfram Language script
+    my $vertices = $G->vertices();
+    return 0 if $vertices == 0;
+    return 1 if $vertices == 1;
+    return 0 if grep { $G->degree($_) < 2 } $G->vertices();
 
     ### Create a user agent object
     my $ua = LWP::UserAgent->new;
