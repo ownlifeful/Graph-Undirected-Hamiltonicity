@@ -20,7 +20,7 @@ version 0.01
     $g->add_edge(1,2);
     $g->add_edge(1,3);
 
-    if( graph_is_hamiltonian( $g ) ) {
+    if ( graph_is_hamiltonian( $g ) ) {
         print "The graph contains a Hamiltonian Cycle.\n";
     } else {
         print "The graph does not contain a Hamiltonian Cycle.\n";

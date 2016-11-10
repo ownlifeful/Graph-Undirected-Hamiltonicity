@@ -39,14 +39,14 @@ a Hamiltonian Cycle.
     use Graph::Undirected;
     use Graph::Undirected::Hamiltonicity;
 
-    ### Create and initialize an undirected graph
+    # Create and initialize an undirected graph.
     my $g = Graph::Undirected->new( vertices => [ 0..3 ] );
     $g->add_edge(0,1);
     $g->add_edge(0,3);
     $g->add_edge(1,2);
     $g->add_edge(1,3);
 
-    if( graph_is_hamiltonian( $g ) ) {
+    if ( graph_is_hamiltonian( $g ) ) {
         print "The graph contains a Hamiltonian Cycle.\n";
     } else {
         print "The graph does not contain a Hamiltonian Cycle.\n";
