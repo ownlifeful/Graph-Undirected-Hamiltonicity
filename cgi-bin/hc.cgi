@@ -57,8 +57,8 @@ if ( $graph_text =~ /\d/ ) {
         print_instructions();
     }
 } else {
-    print
-        "Here is the Null Graph K<sub>0</sub>. It is not Hamiltonian.\n<BR/><P/>\n";
+    print "Here is the Null Graph K<sub>0</sub>. ";
+    print "It is not Hamiltonian.\n<BR/><P/>\n";        
     print_instructions();
 }
 
@@ -68,8 +68,9 @@ print "<br/><br/>\n";
 
 if ( $graph_text =~ /\d=\d/ ) {
 
-    print
-        qq{You can read the program's trace output below, or jump to the <A HREF="#conclusion">conclusion</A>.<BR/>\n};
+    print qq{You can read the program's trace output below, };
+    print qq{or jump to the <A HREF="#conclusion">conclusion</A>.<BR/>\n};
+        
 
     my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($G);
     print qq{<BR/>\n};

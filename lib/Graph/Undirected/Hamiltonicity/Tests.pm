@@ -20,7 +20,6 @@ our @EXPORT_OK = (
     @EXPORT, qw(
         &test_articulation_vertex
         &test_canonical
-        &test_connected
         &test_graph_bridge
         &test_min_degree
         &test_required
@@ -91,8 +90,6 @@ The subroutines that can be imported individually, by name, are:
 =item * &test_articulation_vertex
 
 =item * &test_canonical
-
-=item * &test_connected
 
 =item * &test_graph_bridge
 
@@ -215,27 +212,6 @@ sub test_min_degree {
             return ( $GRAPH_IS_NOT_HAMILTONIAN,
                 "This graph has a vertex ($vertex) with degree < 2" );
         }
-    }
-
-    return $DONT_KNOW;
-}
-
-##########################################################################
-
-=head2 test_connected
-
-If the graph is not connected, it does not contain a Hamiltonian Cycle.
-
-=cut
-
-### Implented this subroutine to allow for a different implementation
-### of is_connected(), in the future.
-
-sub test_connected {
-    my ($G) = @_;
-    unless ( $G->is_connected() ) {
-        return ( $GRAPH_IS_NOT_HAMILTONIAN,
-            "This graph is not connected, therefore not Hamiltonian" );
     }
 
     return $DONT_KNOW;
