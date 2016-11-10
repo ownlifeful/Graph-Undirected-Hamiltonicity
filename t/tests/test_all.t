@@ -8,7 +8,7 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
 
 use Test::More;
 
-plan tests => 17;
+plan tests => 14;
 
 while ( defined( my $line = <DATA> ) ) {
     next if $line =~ /^\s*#/;    ### skip comments
@@ -49,11 +49,6 @@ __DATA__
 ### Note: Every time you add a test case, remember to update the "plan tests => NUMBER";
 
 # Here are some test cases:
-test_connected|0|a simple 3 vertex, 3 edge graph|0=1,0=2,1=2
-
-test_connected|2|a 6 vertex, 6 edge non-connected graph|0=1,0=2,1=2,3=4,3=5,4=5
-
-test_connected|0|Herschel Graph|0=1,0=10,0=3,0=9,10=2,10=8,1=2,1=4,2=5,3=4,3=6,4=5,4=7,5=8,6=7,6=9,7=8,8=9
 
 test_articulation_vertex|0|Herschel Graph|0=1,0=10,0=3,0=9,10=2,10=8,1=2,1=4,2=5,3=4,3=6,4=5,4=7,5=8,6=7,6=9,7=8,8=9
 

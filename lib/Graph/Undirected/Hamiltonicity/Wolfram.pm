@@ -76,7 +76,9 @@ sub is_hamiltonian_per_wolfram {
     my $vertices = $G->vertices();
     return 0 if $vertices == 0;
     return 1 if $vertices == 1;
-    return 0 if grep { $G->degree($_) < 2 } $G->vertices();
+    foreach my $vertex ( $G->vertices() ) {
+        return 0 if $G->degree($vertex) < 2;
+    }
 
     ### Create a user agent object
     my $ua = LWP::UserAgent->new;
@@ -109,7 +111,15 @@ sub get_url_from_config {
     my $file = $ENV{HOME} . '/hamilton.ini';
     return unless ( -e $file && -f _ && -r _ );
 
-    my $hash = Config::INI::Reader->read_file($file);
+    my $hash;
+    eval { 
+        $hash = Config::INI::Reader->read_file($file);
+    };
+    if ( $@ ) {
+        carp "EXCEPTION: [$@]\n";
+        return;
+    }
+
     my $url  = $hash->{wolfram}->{url};
 
     if ( $url =~ /^http/ ) {
@@ -117,7 +127,7 @@ sub get_url_from_config {
         return $url;
     }
 
-    return undef;
+    return;
 }
 
 ##############################################################################
