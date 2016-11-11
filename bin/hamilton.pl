@@ -5,7 +5,10 @@ use Getopt::Long;
 
 use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
-use Graph::Undirected::Hamiltonicity::Spoof qw(spoof_known_hamiltonian_graph);
+use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph
+&spoof_random_graph
+);
+use Graph::Undirected::Hamiltonicity::Wolfram qw(:all);
 
 use warnings;
 use strict;
@@ -42,6 +45,8 @@ GetOptions(
 
 show_usage_and_exit() if $help;
 
+
+
 if ($graph_file) {
     open( my $fh, "<", $graph_file )
         or croak "Could not open [$graph_file][$!]\n";
@@ -58,8 +63,11 @@ if ($graph_file) {
     push @G, string_to_graph($graph_text);
 } elsif ($v) {
     $count ||= 1;
+    my $max_edges = ( $v * $v - $v ) / 2;
     for ( my $i = 0; $i < $count; $i++ ) {
-        push @G, spoof_known_hamiltonian_graph( $v, $e );
+        my $edge_count = $e // int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
+        ### push @G, spoof_known_hamiltonian_graph( $v, $edge_count );
+        push @G, spoof_random_graph( $v, $edge_count );
     }
 
 } else {
@@ -68,6 +76,8 @@ if ($graph_file) {
 
 $ENV{HC_OUTPUT_FORMAT} =
     ( $output_format =~ /^(html|text|none)$/ ) ? $output_format : 'none';
+
+my $url = get_url_from_config();
 
 foreach my $G (@G) {
     print "graph=($G)\n";
@@ -82,8 +92,24 @@ foreach my $G (@G) {
         print "The graph is not Hamiltonian.\n";
     }
 
-    print "($reason)\n";
+    print "($reason)\n\n";
+
+    if ($url) {
+        my $is_hamiltonian_per_wolfram = is_hamiltonian_per_wolfram($G);
+        if ( $is_hamiltonian != $is_hamiltonian_per_wolfram ) {
+            print '<' x 60, " WOLFRAM DIFFERS!\n";
+            print "is_hamiltonian=$is_hamiltonian\n";
+            print "is_hamiltonian_per_wolfram=$is_hamiltonian_per_wolfram\n";
+            print "\n\n";
+        } else {
+            print '>' x 60, " WOLFRAM CONCURS!\n";
+        }
+    } else {
+        print "...skipped Wolfram cross-check.\n";
+    }
+
     print "\n\n";
+
 }
 
 ##############################################################################

@@ -13,6 +13,7 @@ use Exporter qw(import);
 our @EXPORT_OK = qw(
     &spoof_canonical_hamiltonian_graph
     &spoof_known_hamiltonian_graph
+    &spoof_random_graph
 );
 
 our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
@@ -55,6 +56,8 @@ The subroutines that can be imported individually, by name, are:
 =item * &spoof_canonical_hamiltonian_graph
 
 =item * &spoof_known_hamiltonian_graph
+
+=item * &spoof_random_graph
 
 =back
 
@@ -120,6 +123,56 @@ sub spoof_known_hamiltonian_graph {
     my $G = spoof_canonical_hamiltonian_graph($v);
     $G = shuffle($G);
     $G = add_random_edges( $G, $e - $v );
+
+    return $G;
+}
+
+##############################################################################
+
+sub spoof_random_graph {
+
+    my ( $v, $e ) = @_;
+
+    my $G = Graph::Undirected->new( vertices => [ 0 .. $v-1 ] );
+
+    # Generate random
+    my $max_edges = ( $v * $v - $v ) / 2;
+    $e ||= int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
+
+    $G = add_random_edges( $G, $e );
+
+    ### Seek out vertices with degree < 2
+    ### add edges to them.
+    my $edges_to_remove = 0;
+    foreach my $vertex1 ( $G->vertices() ) {
+        next if $G->degree($vertex1) > 1;
+        my $added_edge = 0;
+        while ( ! $added_edge ) {
+            my $vertex2 = int( rand($v) );
+            next if $vertex1 == $vertex2;
+            next if $G->has_edge($vertex1, $vertex2);
+            $G->add_edge($vertex1,$vertex2);
+            $added_edge = 1;
+            $edges_to_remove++;
+        }
+    }
+
+    ### Seek out vertices with degree > 2
+    ### with neighbor of degree < 3
+    ### amd delete the same number of edges.
+    while ( $edges_to_remove ) {
+      LOOP:
+        foreach my $vertex1 ( $G->vertices() ) {
+            next if $G->degree($vertex1) < 3;
+
+            foreach my $vertex2 ( $G->neighbors($vertex1) ) {
+                next if $G->degree($vertex2) < 3;
+                $G->delete_edge($vertex1,$vertex2);
+                $edges_to_remove--;
+                last LOOP;
+            }
+        }
+    }
 
     return $G;
 }
