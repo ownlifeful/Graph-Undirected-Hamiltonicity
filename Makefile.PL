@@ -25,7 +25,7 @@ WriteMakefile(
         'Config::INI::Reader' => '0.025',
         'Carp'                => '1.29',
         'Test::More'          => '0.98',
-        'Test::Exception'     => '0.43',
+        'Test::Exception'     => '0',     # '0.43',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Graph-Undirected-Hamiltonicity-*' },
