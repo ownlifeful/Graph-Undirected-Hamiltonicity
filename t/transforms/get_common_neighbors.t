@@ -41,11 +41,11 @@ my @test_graphs = (
 );
 
 foreach my $test_graph (@test_graphs) {
-    my $G = string_to_graph( $test_graph->{graph_text} );
+    my $g = string_to_graph( $test_graph->{graph_text} );
 
     foreach my $test ( @{ $test_graph->{tests} } ) {
         my %actual_common_neighbors =
-            %{ get_common_neighbors( $G, @{ $test->{vertices} } ) };
+            %{ get_common_neighbors( $g, @{ $test->{vertices} } ) };
 
         foreach my $expected_common_neighbor (
             @{ $test->{expected_common_neighbors} } )

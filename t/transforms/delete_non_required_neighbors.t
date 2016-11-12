@@ -52,13 +52,13 @@ foreach my $test (@tests) {
     my $required_graph =
         string_to_graph( $test->{input_required_graph_text} );
 
-    my $G = string_to_graph( $test->{input_graph_text} );
+    my $g = string_to_graph( $test->{input_graph_text} );
     foreach my $edge_ref ( $required_graph->edges() ) {
-        $G->set_edge_attribute( @$edge_ref, 'required', 1 );
+        $g->set_edge_attribute( @$edge_ref, 'required', 1 );
     }
 
     my ( $deleted_edges, $output_graph ) =
-        delete_non_required_neighbors( $required_graph, $G );
+        delete_non_required_neighbors( $required_graph, $g );
 
     is( $deleted_edges,
         $test->{expected_deleted_edges},

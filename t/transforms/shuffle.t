@@ -58,11 +58,11 @@ foreach my $test (@tests) {
 ##########################################################################
 
 sub get_degree_hash {
-    my ($G) = @_;
+    my ($g) = @_;
 
     my %degree_hash;
-    foreach my $vertex ( $G->vertices() ) {
-        $degree_hash{ $G->degree($vertex) }++;
+    foreach my $vertex ( $g->vertices() ) {
+        $degree_hash{ $g->degree($vertex) }++;
     }
 
     return %degree_hash;

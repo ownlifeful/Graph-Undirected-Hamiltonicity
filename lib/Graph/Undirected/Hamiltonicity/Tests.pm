@@ -60,9 +60,9 @@ Here is an example:
     use Graph::Undirected::Hamiltonicity::Tests qw(&test_trivial);
     use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph);
 
-    my $G = spoof_known_hamiltonian_graph(30, 50); ### 30 vertices, 50 edges
+    my $g = spoof_known_hamiltonian_graph(30, 50); ### 30 vertices, 50 edges
 
-    my ( $is_hamiltonian, $reason ) = test_trivial($G);
+    my ( $is_hamiltonian, $reason ) = test_trivial($g);
     ...
 
 =head1 EXPORT
@@ -118,11 +118,11 @@ for Hamiltonicity.
 =cut
 
 sub test_trivial {
-    my ($G) = @_;
+    my ($g) = @_;
 
-    my @edges     = $G->edges;
+    my @edges     = $g->edges;
     my $e         = @edges;
-    my @vertices  = $G->vertices;
+    my @vertices  = $g->vertices;
     my $v         = @vertices;
     my $max_edges = ( $v * $v - $v ) / 2;
 
@@ -168,14 +168,14 @@ in which all the edges can be arranged into a regular polygon.
 =cut
 
 sub test_canonical {
-    my ($G) = @_;
-    my @vertices = sort { $a <=> $b } $G->vertices();
+    my ($g) = @_;
+    my @vertices = sort { $a <=> $b } $g->vertices();
     my $v = scalar(@vertices);
 
-    if ( $G->has_edge( $vertices[0], $vertices[-1] ) ) {
+    if ( $g->has_edge( $vertices[0], $vertices[-1] ) ) {
         for ( my $counter = 0; $counter < $v - 1; $counter++ ) {
             unless (
-                $G->has_edge(
+                $g->has_edge(
                     $vertices[$counter], $vertices[ $counter + 1 ]
                 )
                 )
@@ -205,10 +205,10 @@ Hamiltonian Cycle.
 =cut
 
 sub test_min_degree {
-    my ($G) = @_;
+    my ($g) = @_;
 
-    foreach my $vertex ( $G->vertices ) {
-        if ( $G->degree($vertex) < 2 ) {
+    foreach my $vertex ( $g->vertices ) {
+        if ( $g->degree($vertex) < 2 ) {
             return ( $GRAPH_IS_NOT_HAMILTONIAN,
                 "This graph has a vertex ($vertex) with degree < 2" );
         }
@@ -229,11 +229,11 @@ Such a vertex is called an Articulation Vertex.
 =cut
 
 sub test_articulation_vertex {
-    my ($G) = @_;
+    my ($g) = @_;
 
-    return $DONT_KNOW if $G->is_biconnected();
+    return $DONT_KNOW if $g->is_biconnected();
 
-    my $vertices_string = join ',', $G->articulation_points();
+    my $vertices_string = join ',', $g->articulation_points();
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
               "This graph is not biconnected, therefore not Hamiltonian. "
@@ -254,11 +254,11 @@ Such an edge is called a Graph Bridge.
 =cut
 
 sub test_graph_bridge {
-    my ($G) = @_;
+    my ($g) = @_;
 
-    return $DONT_KNOW if $G->is_edge_connected();
+    return $DONT_KNOW if $g->is_edge_connected();
 
-    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $G->bridges();
+    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
               "This graph is not edge-connected, therefore not Hamiltonian. "
@@ -321,16 +321,14 @@ sub test_required_cyclic {
     output("cycle_string=[$cycle_string]<BR/>");    ### DEBUG
 
     if ( $number_of_vertices_in_cycle < $v ) {
-        output(
-            "GRAPH_IS_NOT_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"
-        );                                          ### DEBUG
+        output( "GRAPH_IS_NOT_HAMILTONIAN for v=$v; " .        
+                "vertices in cycle=$number_of_vertices_in_cycle;<BR/>");
         return ( $GRAPH_IS_NOT_HAMILTONIAN,
                   "The sub-graph of required edges has a cycle "
                 . "[$cycle_string] with fewer than $v vertices." );
     } elsif ( $number_of_vertices_in_cycle == $v ) {
-        output(
-            "GRAPH_IS_HAMILTONIAN for v=$v; vertices in cycle=$number_of_vertices_in_cycle;<BR/>"
-        );                                          ### DEBUG
+        output( "GRAPH_IS_HAMILTONIAN for v=$v; " . 
+                "vertices in cycle=$number_of_vertices_in_cycle;<BR/>");
         return ( $GRAPH_IS_HAMILTONIAN,
                   "The sub-graph of required edges has a cycle "
                 . "[$cycle_string] with $v vertices." );

@@ -17,9 +17,9 @@ while ( defined( my $line = <DATA> ) ) {
     if ( $line =~ /^([^|]+)\|([012])\|([^|]+)\|(\d+=\d+(,\d+=\d+)*)$/ ) {
         my ( $test_sub_name, $expected_result, $label, $graph_text ) =
             ( $1, $2, $3, $4 );
-        my $G = string_to_graph($graph_text);
+        my $g = string_to_graph($graph_text);
         no strict 'refs';
-        my ( $is_hamiltonian, $reason ) = &$test_sub_name($G);
+        my ( $is_hamiltonian, $reason ) = &$test_sub_name($g);
         use strict 'refs';
         is( $is_hamiltonian, $expected_result, "$test_sub_name: $label" );
     }

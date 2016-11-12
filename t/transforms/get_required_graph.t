@@ -28,9 +28,9 @@ my @tests = (
 );
 
 foreach my $test (@tests) {
-    my $G = string_to_graph( $test->{input_graph_text} );
+    my $g = string_to_graph( $test->{input_graph_text} );
 
-    my ( $required_graph, $output_graph ) = get_required_graph($G);
+    my ( $required_graph, $output_graph ) = get_required_graph($g);
 
     is( "$required_graph",
         $test->{expected_required_graph_text},
@@ -48,7 +48,7 @@ foreach my $test (@tests) {
             1, "only edges in the required graph can be marked required." );
     }
 
-    is( "$output_graph", "$G",
+    is( "$output_graph", "$g",
         "the graph is intact, except for attributes." );
 
 }

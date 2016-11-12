@@ -66,22 +66,22 @@ my @tests = (
 );
 
 foreach my $test (@tests) {
-    my $G = string_to_graph( $test->{input_graph_text} );
+    my $g = string_to_graph( $test->{input_graph_text} );
 
-    is( scalar( $G->vertices() ),
+    is( scalar( $g->vertices() ),
         $test->{expected_vertex_count},
         "Preserved number of vertices. [$test->{label}]"
     );
-    is( scalar( $G->edges() ),
+    is( scalar( $g->edges() ),
         $test->{expected_edge_count},
         "Preserved number of edges. [$test->{label}]"
     );
     if ( $test->{preserved} ) {
-        is( "$G", $test->{input_graph_text},
+        is( "$g", $test->{input_graph_text},
             "Graph to string is the same as string to graph. [$test->{label}]"
         );
     } else {
-        isnt( "$G", $test->{input_graph_text},
+        isnt( "$g", $test->{input_graph_text},
             "Graph to string is NOT the same as string to graph. [$test->{label}]"
         );
     }

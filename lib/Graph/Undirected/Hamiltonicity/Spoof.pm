@@ -36,10 +36,10 @@ our $VERSION = '0.01';
 
     my $v = 30;
     my $e = 50;
-    my $G = spoof_known_hamiltonian_graph($v,$e);
+    my $g = spoof_known_hamiltonian_graph($v,$e);
 
-    ### $G is an instance of Graph::Undirected
-    ### $G is a random Hamiltonian graph with $v vertices and $e edges.
+    ### $g is an instance of Graph::Undirected
+    ### $g is a random Hamiltonian graph with $v vertices and $e edges.
 
 =head1 EXPORT
 
@@ -82,14 +82,14 @@ sub spoof_canonical_hamiltonian_graph {
     my $last_vertex = $v - 1;
     my @vertices    = ( 0 .. $last_vertex );
 
-    my $G = Graph::Undirected->new( vertices => \@vertices );
-    $G->add_edge( 0, $last_vertex );
+    my $g = Graph::Undirected->new( vertices => \@vertices );
+    $g->add_edge( 0, $last_vertex );
 
     for ( my $i = 0; $i < $last_vertex; $i++ ) {
-        $G->add_edge( $i, $i + 1 );
+        $g->add_edge( $i, $i + 1 );
     }
 
-    return $G;
+    return $g;
 }
 
 ##############################################################################
@@ -120,11 +120,11 @@ sub spoof_known_hamiltonian_graph {
 
     croak "The number of edges must be >= number of vertices." if $e < $v;
 
-    my $G = spoof_canonical_hamiltonian_graph($v);
-    $G = shuffle($G);
-    $G = add_random_edges( $G, $e - $v );
+    my $g = spoof_canonical_hamiltonian_graph($v);
+    $g = shuffle($g);
+    $g = add_random_edges( $g, $e - $v );
 
-    return $G;
+    return $g;
 }
 
 ##############################################################################
@@ -133,25 +133,25 @@ sub spoof_random_graph {
 
     my ( $v, $e ) = @_;
 
-    my $G = Graph::Undirected->new( vertices => [ 0 .. $v-1 ] );
+    my $g = Graph::Undirected->new( vertices => [ 0 .. $v-1 ] );
 
     # Generate random
     my $max_edges = ( $v * $v - $v ) / 2;
     $e ||= int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
 
-    $G = add_random_edges( $G, $e );
+    $g = add_random_edges( $g, $e );
 
     ### Seek out vertices with degree < 2
     ### add edges to them.
     my $edges_to_remove = 0;
-    foreach my $vertex1 ( $G->vertices() ) {
-        next if $G->degree($vertex1) > 1;
+    foreach my $vertex1 ( $g->vertices() ) {
+        next if $g->degree($vertex1) > 1;
         my $added_edge = 0;
         while ( ! $added_edge ) {
             my $vertex2 = int( rand($v) );
             next if $vertex1 == $vertex2;
-            next if $G->has_edge($vertex1, $vertex2);
-            $G->add_edge($vertex1,$vertex2);
+            next if $g->has_edge($vertex1, $vertex2);
+            $g->add_edge($vertex1,$vertex2);
             $added_edge = 1;
             $edges_to_remove++;
         }
@@ -162,19 +162,19 @@ sub spoof_random_graph {
     ### amd delete the same number of edges.
     while ( $edges_to_remove ) {
       LOOP:
-        foreach my $vertex1 ( $G->vertices() ) {
-            next if $G->degree($vertex1) < 3;
+        foreach my $vertex1 ( $g->vertices() ) {
+            next if $g->degree($vertex1) < 3;
 
-            foreach my $vertex2 ( $G->neighbors($vertex1) ) {
-                next if $G->degree($vertex2) < 3;
-                $G->delete_edge($vertex1,$vertex2);
+            foreach my $vertex2 ( $g->neighbors($vertex1) ) {
+                next if $g->degree($vertex2) < 3;
+                $g->delete_edge($vertex1,$vertex2);
                 $edges_to_remove--;
                 last LOOP;
             }
         }
     }
 
-    return $G;
+    return $g;
 }
 
 ##############################################################################

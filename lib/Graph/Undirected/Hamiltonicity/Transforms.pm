@@ -54,34 +54,34 @@ with the required edges marked.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&get_required_graph);
 
-     my ( $required_graph, $G1 ) = get_required_graph( $G );
+     my ( $required_graph, $g1 ) = get_required_graph( $g );
 
 =cut
 
 sub get_required_graph {
 
-    my ($G) = @_;
+    my ($g) = @_;
 
     output(   "Beginning a sweep to mark all edges adjacent to degree 2 "
             . "vertices as required:<BR/>" );
 
-    my $G1 = $G->deep_copy_graph();
-    output($G1);
+    my $g1 = $g->deep_copy_graph();
+    output($g1);
 
-    my @vertices = $G1->vertices();
+    my @vertices = $g1->vertices();
     my $required_graph = Graph::Undirected->new( vertices => \@vertices );
 
     foreach my $vertex (@vertices) {
-        my $degree = $G1->degree($vertex);
+        my $degree = $g1->degree($vertex);
         output("Vertex $vertex : Degree=[$degree] ");
 
         if ( $degree == 2 ) {
             output("<UL>");
-            foreach my $neighbor_vertex ( $G1->neighbors($vertex) ) {
+            foreach my $neighbor_vertex ( $g1->neighbors($vertex) ) {
 
                 $required_graph->add_edge( $vertex, $neighbor_vertex );
 
-                if ($G1->get_edge_attribute(
+                if ($g1->get_edge_attribute(
                         $vertex, $neighbor_vertex, 'required'
                     )
                     )
@@ -91,7 +91,7 @@ sub get_required_graph {
                     next;
                 }
 
-                $G1->set_edge_attribute( $vertex, $neighbor_vertex,
+                $g1->set_edge_attribute( $vertex, $neighbor_vertex,
                     'required', 1 );
                 output(   "<LI>Marking $vertex=$neighbor_vertex "
                         . "as required</LI>" );
@@ -102,7 +102,7 @@ sub get_required_graph {
         }
     }
 
-    return ( $required_graph, $G1 );
+    return ( $required_graph, $g1 );
 }
 
 ##########################################################################
@@ -113,26 +113,26 @@ Delete edges connecting neighbors of vertices with degree 2.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&delete_unusable_edges);
 
-     my $G1 = delete_unusable_edges( $G );
+     my $g1 = delete_unusable_edges( $g );
 
 =cut
 
 sub delete_unusable_edges {
 
-    my ($G) = @_;
+    my ($g) = @_;
     my $deleted_edges = 0;
-    my $G1;
-    foreach my $vertex ( $G->vertices() ) {
-        next if $G->degree($vertex) != 2;
-        my @neighbors = $G->neighbors($vertex);
+    my $g1;
+    foreach my $vertex ( $g->vertices() ) {
+        next if $g->degree($vertex) != 2;
+        my @neighbors = $g->neighbors($vertex);
 
-        if ( $G->has_edge(@neighbors) ) {
+        if ( $g->has_edge(@neighbors) ) {
 
             ### Clone graph lazily
-            $G1 //= $G->deep_copy_graph();
+            $g1 //= $g->deep_copy_graph();
 
-            next unless $G1->has_edge(@neighbors);
-            $G1->delete_edge(@neighbors);
+            next unless $g1->has_edge(@neighbors);
+            $g1->delete_edge(@neighbors);
             $deleted_edges++;
             output(   "Deleted edge "
                     . ( join '=', @neighbors )
@@ -141,7 +141,7 @@ sub delete_unusable_edges {
         }
     }
 
-    return ( $deleted_edges, $deleted_edges ? $G1 : $G );
+    return ( $deleted_edges, $deleted_edges ? $g1 : $g );
 }
 
 ##########################################################################
@@ -155,30 +155,30 @@ Return the graph with the edges deleted, and also the number of edges deleted.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&delete_non_required_neighbors);
 
-     my ($deleted_edges, $G1) = delete_non_required_neighbors( $G );
+     my ($deleted_edges, $g1) = delete_non_required_neighbors( $g );
 
 =cut
 
 sub delete_non_required_neighbors {
-    my ( $required_graph, $G ) = @_;
-    my $G1;
+    my ( $required_graph, $g ) = @_;
+    my $g1;
     my $deleted_edges = 0;
     foreach my $required_vertex ( $required_graph->vertices() ) {
         next if $required_graph->degree($required_vertex) != 2;
-        foreach my $neighbor_vertex ( $G->neighbors($required_vertex) ) {
+        foreach my $neighbor_vertex ( $g->neighbors($required_vertex) ) {
             my $required =
-                $G->get_edge_attribute( $required_vertex,
+                $g->get_edge_attribute( $required_vertex,
                 $neighbor_vertex, 'required' );
             unless ($required) {
 
                 ### Clone graph lazily
-                $G1 //= $G->deep_copy_graph();
+                $g1 //= $g->deep_copy_graph();
 
                 next
-                    unless $G1->has_edge( $required_vertex,
+                    unless $g1->has_edge( $required_vertex,
                     $neighbor_vertex );
 
-                $G1->delete_edge( $required_vertex, $neighbor_vertex );
+                $g1->delete_edge( $required_vertex, $neighbor_vertex );
                 $deleted_edges++;
                 output(   "Deleted edge $required_vertex=$neighbor_vertex "
                         . "because vertex $required_vertex has degree==2 "
@@ -187,7 +187,7 @@ sub delete_non_required_neighbors {
         }
     }
 
-    return ( $deleted_edges, $deleted_edges ? $G1 : $G );
+    return ( $deleted_edges, $deleted_edges ? $g1 : $g );
 }
 
 ##########################################################################
@@ -200,14 +200,14 @@ Return the graph with the edges deleted, and also the number of edges deleted.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&shrink_required_walks_longer_than_2_edges);
 
-     my ($deleted_edges, $G1) = shrink_required_walks_longer_than_2_edges( $G );
+     my ($deleted_edges, $g1) = shrink_required_walks_longer_than_2_edges( $g );
 
 =cut
 
 sub shrink_required_walks_longer_than_2_edges {
-    my ( $G, $required_graph ) = @_;
+    my ( $g, $required_graph ) = @_;
 
-    my $G1;
+    my $g1;
     my $deleted_edges = 0;
 
     foreach my $vertex ( sort { $a <=> $b } $required_graph->vertices() ) {
@@ -219,26 +219,26 @@ sub shrink_required_walks_longer_than_2_edges {
             and ( $required_graph->degree( $neighbors[1] ) == 1 ) );
 
         ### Clone graph lazily
-        $G1 //= $G->deep_copy_graph();
+        $g1 //= $g->deep_copy_graph();
 
-        unless ( $G1->has_edge(@neighbors) ) {
+        unless ( $g1->has_edge(@neighbors) ) {
             $required_graph->add_edge(@neighbors);
-            $G1->add_edge(@neighbors);
+            $g1->add_edge(@neighbors);
             output("Added edge $neighbors[0]=$neighbors[1] and ");
         }
 
         output(   "deleted vertex $vertex because it was part of a "
                 . "long required walk.<BR/>" );
-        $G1->set_edge_attribute( @neighbors, 'required', 1 );
+        $g1->set_edge_attribute( @neighbors, 'required', 1 );
         $required_graph->delete_vertex($vertex);
-        $G1->delete_vertex($vertex);
+        $g1->delete_vertex($vertex);
         $deleted_edges++;
     }
 
     output("Deleted $deleted_edges edges to shrink the graph.")
         if $deleted_edges;
 
-    return ( $deleted_edges, $deleted_edges ? $G1 : $G );
+    return ( $deleted_edges, $deleted_edges ? $g1 : $g );
 }
 
 ##########################################################################
@@ -250,38 +250,38 @@ the neighbors of vertex1 become the neighbors of vertex2 and vice versa.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&swap_vertices);
 
-     my $G1 = swap_vertices( $G, 3, 7 );
+     my $g1 = swap_vertices( $g, 3, 7 );
 
-     # $G1 is like $G, with vertices 3 and 7 swapped.
+     # $g1 is like $g, with vertices 3 and 7 swapped.
 
 =cut
 
 sub swap_vertices {
-    my ( $G, $vertex_1, $vertex_2 ) = @_;
+    my ( $g, $vertex_1, $vertex_2 ) = @_;
 
-    my $G1 = $G->deep_copy_graph();
+    my $g1 = $g->deep_copy_graph();
 
     my %common_neighbors =
-        %{ get_common_neighbors( $G1, $vertex_1, $vertex_2 ) };
+        %{ get_common_neighbors( $g1, $vertex_1, $vertex_2 ) };
 
     my @vertex_1_neighbors =
-        grep { $_ != $vertex_2 } $G1->neighbors($vertex_1);
+        grep { $_ != $vertex_2 } $g1->neighbors($vertex_1);
     my @vertex_2_neighbors =
-        grep { $_ != $vertex_1 } $G1->neighbors($vertex_2);
+        grep { $_ != $vertex_1 } $g1->neighbors($vertex_2);
 
     foreach my $neighbor_vertex (@vertex_1_neighbors) {
         next if $common_neighbors{$neighbor_vertex};
-        $G1->delete_edge( $neighbor_vertex, $vertex_1 );
-        $G1->add_edge( $neighbor_vertex, $vertex_2 );
+        $g1->delete_edge( $neighbor_vertex, $vertex_1 );
+        $g1->add_edge( $neighbor_vertex, $vertex_2 );
     }
 
     foreach my $neighbor_vertex (@vertex_2_neighbors) {
         next if $common_neighbors{$neighbor_vertex};
-        $G1->delete_edge( $neighbor_vertex, $vertex_2 );
-        $G1->add_edge( $neighbor_vertex, $vertex_1 );
+        $g1->delete_edge( $neighbor_vertex, $vertex_2 );
+        $g1->add_edge( $neighbor_vertex, $vertex_1 );
     }
 
-    return $G1;
+    return $g1;
 }
 
 ##########################################################################
@@ -293,20 +293,20 @@ a hash whose keys are all the vertices that vertex1 and vertex2 share.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&get_common_neighbors);
 
-     my %common_neighbors = %{ get_common_neighbors( $G, 3, 7 ) };
+     my %common_neighbors = %{ get_common_neighbors( $g, 3, 7 ) };
 
 =cut
 
 sub get_common_neighbors {
-    my ( $G, $vertex_1, $vertex_2 ) = @_;
+    my ( $g, $vertex_1, $vertex_2 ) = @_;
 
     my %common_neighbors;
     my %vertex_1_neighbors;
-    foreach my $neighbor_vertex ( $G->neighbors($vertex_1) ) {
+    foreach my $neighbor_vertex ( $g->neighbors($vertex_1) ) {
         $vertex_1_neighbors{$neighbor_vertex}++;
     }
 
-    foreach my $neighbor_vertex ( $G->neighbors($vertex_2) ) {
+    foreach my $neighbor_vertex ( $g->neighbors($vertex_2) ) {
         next unless $vertex_1_neighbors{$neighbor_vertex};
         $common_neighbors{$neighbor_vertex} = 1;
     }
@@ -324,7 +324,7 @@ Graph::Undirected::stringify()
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph);
 
-     my $G = string_to_graph('0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,4=6,5=7,6=7');
+     my $g = string_to_graph('0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,4=6,5=7,6=7');
 
 =cut
 
@@ -349,13 +349,13 @@ sub string_to_graph {
     }
 
     my @vertices = keys %vertices;
-    my $G = Graph::Undirected->new( vertices => \@vertices );
+    my $g = Graph::Undirected->new( vertices => \@vertices );
 
     foreach my $edge_ref (@edges) {
-        $G->add_edge(@$edge_ref) unless $G->has_edge(@$edge_ref);
+        $g->add_edge(@$edge_ref) unless $g->has_edge(@$edge_ref);
     }
 
-    return $G;
+    return $g;
 }
 
 ##########################################################################
@@ -368,17 +368,17 @@ identical to the original graph.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&shuffle);
 
-     my $G1 = shuffle( $G );
+     my $g1 = shuffle( $g );
 
 =cut
 
 sub shuffle {
-    my ($G) = @_;
+    my ($g) = @_;
 
     # everyday i'm shufflin'
 
-    my $G1 = $G->deep_copy_graph();
-    my $v  = scalar( $G1->vertices() );
+    my $g1 = $g->deep_copy_graph();
+    my $v  = scalar( $g1->vertices() );
 
     my $max_times_to_shuffle = $v * $v;
     my $shuffles             = 0;
@@ -389,11 +389,11 @@ sub shuffle {
 
         next if $v1 == $v2;
 
-        $G1 = swap_vertices( $G1, $v1, $v2 );
+        $g1 = swap_vertices( $g1, $v1, $v2 );
         $shuffles++;
     }
 
-    return $G1;
+    return $g1;
 }
 
 ##############################################################################
@@ -404,17 +404,17 @@ Add random edges to a given graph.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&add_random_edges);
 
-     my $G1 = add_random_edges( $G, 7 );
+     my $g1 = add_random_edges( $g, 7 );
 
-     # $G1 is like $G, but with 7 extra edges.
+     # $g1 is like $g, but with 7 extra edges.
 
 =cut
 
 sub add_random_edges {
-    my ( $G, $edges_to_add ) = @_;
+    my ( $g, $edges_to_add ) = @_;
 
-    my $G1 = $G->deep_copy_graph();
-    my $v  = scalar( $G1->vertices() );
+    my $g1 = $g->deep_copy_graph();
+    my $v  = scalar( $g1->vertices() );
 
     my $added_edges = 0;
     while ( $added_edges < $edges_to_add ) {
@@ -423,13 +423,13 @@ sub add_random_edges {
         my $v2 = int( rand($v) );
 
         next if $v1 == $v2;
-        next if $G1->has_edge( $v1, $v2 );
+        next if $g1->has_edge( $v1, $v2 );
 
-        $G1->add_edge( $v1, $v2 );
+        $g1->add_edge( $v1, $v2 );
         $added_edges++;
     }
 
-    return $G1;
+    return $g1;
 }
 
 ##############################################################################

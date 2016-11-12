@@ -17,18 +17,18 @@ while ( defined( my $line = <DATA> ) ) {
     chomp $line;
 
     if ( $line =~ /^\d+=\d+(,\d+=\d+)*$/ ) {
-        my $G = string_to_graph($line);
+        my $g = string_to_graph($line);
 
-        my $e         = scalar( $G->edges() );
-        my @vertices  = $G->vertices;
+        my $e         = scalar( $g->edges() );
+        my @vertices  = $g->vertices;
         my $v         = @vertices;
         my $max_edges = ( $v * $v - $v ) / 2;
 
         my $edges_to_add = int( rand( $max_edges - $e ) );
 
-        my $G1 = add_random_edges( $G, $edges_to_add );
+        my $g1 = add_random_edges( $g, $edges_to_add );
 
-        is( scalar( $G1->edges() ),
+        is( scalar( $g1->edges() ),
             $e + $edges_to_add,
             "Succesfully added $edges_to_add edges."
         );

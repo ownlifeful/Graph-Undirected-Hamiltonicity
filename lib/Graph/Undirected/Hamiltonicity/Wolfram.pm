@@ -34,8 +34,8 @@ our $VERSION = '0.01';
 
     my $result;
     eval {
-        # $G is a Graph::Undirected
-        $result = is_hamiltonian_per_wolfram( $G );
+        # $g is a Graph::Undirected
+        $result = is_hamiltonian_per_wolfram( $g );
     };
     warn $@ if $@;
 
@@ -70,14 +70,14 @@ Throws: an exception if an error is encountered.
 =cut
 
 sub is_hamiltonian_per_wolfram {
-    my ($G) = @_;
+    my ($g) = @_;
 
     ### Cover up limitations of Wolfram Language script
-    my $vertices = $G->vertices();
+    my $vertices = $g->vertices();
     return 0 if $vertices == 0;
     return 1 if $vertices == 1;
-    foreach my $vertex ( $G->vertices() ) {
-        return 0 if $G->degree($vertex) < 2;
+    foreach my $vertex ( $g->vertices() ) {
+        return 0 if $g->degree($vertex) < 2;
     }
 
     ### Create a user agent object
@@ -89,7 +89,7 @@ sub is_hamiltonian_per_wolfram {
     ### Create a request
     my $req = HTTP::Request->new( POST => $url );
     $req->content_type('application/x-www-form-urlencoded');
-    $req->content("x=$G");
+    $req->content("x=$g");
 
     # Pass request to the user agent and get a response back
     my $res = $ua->request($req);

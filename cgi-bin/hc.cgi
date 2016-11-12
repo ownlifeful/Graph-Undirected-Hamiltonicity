@@ -40,10 +40,10 @@ $graph_text =~ s/[^0-9=,]+//g;
 $graph_text =~ s/([=,])\D+/$1/g;
 $graph_text =~ s/^\D+|\D+$//g;
 
-my $G;
+my $g;
 if ( $graph_text =~ /\d/ ) {
     if ( $graph_text =~ /=/ ) {
-        eval { $G = string_to_graph($graph_text); };
+        eval { $g = string_to_graph($graph_text); };
         if ($@) {
             print "That was not a valid graph, ";
             print "according to the Graph::Undirected module.<BR/>\n";
@@ -62,7 +62,7 @@ if ( $graph_text =~ /\d/ ) {
     print_instructions();
 }
 
-print get_textarea($G);
+print get_textarea($g);
 print end_form;
 print "<br/><br/>\n";
 
@@ -72,7 +72,7 @@ if ( $graph_text =~ /\d=\d/ ) {
     print qq{or jump to the <A HREF="#conclusion">conclusion</A>.<BR/>\n};
         
 
-    my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($G);
+    my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($g);
     print qq{<BR/>\n};
     print qq{<A NAME="conclusion"><B>Conclusion:</B></A>\n};
     print qq{<span style="background: yellow;">\n};
@@ -91,9 +91,9 @@ print end_html;
 ############################################################
 
 sub get_textarea {
-    my $G = $_[0];
+    my $g = $_[0];
 
-    my $printable_string = defined $G ? $G->stringify() : '';
+    my $printable_string = defined $g ? $g->stringify() : '';
 
     Delete('graph_text');
 

@@ -15,15 +15,15 @@ plan tests => 30;
 $ENV{HC_OUTPUT_FORMAT} = 'none';
 
 for my $v ( 1 .. 10 ) {
-    my $G = spoof_canonical_hamiltonian_graph($v);
+    my $g = spoof_canonical_hamiltonian_graph($v);
 
-    is( scalar( $G->vertices() ), $v, "Spoofed graph has $v vertices." );
-    my ( $is_hamiltonian, $reason ) = test_canonical($G);
+    is( scalar( $g->vertices() ), $v, "Spoofed graph has $v vertices." );
+    my ( $is_hamiltonian, $reason ) = test_canonical($g);
 
     if ( $v == 2 ) {
-        is( scalar( $G->edges() ), 1, "Spoofed graph has 1 edge." );
+        is( scalar( $g->edges() ), 1, "Spoofed graph has 1 edge." );
     } else {
-        is( scalar( $G->edges() ), $v, "Spoofed graph has $v edges." );
+        is( scalar( $g->edges() ), $v, "Spoofed graph has $v edges." );
     }
 
     ### The result is counter-intuitive, for v == 2, but it makes sense in context.

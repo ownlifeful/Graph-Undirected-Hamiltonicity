@@ -18,8 +18,8 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity::Output - convenience subroutines for printing output
-in various formats.
+Graph::Undirected::Hamiltonicity::Output - convenience subroutines for 
+printing output in various formats.
 
 =head1 VERSION
 
@@ -31,8 +31,9 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-The output() subroutine examines an environment variable called HC_OUTPUT_FORMAT
-to determine the output format. The output format can be one of:
+The output() subroutine examines an environment variable called 
+HC_OUTPUT_FORMAT to determine the output format. The output format
+can be one of:
 
 =over 4
 
@@ -51,13 +52,13 @@ to determine the output format. The output format can be one of:
     # in text mode, print "Foo", "\n"
     # in none mode, print nothing.
 
-    output($G); # $G is a Graph::Undirected
+    output($g); # $g is a Graph::Undirected
     # in html mode, print the SVG to draw this graph
     # in text mode, print the adjacency-list of this graph
     # in none mode, print nothing.
 
 
-    output($G, { required => 1 });
+    output($g, { required => 1 });
     # Indicates that the graph should be formatted
     # as a graph of "required" edges only.
 
@@ -119,7 +120,7 @@ sub output {
 ##########################################################################
 
 sub output_image_svg {
-    my ( $G, $hash_ref ) = @_;
+    my ( $g, $hash_ref ) = @_;
 
     my %params = %{ $hash_ref // {} };
     my $image_size = $params{size} || 600;
@@ -136,9 +137,9 @@ xmlns="http://www.w3.org/2000/svg">
 
 };
 
-    output_graph_svg( $G, { %params, image_size => $image_size } );
-    unless ( $G->vertices() > 20 ) {
-        output_adjacency_matrix_svg( $G,
+    output_graph_svg( $g, { %params, image_size => $image_size } );
+    unless ( $g->vertices() > 20 ) {
+        output_adjacency_matrix_svg( $g,
             { %params, image_size => $image_size } );
     }
     print qq{</svg>\n};
@@ -148,12 +149,12 @@ xmlns="http://www.w3.org/2000/svg">
 ##########################################################################
 
 sub output_graph_svg {
-    my ( $G, $hash_ref ) = @_;
+    my ( $g, $hash_ref ) = @_;
 
     my %params = %{ $hash_ref // {} };
 
     my $Pi = 4 * atan2 1, 1;
-    my $v = scalar( $G->vertices() );
+    my $v = scalar( $g->vertices() );
 
     ### Compute angle between vertices
     my $angle_between_vertices = 2 * $Pi / $v;
@@ -168,7 +169,7 @@ sub output_graph_svg {
     ### Compute vertex coordinates
     my $radius   = ( $image_size / 2 ) - $border;
     my $angle    = $Pi * ( 0.5 - ( 1 / $v ) );
-    my @vertices = $G->vertices();
+    my @vertices = $g->vertices();
 
     @vertices = sort { $a <=> $b } @vertices;
     my $text_xml     = '';
@@ -193,7 +194,7 @@ sub output_graph_svg {
 
     my $edges_xml = '';
     ### Draw edges
-    foreach my $edge_ref ( $G->edges() ) {
+    foreach my $edge_ref ( $g->edges() ) {
         my ( $orig, $dest ) = @$edge_ref;
 
         if ( $orig > $dest ) {
@@ -203,7 +204,7 @@ sub output_graph_svg {
         }
 
         my $required = $params{required}
-            || $G->get_edge_attribute( $orig, $dest, 'required' );
+            || $g->get_edge_attribute( $orig, $dest, 'required' );
         my $stroke_width = $required ? 3         : 1;
         my $color        = $required ? '#FF0000' : '#000000';
 
@@ -248,7 +249,7 @@ $text_xml</g>
 
 sub output_adjacency_matrix_svg {
 
-    my ( $G, $hash_ref ) = @_;
+    my ( $g, $hash_ref ) = @_;
 
     my %params = %{ $hash_ref // {} };
 
@@ -256,7 +257,7 @@ sub output_adjacency_matrix_svg {
     print qq{<g style="opacity:1; stroke: black; stroke-opacity: 1">\n};
 
     my $square_size = 30;
-    my @vertices = sort { $a <=> $b } $G->vertices();
+    my @vertices = sort { $a <=> $b } $g->vertices();
 
     my $image_size = $params{image_size} || 600;
 
@@ -287,10 +288,10 @@ sub output_adjacency_matrix_svg {
             last if $i == $j;
 
             my $fill_color;
-            if ( $G->has_edge( $i, $j ) ) {
+            if ( $g->has_edge( $i, $j ) ) {
                 $fill_color =
                        $params{required}
-                    || $G->get_edge_attribute( $i, $j, 'required' )
+                    || $g->get_edge_attribute( $i, $j, 'required' )
                     ? '#FF0000'
                     : '#000000';
             } else {

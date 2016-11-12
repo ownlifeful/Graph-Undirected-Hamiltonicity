@@ -79,10 +79,10 @@ $ENV{HC_OUTPUT_FORMAT} =
 
 my $url = get_url_from_config();
 
-foreach my $G (@G) {
-    print "graph=($G)\n";
+foreach my $g (@G) {
+    print "graph=($g)\n";
 
-    my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($G);
+    my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($g);
 
     print "\n\n";
     print "Conclusion: ";
@@ -95,7 +95,7 @@ foreach my $G (@G) {
     print "($reason)\n\n";
 
     if ($url) {
-        my $is_hamiltonian_per_wolfram = is_hamiltonian_per_wolfram($G);
+        my $is_hamiltonian_per_wolfram = is_hamiltonian_per_wolfram($g);
         if ( $is_hamiltonian != $is_hamiltonian_per_wolfram ) {
             print '<' x 60, " WOLFRAM DIFFERS!\n";
             print "is_hamiltonian=$is_hamiltonian\n";

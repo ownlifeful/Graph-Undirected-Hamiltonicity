@@ -74,8 +74,8 @@ contains a Hamiltonian Cycle.
 =cut
 
 sub graph_is_hamiltonian {
-    my ($G) = @_;
-    my ( $is_hamiltonian, $reason ) = is_hamiltonian($G);
+    my ($g) = @_;
+    my ( $is_hamiltonian, $reason ) = is_hamiltonian($g);
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
     return wantarray ? ( $final_bit, $reason ) : $final_bit;
 }
@@ -96,11 +96,13 @@ sub graph_is_hamiltonian {
 #
 
 sub is_hamiltonian {
-    my ($G1) = @_;
+    my ($g) = @_;
 
+    my $spaced_string = "$g";
+    $spaced_string =~ s/\,/, /g;
     output("<HR NOSHADE>");
-    output("Calling is_hamiltonian($G1)");
-    output($G1);
+    output("Calling is_hamiltonian($spaced_string)");
+    output($g);
 
     my ( $is_hamiltonian, $reason );
 
@@ -112,14 +114,14 @@ sub is_hamiltonian {
     );
 
     foreach my $test_sub (@tests_1) {
-        ( $is_hamiltonian, $reason ) = &$test_sub($G1);
+        ( $is_hamiltonian, $reason ) = &$test_sub($g);
         return ( $is_hamiltonian, $reason )
             unless $is_hamiltonian == $DONT_KNOW;
     }
 
     ### Create a graph made of only required edges.
     my $required_graph;
-    ( $required_graph, $G1 ) = get_required_graph($G1);
+    ( $required_graph, $g ) = get_required_graph($g);
 
     if ( scalar( $required_graph->edges() ) ) {
         output("required graph:");
@@ -132,12 +134,9 @@ sub is_hamiltonian {
     return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
 
     my $deleted_edges;
-    ( $deleted_edges, $G1 ) = delete_unusable_edges($G1);
+    ( $deleted_edges, $g ) = delete_unusable_edges($g);
     if ($deleted_edges) {
-
-        # The following is equivalent to:
-        # return is_hamiltonian($G1);
-        @_ = ($G1);
+        @_ = ($g);
         goto &is_hamiltonian;
     }
 
@@ -148,18 +147,18 @@ sub is_hamiltonian {
             unless $is_hamiltonian == $DONT_KNOW;
 
         output("Now calling deleted_non_required_neighbors()<BR/>");
-        ( $deleted_edges, $G1 ) =
-            delete_non_required_neighbors( $required_graph, $G1 );
+        ( $deleted_edges, $g ) =
+            delete_non_required_neighbors( $required_graph, $g );
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
             output(
                 "Shrank the graph by removing $deleted_edges edge$s.<BR/>");
-            @_ = ($G1);
+            @_ = ($g);
             goto &is_hamiltonian;
         }
 
-        ( $deleted_edges, $G1 ) =
-            shrink_required_walks_longer_than_2_edges( $G1, $required_graph );
+        ( $deleted_edges, $g ) =
+            shrink_required_walks_longer_than_2_edges( $g, $required_graph );
         if ($deleted_edges) {
             if ( $deleted_edges == 1 ) {
                 output(
@@ -170,29 +169,29 @@ sub is_hamiltonian {
                         . "$deleted_edges edges and vertices.<BR/>" );
             }
 
-            @_ = ($G1);
+            @_ = ($g);
             goto &is_hamiltonian;
         }
     }
 
     output(   "Now running an exhaustive, recursive, and conclusive search, "
             . "only slightly better than brute force.<BR/>" );
-    my @undecided_vertices = grep { $G1->degree($_) > 2 } $G1->vertices();
+    my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {
         my $vertex =
-            get_chosen_vertex( $G1, $required_graph, \@undecided_vertices );
+            get_chosen_vertex( $g, $required_graph, \@undecided_vertices );
         my $tentative_combinations =
-            get_tentative_combinations( $G1, $required_graph, $vertex );
+            get_tentative_combinations( $g, $required_graph, $vertex );
         foreach my $tentative_edge_pair (@$tentative_combinations) {
-            my $G2 = $G1->deep_copy_graph();
+            my $g1 = $g->deep_copy_graph();
             output(   "For vertex: $vertex, protecting "
                     . ( join ',', map {"$vertex=$_"} @$tentative_edge_pair )
                     . "<BR/>" );
-            foreach my $neighbor ( $G2->neighbors($vertex) ) {
+            foreach my $neighbor ( $g1->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
                 output("Deleting edge: $vertex=$neighbor<BR/>");
-                $G2->delete_edge( $vertex, $neighbor );
+                $g1->delete_edge( $vertex, $neighbor );
             }
 
             output(   "The Graph with $vertex="
@@ -200,9 +199,9 @@ sub is_hamiltonian {
                     . ", $vertex="
                     . $tentative_edge_pair->[1]
                     . " protected:<BR/>" );
-            output($G2);
+            output($g1);
 
-            ( $is_hamiltonian, $reason ) = is_hamiltonian($G2);
+            ( $is_hamiltonian, $reason ) = is_hamiltonian($g1);
             if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
                 return ( $is_hamiltonian, $reason );
             }
@@ -217,9 +216,9 @@ sub is_hamiltonian {
 ##########################################################################
 
 sub get_tentative_combinations {
-    my ( $G, $required_graph, $vertex ) = @_;
+    my ( $g, $required_graph, $vertex ) = @_;
     my @tentative_combinations;
-    my @neighbors = $G->neighbors($vertex);
+    my @neighbors = $g->neighbors($vertex);
     if ( $required_graph->degree($vertex) == 1 ) {
         my ($fixed_neighbor) = $required_graph->neighbors($vertex);
 
@@ -244,14 +243,14 @@ sub get_tentative_combinations {
 ##########################################################################
 
 sub get_chosen_vertex {
-    my ( $G, $required_graph, $undecided_vertices ) = @_;
+    my ( $g, $required_graph, $undecided_vertices ) = @_;
 
     ### Choose the vertex with the highest degree first
     my $chosen_vertex;
     my $chosen_vertex_degree;
     my $chosen_vertex_required_degree;
     foreach my $vertex (@$undecided_vertices) {
-        my $degree          = $G->degree($vertex);
+        my $degree          = $g->degree($vertex);
         my $required_degree = $required_graph->degree($vertex);
         if (   ( !defined $chosen_vertex_degree )
             or ( $degree > $chosen_vertex_degree )

@@ -32,9 +32,9 @@ my @tests = (
 );
 
 foreach my $test (@tests) {
-    my $G = string_to_graph( $test->{input_graph_text} );
+    my $g = string_to_graph( $test->{input_graph_text} );
 
-    my ( $deleted_edges, $output_graph ) = delete_unusable_edges($G);
+    my ( $deleted_edges, $output_graph ) = delete_unusable_edges($g);
 
     is( $deleted_edges,
         $test->{expected_deleted_edges},

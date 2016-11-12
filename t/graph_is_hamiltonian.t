@@ -24,13 +24,13 @@ while ( defined( my $line = <DATA> ) ) {
 
     if ( $line =~ /^([^|]+)\|([01])\|(\d+|\d+=\d+(,\d+=\d+)*)$/ ) {
         my ( $label, $expected_result, $graph_text ) = ( $1, $2, $3 );
-        my $G = string_to_graph($graph_text);
+        my $g = string_to_graph($graph_text);
 
-        my $is_hamiltonian = graph_is_hamiltonian($G);
+        my $is_hamiltonian = graph_is_hamiltonian($g);
         is( $is_hamiltonian, $expected_result, $label );
 
         if ($url) {
-            is( is_hamiltonian_per_wolfram($G),
+            is( is_hamiltonian_per_wolfram($g),
                 $expected_result, "Wolfram: $label" );
         }
     }
