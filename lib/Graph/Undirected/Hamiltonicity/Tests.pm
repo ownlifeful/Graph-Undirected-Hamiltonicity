@@ -233,12 +233,16 @@ sub test_articulation_vertex {
 
     return $DONT_KNOW if $g->is_biconnected();
 
-    my $vertices_string = join ',', $g->articulation_points();
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
-              "This graph is not biconnected, therefore not Hamiltonian. "
-            . "It contains the following articulation vertices: "
-            . "($vertices_string)" );
+             "This graph is not biconnected, therefore not Hamiltonian. ");
+
+#    my $vertices_string = join ',', $g->articulation_points();
+#
+#    return ( $GRAPH_IS_NOT_HAMILTONIAN,
+#              "This graph is not biconnected, therefore not Hamiltonian. "
+#            . "It contains the following articulation vertices: "
+#            . "($vertices_string)" );
 
 }
 
@@ -258,11 +262,14 @@ sub test_graph_bridge {
 
     return $DONT_KNOW if $g->is_edge_connected();
 
-    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
+   return ( $GRAPH_IS_NOT_HAMILTONIAN,
+            "This graph has a bridge, and is therefore not Hamiltonian.");
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN,
-              "This graph is not edge-connected, therefore not Hamiltonian. "
-            . " It contains the following bridges ($bridge_string)." );
+#    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
+#
+#    return ( $GRAPH_IS_NOT_HAMILTONIAN,
+#              "This graph is not edge-connected, therefore not Hamiltonian. "
+#            . " It contains the following bridges ($bridge_string)." );
 
 }
 

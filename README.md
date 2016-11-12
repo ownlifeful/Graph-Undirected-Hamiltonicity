@@ -48,8 +48,7 @@ To get per-module help:
 
 ## INSTALLATION
 
-To install the core module:
-
+### To install the core module:
 
     perl Makefile.PL
     make
@@ -59,7 +58,9 @@ To install the core module:
 
 
 
-To install the optional CGI script, copy the script to the appropriate location for your web server.
+### To install the optional CGI script:
+
+Copy the script to the appropriate location for your web server.
 
 
 On macOS:
@@ -71,13 +72,15 @@ On CentOS ( and presumably RHEL and Fedora Linux ):
 
     sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
 
-## Verification via Wolfram Cloud
-To activate the ( optional, but recommended  ) `Graph::Undirected::Hamiltonicity::Wolfram` module, which lets you cross-check results 
-with the Wolfram Open Cloud, please read [WOLFRAM.md](WOLFRAM.md "Verification via Wolfram Cloud").
+### To enable verification via Wolfram Open Cloud:
+
+It is recommended to enable result cross-verification via the Wolfram Open Cloud.
+To activate the `Graph::Undirected::Hamiltonicity::Wolfram` module, 
+please read [WOLFRAM.md](WOLFRAM.md "Verification via Wolfram Cloud").
 
     use Graph::Undirected::Hamiltonicity::Wolfram;
 
-    if( is_hamiltonian_per_wolfram( $g ) ) {
+    if ( is_hamiltonian_per_wolfram( $g ) ) {
         print "The graph contains a Hamiltonian Cycle.\n";
     } else {
         print "The graph does not contain a Hamiltonian Cycle.\n";
@@ -118,7 +121,7 @@ To get more detailed help:
 
 # SUPPORT
 
-Please report issues [on github](https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/issues).
+Please report issues [on GitHub](https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/issues).
 
 
 # ACKNOWLEDGEMENTS
