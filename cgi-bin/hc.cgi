@@ -51,7 +51,6 @@ if ( $graph_text =~ /\d/ ) {
             print_instructions();
         }
     } else {
-        print "<TT>$graph_text</TT> is not a valid graph.\n";
         print "If the graph contains a single vertex, ";
         print "it is Hamiltonian.<BR/>\n";
         print_instructions();
