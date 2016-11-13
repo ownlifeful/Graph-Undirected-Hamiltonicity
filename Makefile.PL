@@ -20,12 +20,13 @@ WriteMakefile(
     PREREQ_PM => {
         'Graph'               => '0.9',   # '0.9704',
         'Exporter'            => '5',     # '5.68',
-        'CGI'                 => '4',     # '4.31',
         'LWP::UserAgent'      => '6',     # '6.15'
         'Config::INI::Reader' => '0.025',
         'Carp'                => '1.29',
         'Test::More'          => '0.98',
         'Test::Exception'     => '0',     # '0.43',
+        'CGI::Minimal'        => '1.29',
+        ### 'CGI'                 => '4',     # '4.31',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Graph-Undirected-Hamiltonicity-*' },
