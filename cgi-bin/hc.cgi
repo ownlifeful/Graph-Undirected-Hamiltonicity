@@ -93,8 +93,8 @@ if ( $graph_text =~ /\d=\d/ ) {
         print "The graph is not Hamiltonian.\n";
     }
     print qq{</span>\n};
-    print "($reason)\n";
-
+    print qq{($reason)\n};
+    print qq{<BR/><P/>\n};
 }
 
 print qq{</div></BODY></HTML>\n};
