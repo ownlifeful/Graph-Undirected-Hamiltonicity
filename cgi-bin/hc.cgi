@@ -23,7 +23,7 @@ my ( $self_url ) = split /\?/, $ENV{REQUEST_URI};
 
 print qq{Content-Type: text/html\n\n};
 
-print <<"END_OF_HEADER";
+print <<'END_OF_HEADER';
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -34,18 +34,31 @@ print <<"END_OF_HEADER";
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.8.0/jquery.modal.min.css" integrity="sha256-rll6wTV76AvdluCY5Pzv2xJfw2x7UXnK+fGfj9tQocc=" crossorigin="anonymous" />
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.8.0/jquery.modal.min.js" integrity="sha256-UeH9wuUY83m/pXN4vx0NI5R6rxttIW73OhV0fE0p/Ac=" crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function(){
+       if ( window.is_hamiltonian ) {
+           $('#ham').modal();
+       } else {
+           $('#non').modal();
+       }
+    });
+</script>
 
 </head>
 <body bgcolor="white">
 <div class="container">
 <br/><br/>
 
-<form method="post" action="$self_url" enctype="multipart/form-data">
 
 END_OF_HEADER
 
+print qq{<form method="post" action="$self_url" enctype="multipart/form-data">\n};
 
 my $cgi = CGI::Minimal->new;
 if ($cgi->truncated) {
@@ -88,16 +101,31 @@ if ( $graph_text =~ /\d=\d/ ) {
     print qq{<A NAME="conclusion"></A><B>Conclusion:</B>\n};
     print qq{<span style="background: yellow;">\n};
     if ( $is_hamiltonian ) {
-        print "The graph is Hamiltonian.\n";
+        print qq{The graph is Hamiltonian.\n};
+        print qq{<script>window.is_hamiltonian = true;</script>\n};
     } else {
-        print "The graph is not Hamiltonian.\n";
+        print qq{The graph is not Hamiltonian.\n};
+        print qq{<script>window.is_hamiltonian = false;</script>\n};
     }
     print qq{</span>\n};
     print qq{($reason)\n};
     print qq{<BR/><P/>\n};
 }
 
-print qq{</div></BODY></HTML>\n};
+print qq{</div>
+ <!-- Hamiltonian modal -->
+  <div id="ham" style="display:none;">
+    <p><H1>The graph is Hamiltonian!</H1></p>
+  </div>
+
+ <!-- Non-Hamiltonian modal -->
+  <div id="non" style="display:none;">
+    <p><H1>The graph is <u>not</u> Hamiltonian!</H1></p>
+  </div>
+
+</BODY></HTML>\n};
+
+### print qq{<a href="#" rel="modal:close">Close</a> or press ESC};
 
 ############################################################
 
