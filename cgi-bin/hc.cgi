@@ -52,12 +52,12 @@ if ( $graph_text =~ /\d/ ) {
         }
     } else {
         print "<TT>$graph_text</TT> is not a valid graph.\n";
-        print "If the graph contains a single vertex of degree 0 or 1 ";
-        print "it is non-Hamiltonian.<BR/>\n";
+        print "If the graph contains a single vertex, ";
+        print "it is Hamiltonian.<BR/>\n";
         print_instructions();
     }
 } else {
-    print "Here is the Null Graph K<sub>0</sub>. ";
+    print "Here is the Null Graph <TT>K<sub>0</sub></TT>. ";
     print "It is not Hamiltonian.\n<BR/><P/>\n";        
     print_instructions();
 }
