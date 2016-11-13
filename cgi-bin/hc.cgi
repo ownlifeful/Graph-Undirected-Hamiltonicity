@@ -63,7 +63,7 @@ print qq{<form method="post" action="$self_url" enctype="multipart/form-data">\n
 my $cgi = CGI::Minimal->new;
 if ($cgi->truncated) {
     print qq{<H2>There was an error. The input size might be too big.</H2>\n};
-    print get_textarea($g);
+    print get_textarea();
     print qq{</form></div></body></html>\n};
     exit;
 }
