@@ -62,7 +62,8 @@ print qq{<form method="post" action="$self_url" enctype="multipart/form-data">\n
 
 my $cgi = CGI::Minimal->new;
 if ($cgi->truncated) {
-    print qq{There was an error. The input size might be too big.\n};
+    print qq{<H2>There was an error. The input size might be too big.</H2>\n};
+    print get_textarea($g);
     print qq{</form></div></body></html>\n};
     exit;
 }
@@ -93,8 +94,7 @@ print "<br/><br/>\n";
 
 if ( $graph_text =~ /\d=\d/ ) {
 
-    print qq{You can read the program's trace output below, };
-    print qq{or jump to the <A HREF="#conclusion">conclusion</A>.<BR/>\n};
+    print qq{<h2>Here is the program's trace output:</h2><BR/>\n};
 
     my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($g);
     print qq{<BR/>\n};
