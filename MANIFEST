@@ -25,7 +25,7 @@ t/transforms/delete_unusable_edges.t
 t/transforms/get_common_neighbors.t
 t/transforms/get_required_graph.t
 t/transforms/shrink_required_walks_longer_than_2_edges.t
-t/transforms/shuffle.t
+t/transforms/get_random_isomorph.t
 t/transforms/string_to_graph.t
 t/transforms/swap_vertices.t
 META.yml                                 Module YAML meta-data (added by MakeMaker)

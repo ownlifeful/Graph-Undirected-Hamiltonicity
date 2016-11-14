@@ -6,7 +6,7 @@ use warnings;
 
 use Carp;
 use Graph::Undirected;
-use Graph::Undirected::Hamiltonicity::Transforms qw(add_random_edges shuffle);
+use Graph::Undirected::Hamiltonicity::Transforms qw(&add_random_edges &get_random_isomorph);
 
 use Exporter qw(import);
 
@@ -120,7 +120,7 @@ sub spoof_known_hamiltonian_graph {
     croak "The number of edges must be >= number of vertices." if $e < $v;
 
     my $g = spoof_canonical_hamiltonian_graph($v);
-    $g = shuffle($g);
+    $g = get_random_isomorph($g);
     $g = add_random_edges( $g, $e - $v );
 
     return $g;

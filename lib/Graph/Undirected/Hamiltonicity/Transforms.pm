@@ -16,7 +16,7 @@ our @EXPORT_OK = qw(
     &get_common_neighbors
     &get_required_graph
     &shrink_required_walks_longer_than_2_edges
-    &shuffle
+    &get_random_isomorph
     &string_to_graph
     &swap_vertices
 );
@@ -360,19 +360,19 @@ sub string_to_graph {
 
 ##########################################################################
 
-=head2 shuffle
+=head2 get_random_isomorph
 
 Takes an input graph, and swaps its vertices randomly, so that the
 resultant graph is an isomorph of the input graph, but probably not
 identical to the original graph.
 
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&shuffle);
+     use Graph::Undirected::Hamiltonicity::Transforms qw(&get_random_isomorph);
 
-     my $g1 = shuffle( $g );
+     my $g1 = get_random_isomorph( $g );
 
 =cut
 
-sub shuffle {
+sub get_random_isomorph {
     my ($g) = @_;
 
     # everyday i'm shufflin'

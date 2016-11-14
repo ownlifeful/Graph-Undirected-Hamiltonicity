@@ -5,11 +5,11 @@ use warnings;
 
 use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms
-    qw(&string_to_graph &shuffle);
+    qw(&string_to_graph &get_random_isomorph);
 
 use Test::More;
 
-plan tests => 9;
+plan tests => 12;
 
 my @tests = (
     {   label => 'Herschel Graph',
@@ -26,7 +26,11 @@ my @tests = (
             '0=1,0=4,1=2,1=4,2=3,2=5,3=5,4=6,5=7,6=8,6=9,7=10,7=11,8=9,9=10,10=11',
         expected_is_hamiltonian => 1,
     },
-
+    {
+        label => 'Petersen Graph',
+        input_graph_text => '0=1,0=4,0=5,1=2,1=6,2=3,2=7,3=4,3=8,4=9,5=7,5=8,6=8,6=9,7=9',
+        expected_is_hamiltonian => 0,
+    }
 );
 
 foreach my $test (@tests) {
@@ -34,24 +38,25 @@ foreach my $test (@tests) {
     my $label      = $test->{label};
     my $graph_text = $test->{input_graph_text};
 
-    ### A shuffled graph is very likely to be different from the original, but it's not 100% guaranteed.
+    ### A random isomorph is very likely to be different from the original,
+    ### but it's not 100% guaranteed.
     my $before_graph = string_to_graph($graph_text);
-    my $after_graph  = shuffle($before_graph);
+    my $after_graph  = get_random_isomorph($before_graph);
     isnt( "$after_graph", "$before_graph",
-        "[$label] probably different after shuffle(). IF THIS TEST FAILS, JUST RE-RUN THE TEST. ODDS ARE, IT WILL PASS."
+        "[$label] probably different after get_random_isomorph(). IF THIS TEST FAILS, JUST RE-RUN THE TEST. ODDS ARE, IT WILL PASS."
     );
 
-    ### The distribution of degrees in the graph remains unchanged after shuffle.
+    ### The distribution of degrees in the graph remains unchanged after get_random_isomorph.
     my %before_degree_hash = get_degree_hash($before_graph);
     my %after_degree_hash  = get_degree_hash($after_graph);
     is_deeply( \%after_degree_hash, \%before_degree_hash,
-        "[$label] degree hash unchanged after shuffle()" );
+        "[$label] degree hash unchanged after get_random_isomorph()" );
 
-    ### The Hamiltonicity of the graph remains unchanged after shuffle
+    ### The Hamiltonicity of the graph remains unchanged after get_random_isomorph
     my $is_hamiltonian = graph_is_hamiltonian($after_graph);
     is( $is_hamiltonian,
         $test->{expected_is_hamiltonian},
-        "[$label] Hamiltonicity unchanged after shuffle()"
+        "[$label] Hamiltonicity unchanged after get_random_isomorph()"
     );
 }
 
