@@ -148,7 +148,7 @@ sub is_hamiltonian {
 
         output("Now calling deleted_non_required_neighbors()<BR/>");
         ( $deleted_edges, $g ) =
-            delete_non_required_neighbors( $required_graph, $g );
+            delete_non_required_neighbors( $g, $required_graph );
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
             output(

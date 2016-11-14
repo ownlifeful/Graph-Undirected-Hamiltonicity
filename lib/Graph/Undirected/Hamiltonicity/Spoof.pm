@@ -150,7 +150,7 @@ sub spoof_randomish_graph {
     my $g = spoof_random_graph( $v, $e );
 
     ### Seek out vertices with degree < 2
-    ### add random edges to them.
+    ### and add random edges to them.
     my $edges_to_remove = 0;
     foreach my $vertex1 ( $g->vertices() ) {
         next if $g->degree($vertex1) > 1;

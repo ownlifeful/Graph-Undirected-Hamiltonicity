@@ -58,7 +58,7 @@ foreach my $test (@tests) {
     }
 
     my ( $deleted_edges, $output_graph ) =
-        delete_non_required_neighbors( $required_graph, $g );
+        delete_non_required_neighbors( $g, $required_graph );
 
     is( $deleted_edges,
         $test->{expected_deleted_edges},

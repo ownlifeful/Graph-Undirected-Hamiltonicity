@@ -160,7 +160,7 @@ Return the graph with the edges deleted, and also the number of edges deleted.
 =cut
 
 sub delete_non_required_neighbors {
-    my ( $required_graph, $g ) = @_;
+    my ( $g, $required_graph ) = @_;
     my $g1;
     my $deleted_edges = 0;
     foreach my $required_vertex ( $required_graph->vertices() ) {
