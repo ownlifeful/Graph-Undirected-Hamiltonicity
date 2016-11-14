@@ -6,7 +6,7 @@ use Getopt::Long;
 use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
 use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph
-&spoof_random_graph
+&spoof_randomish_graph
 );
 use Graph::Undirected::Hamiltonicity::Wolfram qw(:all);
 
@@ -14,15 +14,6 @@ use warnings;
 use strict;
 
 $| = 1;    # piping hot pipes
-
-=head2
---graph_text=
---graph_file=
---vertices=
---edges=
---count=
---output_format=
-=cut
 
 my $graph_file    = '';
 my $graph_text    = '';
@@ -45,8 +36,6 @@ GetOptions(
 
 show_usage_and_exit() if $help;
 
-
-
 if ($graph_file) {
     open( my $fh, "<", $graph_file )
         or croak "Could not open [$graph_file][$!]\n";
@@ -63,11 +52,8 @@ if ($graph_file) {
     push @G, string_to_graph($graph_text);
 } elsif ($v) {
     $count ||= 1;
-    my $max_edges = ( $v * $v - $v ) / 2;
     for ( my $i = 0; $i < $count; $i++ ) {
-        my $edge_count = $e // int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
-        ### push @G, spoof_known_hamiltonian_graph( $v, $edge_count );
-        push @G, spoof_randomish_graph( $v, $edge_count );
+        push @G, spoof_randomish_graph( $v, $e );
     }
 
 } else {
