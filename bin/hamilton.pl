@@ -67,7 +67,7 @@ if ($graph_file) {
     for ( my $i = 0; $i < $count; $i++ ) {
         my $edge_count = $e // int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
         ### push @G, spoof_known_hamiltonian_graph( $v, $edge_count );
-        push @G, spoof_random_graph( $v, $edge_count );
+        push @G, spoof_randomish_graph( $v, $edge_count );
     }
 
 } else {

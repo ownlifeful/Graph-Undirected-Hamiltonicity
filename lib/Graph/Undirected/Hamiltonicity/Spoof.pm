@@ -14,6 +14,7 @@ our @EXPORT_OK = qw(
     &spoof_canonical_hamiltonian_graph
     &spoof_known_hamiltonian_graph
     &spoof_random_graph
+    &spoof_randomish_graph
 );
 
 our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
@@ -114,9 +115,7 @@ sub spoof_known_hamiltonian_graph {
     croak "Please provide the number of vertices." unless defined $v and $v;
     croak "A graph with 2 vertices cannot be Hamiltonian." if $v == 2;
 
-    # Generate random
-    my $max_edges = ( $v * $v - $v ) / 2;
-    $e ||= int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
+    $e ||= get_random_edge_count($v);
 
     croak "The number of edges must be >= number of vertices." if $e < $v;
 
@@ -132,17 +131,26 @@ sub spoof_known_hamiltonian_graph {
 sub spoof_random_graph {
 
     my ( $v, $e ) = @_;
+    $e ||= get_random_edge_count($v);
 
     my $g = Graph::Undirected->new( vertices => [ 0 .. $v-1 ] );
-
-    # Generate random
-    my $max_edges = ( $v * $v - $v ) / 2;
-    $e ||= int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
-
     $g = add_random_edges( $g, $e );
 
+    return $g;
+}
+
+##############################################################################
+
+
+sub spoof_randomish_graph {
+
+    my ( $v, $e ) = @_;
+    $e ||= get_random_edge_count($v);
+
+    my $g = spoof_random_graph( $v, $e );
+
     ### Seek out vertices with degree < 2
-    ### add edges to them.
+    ### add random edges to them.
     my $edges_to_remove = 0;
     foreach my $vertex1 ( $g->vertices() ) {
         next if $g->degree($vertex1) > 1;
@@ -159,7 +167,9 @@ sub spoof_random_graph {
 
     ### Seek out vertices with degree > 2
     ### with neighbor of degree < 3
-    ### amd delete the same number of edges.
+    ### and delete edges.
+    ### Delete the same number of edges,
+    ### as the random edges added.
     while ( $edges_to_remove ) {
       LOOP:
         foreach my $vertex1 ( $g->vertices() ) {
@@ -175,6 +185,15 @@ sub spoof_random_graph {
     }
 
     return $g;
+}
+
+##############################################################################
+
+sub get_random_edge_count {
+    my ( $v ) = @_;
+    my $max_edges = ( $v * $v - $v ) / 2;
+    my $e = int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
+    return $e;
 }
 
 ##############################################################################
