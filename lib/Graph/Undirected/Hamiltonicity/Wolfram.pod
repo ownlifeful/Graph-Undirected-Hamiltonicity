@@ -28,8 +28,6 @@ Version 0.01
 
 The is_hamiltonian_per_wolfram() subroutine is exported by default.
 
-=back
-
 =head1 SUBROUTINES
 
 =head2 is_hamiltonian_per_wolfram
