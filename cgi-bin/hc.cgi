@@ -42,11 +42,8 @@ print <<'END_OF_HEADER';
 
 <script>
     $(document).ready(function(){
-       if ( window.is_hamiltonian ) {
-           $('#ham').modal();
-       } else {
-           $('#non').modal();
-       }
+       var modal_to_open = window.is_hamiltonian ? '#ham' : '#non';
+       $( modal_to_open ).modal();
     });
 </script>
 
@@ -112,18 +109,19 @@ if ( $graph_text =~ /\d=\d/ ) {
     print qq{<BR/><P/>\n};
 }
 
-print qq{</div>
+print q{
  <!-- Hamiltonian modal -->
   <div id="ham" style="display:none;">
-    <p><H1>The graph is Hamiltonian!</H1></p>
+    <H1>The graph is Hamiltonian!</H1>
   </div>
 
  <!-- Non-Hamiltonian modal -->
   <div id="non" style="display:none;">
-    <p><H1>The graph is <u>not</u> Hamiltonian!</H1></p>
+    <H1>The graph is <u>not</u> Hamiltonian!</H1>
   </div>
-
-</BODY></HTML>\n};
+</div>
+</BODY></HTML>
+};
 
 ### print qq{<a href="#" rel="modal:close">Close</a> or press ESC};
 
