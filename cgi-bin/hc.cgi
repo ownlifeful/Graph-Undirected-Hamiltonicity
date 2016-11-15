@@ -33,6 +33,7 @@ print <<'END_OF_HEADER';
 
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.8.0/jquery.modal.min.css" integrity="sha256-rll6wTV76AvdluCY5Pzv2xJfw2x7UXnK+fGfj9tQocc=" crossorigin="anonymous" />
 
@@ -111,12 +112,12 @@ if ( $graph_text =~ /\d=\d/ ) {
 
 print q{
  <!-- Hamiltonian modal -->
-  <div id="ham" style="display:none;">
+  <div id="ham" style="display:none; overflow: visible;">
     <H1>The graph is Hamiltonian!</H1>
   </div>
 
  <!-- Non-Hamiltonian modal -->
-  <div id="non" style="display:none;">
+  <div id="non" style="display:none; overflow: visible;">
     <H1>The graph is <u>not</u> Hamiltonian!</H1>
   </div>
 </div>
