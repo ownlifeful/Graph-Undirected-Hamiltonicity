@@ -23,40 +23,10 @@ our @EXPORT_OK = qw(
 
 our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
-=head1 NAME
-
-Graph::Undirected::Hamiltonicity::Transforms - subroutines that apply transformations to undirected graphs.
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
 our $VERSION = '0.01';
 
-=head1 SUBROUTINES
 
-=cut
-
-##################################################### BEGIN subs
-
-=head2 get_required_graph
-
-For each vertex in the graph that has degree == 2,
-mark the edges adjacent to the vertex as "required".
-
-Create a graph that has the same edges as the input graph,
-but only the edges marked "required".
-
-Return the "required" graph, and also a copy of the original graph,
-with the required edges marked.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&get_required_graph);
-
-     my ( $required_graph, $g1 ) = get_required_graph( $g );
-
-=cut
+#####################################################
 
 sub get_required_graph {
 
@@ -107,16 +77,6 @@ sub get_required_graph {
 
 ##########################################################################
 
-=head2 delete_unusable_edges
-
-Delete edges connecting neighbors of vertices with degree 2.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&delete_unusable_edges);
-
-     my $g1 = delete_unusable_edges( $g );
-
-=cut
-
 sub delete_unusable_edges {
 
     my ($g) = @_;
@@ -145,19 +105,6 @@ sub delete_unusable_edges {
 }
 
 ##########################################################################
-
-=head2 delete_non_required_neighbors
-
-Delete all non-required edges adjacent to vertices adjacent to 
-2 required edges.
-
-Return the graph with the edges deleted, and also the number of edges deleted.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&delete_non_required_neighbors);
-
-     my ($deleted_edges, $g1) = delete_non_required_neighbors( $g );
-
-=cut
 
 sub delete_non_required_neighbors {
     my ( $g, $required_graph ) = @_;
@@ -191,18 +138,6 @@ sub delete_non_required_neighbors {
 }
 
 ##########################################################################
-
-=head2 shrink_required_walks_longer_than_2_edges
-
-Shrink all required walks longer than 2 edges.
-
-Return the graph with the edges deleted, and also the number of edges deleted.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&shrink_required_walks_longer_than_2_edges);
-
-     my ($deleted_edges, $g1) = shrink_required_walks_longer_than_2_edges( $g );
-
-=cut
 
 sub shrink_required_walks_longer_than_2_edges {
     my ( $g, $required_graph ) = @_;
@@ -243,19 +178,6 @@ sub shrink_required_walks_longer_than_2_edges {
 
 ##########################################################################
 
-=head2 swap_vertices
-
-For a given graph, and two specified vertices, modify the graph so that 
-the neighbors of vertex1 become the neighbors of vertex2 and vice versa.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&swap_vertices);
-
-     my $g1 = swap_vertices( $g, 3, 7 );
-
-     # $g1 is like $g, with vertices 3 and 7 swapped.
-
-=cut
-
 sub swap_vertices {
     my ( $g, $vertex_1, $vertex_2 ) = @_;
 
@@ -286,17 +208,6 @@ sub swap_vertices {
 
 ##########################################################################
 
-=head2 get_common_neighbors
-
-For a given graph, and two specified vertices, return a reference to 
-a hash whose keys are all the vertices that vertex1 and vertex2 share.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&get_common_neighbors);
-
-     my %common_neighbors = %{ get_common_neighbors( $g, 3, 7 ) };
-
-=cut
-
 sub get_common_neighbors {
     my ( $g, $vertex_1, $vertex_2 ) = @_;
 
@@ -315,18 +226,6 @@ sub get_common_neighbors {
 }
 
 ##########################################################################
-
-=head2 string_to_graph
-
-Take a string and convert it to an undirected graph.
-The string should be in the same format as the output of
-Graph::Undirected::stringify()
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph);
-
-     my $g = string_to_graph('0=1,0=2,0=6,1=3,1=7,2=3,2=4,3=5,4=5,4=6,5=7,6=7');
-
-=cut
 
 sub string_to_graph {
     my ($string) = @_;
@@ -360,18 +259,6 @@ sub string_to_graph {
 
 ##########################################################################
 
-=head2 get_random_isomorph
-
-Takes an input graph, and swaps its vertices randomly, so that the
-resultant graph is an isomorph of the input graph, but probably not
-identical to the original graph.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&get_random_isomorph);
-
-     my $g1 = get_random_isomorph( $g );
-
-=cut
-
 sub get_random_isomorph {
     my ($g) = @_;
 
@@ -383,7 +270,6 @@ sub get_random_isomorph {
     my $max_times_to_shuffle = $v * $v;
     my $shuffles             = 0;
     while ( $shuffles < $max_times_to_shuffle ) {
-
         my $v1 = int( rand($v) );
         my $v2 = int( rand($v) );
 
@@ -398,18 +284,6 @@ sub get_random_isomorph {
 
 ##############################################################################
 
-=head2 add_random_edges
-
-Add random edges to a given graph.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&add_random_edges);
-
-     my $g1 = add_random_edges( $g, 7 );
-
-     # $g1 is like $g, but with 7 extra edges.
-
-=cut
-
 sub add_random_edges {
     my ( $g, $edges_to_add ) = @_;
 
@@ -418,7 +292,6 @@ sub add_random_edges {
 
     my $added_edges = 0;
     while ( $added_edges < $edges_to_add ) {
-
         my $v1 = int( rand($v) );
         my $v2 = int( rand($v) );
 
@@ -434,10 +307,5 @@ sub add_random_edges {
 
 ##############################################################################
 
-=head1 AUTHOR
-
-Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
-
-=cut
 
 1;    # End of Graph::Undirected::Hamiltonicity::Transforms

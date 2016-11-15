@@ -1,10 +1,16 @@
 Changes
 lib/Graph/Undirected/Hamiltonicity.pm
+lib/Graph/Undirected/Hamiltonicity.pod
 lib/Graph/Undirected/Hamiltonicity/Output.pm
+lib/Graph/Undirected/Hamiltonicity/Output.pod
 lib/Graph/Undirected/Hamiltonicity/Spoof.pm
+lib/Graph/Undirected/Hamiltonicity/Spoof.pod
 lib/Graph/Undirected/Hamiltonicity/Wolfram.pm
+lib/Graph/Undirected/Hamiltonicity/Wolfram.pod
 lib/Graph/Undirected/Hamiltonicity/Tests.pm
+lib/Graph/Undirected/Hamiltonicity/Tests.pod
 lib/Graph/Undirected/Hamiltonicity/Transforms.pm
+lib/Graph/Undirected/Hamiltonicity/Transforms.pod
 Makefile.PL
 LICENSE
 MANIFEST			This list of files

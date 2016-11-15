@@ -7,7 +7,7 @@ WriteMakefile(
     NAME             => 'Graph::Undirected::Hamiltonicity',
     AUTHOR           => q{Ashwin Dixit <ashwin at ownlifeful dot com>},
     VERSION_FROM     => 'lib/Graph/Undirected/Hamiltonicity.pm',
-    ABSTRACT_FROM    => 'lib/Graph/Undirected/Hamiltonicity.pm',
+    ABSTRACT_FROM    => 'lib/Graph/Undirected/Hamiltonicity.pod',
     LICENSE          => 'artistic_2',
     PL_FILES         => {},
     MIN_PERL_VERSION => 5.006,
