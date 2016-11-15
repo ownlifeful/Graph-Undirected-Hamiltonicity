@@ -107,7 +107,6 @@ sub spoof_randomish_graph {
     ### as the random edges added.
     while ( $edges_to_remove and $try_count < $max_tries ) {
         $try_count++;
-        print "spoof_randomish_graph: remaining edges_to_remove=[$edges_to_remove]\n"; ### DEBUG
       LOOP:
         foreach my $vertex1 ( $g->vertices() ) {
             next if $g->degree($vertex1) < 3;
