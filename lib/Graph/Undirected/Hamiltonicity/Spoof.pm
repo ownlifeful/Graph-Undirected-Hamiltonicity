@@ -105,7 +105,7 @@ sub spoof_randomish_graph {
     ### and delete edges.
     ### Try to delete the same number of edges,
     ### as the random edges added.
-    while ( $edges_to_remove and $try_count < $max_tries ) {
+    while ( $edges_to_remove and ($try_count < $max_tries) ) {
         $try_count++;
       LOOP:
         foreach my $vertex1 ( $g->vertices() ) {
@@ -119,6 +119,8 @@ sub spoof_randomish_graph {
             }
         }
     }
+
+    carp "Exiting with $edges_to_remove extra edges.\n" if $edges_to_remove;
 
     return $g;
 }

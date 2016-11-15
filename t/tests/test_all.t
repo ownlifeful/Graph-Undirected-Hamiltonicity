@@ -8,7 +8,7 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
 
 use Test::More;
 
-plan tests => 14;
+plan tests => 15;
 
 while ( defined( my $line = <DATA> ) ) {
     next if $line =~ /^\s*#/;    ### skip comments
@@ -79,4 +79,8 @@ test_required_cyclic|2|a 6 vertex, 6 edge non-connected graph|0=1,0=2,1=2,3=4,3=
 test_required_cyclic|1|a simple 3 vertex, 3 edge graph|0=1,0=2,1=2
 
 test_required_cyclic|1|a simple 4 vertex, 3 edge graph|0=1,0=2,1=2,3
+
+test_required_cyclic|1|a simple 4 vertex, 4 edge canonical graph|0=1,0=3,1=2,2=3
+
+test_required_cyclic|2|a graph with a non-Hamiltonian cycle in it|0=1,0=3,1=2,2=3,4
 
