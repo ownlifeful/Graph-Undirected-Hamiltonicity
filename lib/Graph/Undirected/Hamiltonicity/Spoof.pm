@@ -84,24 +84,30 @@ sub spoof_randomish_graph {
     ### and add random edges to them.
     my $edges_to_remove = 0;
     foreach my $vertex1 ( $g->vertices() ) {
-        next if $g->degree($vertex1) > 1;
-        my $added_edge = 0;
-        while ( ! $added_edge ) {
+        my $degree = $g->degree($vertex1);
+
+        next if $degree > 1;
+        my $added_edges = 0;
+        while ( $added_edges < (2 - $degree) ) {
             my $vertex2 = int( rand($v) );
             next if $vertex1 == $vertex2;
             next if $g->has_edge($vertex1, $vertex2);
             $g->add_edge($vertex1,$vertex2);
-            $added_edge = 1;
+            $added_edges++;
             $edges_to_remove++;
         }
     }
 
+    my $try_count = 0;
+    my $max_tries = $edges_to_remove + 1;
     ### Seek out vertices with degree > 2
     ### with neighbor of degree < 3
     ### and delete edges.
-    ### Delete the same number of edges,
+    ### Try to delete the same number of edges,
     ### as the random edges added.
-    while ( $edges_to_remove ) {
+    while ( $edges_to_remove and $try_count < $max_tries ) {
+        $try_count++;
+        print "spoof_randomish_graph: remaining edges_to_remove=[$edges_to_remove]\n"; ### DEBUG
       LOOP:
         foreach my $vertex1 ( $g->vertices() ) {
             next if $g->degree($vertex1) < 3;
