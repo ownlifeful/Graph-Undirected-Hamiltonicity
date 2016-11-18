@@ -2,7 +2,7 @@
 =head1 NAME
 
 Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
-    contains a Hamiltonian Cycle. YEE HAW!
+    contains a Hamiltonian Cycle.
 
 =head1 VERSION
 
