@@ -74,8 +74,7 @@ On CentOS ( and presumably RHEL and Fedora Linux ):
 
 ### To enable verification via Wolfram Open Cloud:
 
-It is recommended to enable result cross-verification via the Wolfram Open Cloud.
-To activate the `Graph::Undirected::Hamiltonicity::Wolfram` module, 
+( Optional, but recommended ). To enable result cross-verification via the Wolfram Open Cloud,
 please read [WOLFRAM.md](WOLFRAM.md "Verification via Wolfram Cloud").
 
     use Graph::Undirected::Hamiltonicity::Wolfram;
