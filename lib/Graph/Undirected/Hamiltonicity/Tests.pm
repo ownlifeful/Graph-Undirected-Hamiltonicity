@@ -20,6 +20,7 @@ our @EXPORT_OK = (
     @EXPORT, qw(
         &test_articulation_vertex
         &test_canonical
+        &test_dirac
         &test_graph_bridge
         &test_min_degree
         &test_required
@@ -155,6 +156,30 @@ sub test_graph_bridge {
 #    return ( $GRAPH_IS_NOT_HAMILTONIAN,
 #              "This graph is not edge-connected, therefore not Hamiltonian. "
 #            . " It contains the following bridges ($bridge_string)." );
+
+}
+
+##########################################################################
+
+### A simple graph with n vertices (n >= 3) is Hamiltonian if every vertex 
+### has degree n / 2 or greater. -- Dirac (1952)
+### https://en.wikipedia.org/wiki/Hamiltonian_path
+
+sub test_dirac {
+    my ($g) = @_;
+    my $v = $g->vertices();
+    return $DONT_KNOW if $v < 3;
+
+    my $half_v = $v / 2;
+
+    foreach my $vertex ( $g->vertices() ) {
+        if ( $g->degree($vertex) < $half_v ) {
+            return $DONT_KNOW;
+        }
+    }
+
+    return ($GRAPH_IS_HAMILTONIAN,
+            "Every vertex has degree $half_v or more.");
 
 }
 
