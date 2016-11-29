@@ -8,21 +8,19 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
 
 use Test::More;
 
-plan tests => 15;
+plan tests => 21;
 
 while ( defined( my $line = <DATA> ) ) {
     next if $line =~ /^\s*#/;    ### skip comments
     chomp $line;
+    next unless $line;
+    my ( $test_sub_name, $expected_result, $label, $graph_text ) = split /\|/, $line;
 
-    if ( $line =~ /^([^|]+)\|([012])\|([^|]+)\|(\d+=\d+(,\d+=\d+)*)$/ ) {
-        my ( $test_sub_name, $expected_result, $label, $graph_text ) =
-            ( $1, $2, $3, $4 );
-        my $g = string_to_graph($graph_text);
-        no strict 'refs';
-        my ( $is_hamiltonian, $reason ) = &$test_sub_name($g);
-        use strict 'refs';
-        is( $is_hamiltonian, $expected_result, "$test_sub_name: $label" );
-    }
+    my $g = string_to_graph($graph_text);
+    no strict 'refs';
+    my ( $is_hamiltonian, $reason ) = &$test_sub_name($g);
+    use strict 'refs';
+    is( $is_hamiltonian, $expected_result, "$test_sub_name: $label" );
 }
 
 1;
@@ -78,9 +76,16 @@ test_required_cyclic|2|a 6 vertex, 6 edge non-connected graph|0=1,0=2,1=2,3=4,3=
 
 test_required_cyclic|1|a simple 3 vertex, 3 edge graph|0=1,0=2,1=2
 
-test_required_cyclic|1|a simple 4 vertex, 3 edge graph|0=1,0=2,1=2,3
+test_required_cyclic|2|a simple 4 vertex, 3 edge graph|0=1,0=2,1=2,3
 
 test_required_cyclic|1|a simple 4 vertex, 4 edge canonical graph|0=1,0=3,1=2,2=3
 
 test_required_cyclic|2|a graph with a non-Hamiltonian cycle in it|0=1,0=3,1=2,2=3,4
 
+test_dirac|0|a single vertex graph|0
+
+test_dirac|0|a two vertex graph|0=1
+
+test_dirac|1|a simple 3 vertex, 3 edge graph|0=1,0=2,1=2
+
+test_dirac|0|Herschel Graph|0=1,0=10,0=3,0=9,10=2,10=8,1=2,1=4,2=5,3=4,3=6,4=5,4=7,5=8,6=7,6=9,7=8,8=9
