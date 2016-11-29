@@ -109,9 +109,9 @@ sub is_hamiltonian {
     my @tests_1 = (
         \&test_trivial,
         \&test_min_degree,
+        \&test_dirac,
         \&test_articulation_vertex,
         \&test_graph_bridge,
-        \&test_dirac,
     );
 
     foreach my $test_sub (@tests_1) {
