@@ -53,7 +53,7 @@ sub spoof_known_hamiltonian_graph {
 
     my $g = spoof_canonical_hamiltonian_graph($v);
     $g = get_random_isomorph($g);
-    $g = add_random_edges( $g, $e - $v );
+    $g = add_random_edges( $g, $e - $v ) if ( $e - $v ) > 0;
 
     return $g;
 }
@@ -66,7 +66,7 @@ sub spoof_random_graph {
     $e ||= get_random_edge_count($v);
 
     my $g = Graph::Undirected->new( vertices => [ 0 .. $v-1 ] );
-    $g = add_random_edges( $g, $e );
+    $g = add_random_edges( $g, $e ) if $e;
 
     return $g;
 }
@@ -130,7 +130,18 @@ sub spoof_randomish_graph {
 sub get_random_edge_count {
     my ( $v ) = @_;
     my $max_edges = ( $v * $v - $v ) / 2;
-    my $e = int( rand( $max_edges - 2 * $v + 2 ) ) + $v;
+
+    my $range = $max_edges - 2 * $v + 2;
+
+    ### print "get_random_edge_count: v=$v; max_edges=$max_edges; range=$range;\n"; ### DEBUG
+
+    return $v if $range <= 0;
+    return $v if ( $v + $range ) >= $max_edges;
+
+    my $e = int( rand( $range ) ) + $v;
+
+    ### print "get_random_edge_count: v=$v; max_edges=$max_edges; range=$range; e=$e;\n"; ### DEBUG
+
     return $e;
 }
 

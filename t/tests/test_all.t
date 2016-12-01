@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
-use Graph::Undirected::Hamiltonicity::Transforms qw(string_to_graph);
+use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph);
 
 use Test::More;
 

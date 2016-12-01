@@ -4,6 +4,8 @@ use 5.006;
 use strict;
 use warnings;
 
+use Carp;
+
 use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity::Output qw(:all);
 
@@ -287,9 +289,15 @@ sub get_random_isomorph {
 sub add_random_edges {
     my ( $g, $edges_to_add ) = @_;
 
-    my $g1 = $g->deep_copy_graph();
-    my $v  = scalar( $g1->vertices() );
+    my $e  = scalar( $g->edges() );
+    my $v  = scalar( $g->vertices() );
+    my $max_edges = ( $v * $v - $v ) / 2;
 
+    if ( ($e + $edges_to_add) > $max_edges ) {
+        croak "Can only add up to: ", $max_edges - $e, " edges. NOT [$edges_to_add]; e=[$e]\n";
+    }
+
+    my $g1 = $g->deep_copy_graph();
     my $added_edges = 0;
     while ( $added_edges < $edges_to_add ) {
         my $v1 = int( rand($v) );

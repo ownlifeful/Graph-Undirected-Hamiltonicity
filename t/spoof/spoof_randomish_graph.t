@@ -21,7 +21,9 @@ for my $v ( 3 .. 13 ) {
 }
 
 for my $v ( 10 .. 20 ) {
-    my $e = 2 * $v;
+    my $max_edges = ( $v * $v - $v ) / 2;
+    my $e = int( rand( $max_edges ) );
+
     my $g = spoof_randomish_graph( $v, $e );
     is( scalar( $g->vertices() ), $v, "Spoofed random graph has $v vertices." );
     cmp_ok( scalar( $g->edges() ), '>=', $e, "Spoofed random graph has $e or more edges." );
