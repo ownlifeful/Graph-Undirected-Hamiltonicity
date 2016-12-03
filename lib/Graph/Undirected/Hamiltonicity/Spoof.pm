@@ -63,7 +63,7 @@ sub spoof_known_hamiltonian_graph {
 sub spoof_random_graph {
 
     my ( $v, $e ) = @_;
-    $e ||= get_random_edge_count($v);
+    $e //= get_random_edge_count($v);
 
     my $g = Graph::Undirected->new( vertices => [ 0 .. $v-1 ] );
     $g = add_random_edges( $g, $e ) if $e;
