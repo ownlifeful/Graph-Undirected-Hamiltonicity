@@ -129,18 +129,14 @@ sub spoof_randomish_graph {
 
 sub get_random_edge_count {
     my ( $v ) = @_;
+
+    my %h = ( 0 => 0, 1 => 0, 2 => 1, 3 => 3, 4 => 4 );
+    my $e = $h{$v};
+    return $e if defined $e;
+
     my $max_edges = ( $v * $v - $v ) / 2;
-
     my $range = $max_edges - 2 * $v + 2;
-
-    ### print "get_random_edge_count: v=$v; max_edges=$max_edges; range=$range;\n"; ### DEBUG
-
-    return $v if $range <= 0;
-    return $v if ( $v + $range ) >= $max_edges;
-
-    my $e = int( rand( $range ) ) + $v;
-
-    ### print "get_random_edge_count: v=$v; max_edges=$max_edges; range=$range; e=$e;\n"; ### DEBUG
+    $e = int( rand( $range ) ) + $v;
 
     return $e;
 }
