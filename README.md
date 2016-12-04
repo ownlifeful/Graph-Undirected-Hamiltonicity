@@ -32,19 +32,22 @@ version 0.01
 This module is dedicated to the Quixotic quest of determining whether "[P=NP](https://en.wikipedia.org/wiki/P_versus_NP_problem "P versus NP")".
 It decides whether a given `Graph::Undirected` contains a Hamiltonian Cycle.
 
-The non-deterministic algorithm systematically simplifies and traverses the input graph in a series of recursive tests. This module is not object-oriented, though once work on it is sufficiently advanced, it could be rolled up into an `is_hamiltonian()` method in `Graph::Undirected`. For now, it serves as a framework for explorers of this frontier of Computer Science.
+The non-deterministic algorithm systematically simplifies the input graph in a series of recursive tests. This module is not object-oriented, though once work on it is sufficiently advanced, it could be rolled up into an `is_hamiltonian()` method in `Graph::Undirected`. For now, it serves as a framework for explorers of this frontier of Computer Science.
 
-The module includes several utility subroutines which might be generally useful in spoofing or transforming graphs. These subroutines are organized by broad functional area into submodules, and can be imported individually by name.
-
-To get per-module help:
+The modules in this distribution are:
 
 
-    perldoc Graph::Undirected::Hamiltonicity
-    perldoc Graph::Undirected::Hamiltonicity::Tests
-    perldoc Graph::Undirected::Hamiltonicity::Spoof
-    perldoc Graph::Undirected::Hamiltonicity::Transforms
-    perldoc Graph::Undirected::Hamiltonicity::Wolfram
-    perldoc Graph::Undirected::Hamiltonicity::Output
+* [Graph::Undirected::Hamiltonicity](lib/Graph/Undirected/Hamiltonicity.pod) - the core algorithm.
+
+* [Graph::Undirected::Hamiltonicity::Tests](lib/Graph/Undirected/Hamiltonicity/Tests.pod) - a set of subroutines, each of which is a polynomial time test for Hamiltonicity.
+
+* [Graph::Undirected::Hamiltonicity::Transforms](lib/Graph/Undirected/Hamiltonicity/Transforms.pod) - a set of subroutines, each of which optionally returns a transformed copy of the input graph.
+
+* [Graph::Undirected::Hamiltonicity::Spoof](lib/Graph/Undirected/Hamiltonicity/Spoof.pod) - a set to subroutines to spoof random graphs with defined properties.
+
+* [Graph::Undirected::Hamiltonicity::Wolfram](lib/Graph/Undirected/Hamiltonicity/Wolfram.pod) - an optional module to enable result cross-verfication via the Wolfram Open Cloud. Please read [WOLFRAM.md](WOLFRAM.md "Verification via Wolfram Cloud").
+
+* [Graph::Undirected::Hamiltonicity::Output](lib/Graph/Undirected/Hamiltonicity/Output.pod) - a set of subroutines used by `output()`, a polymorphic subroutine that supports different output formats.
 
 ## INSTALLATION
 
@@ -68,7 +71,7 @@ On macOS:
 
     sudo cp cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
 
-On CentOS ( and presumably RHEL and Fedora Linux ):
+On CentOS, RHEL and Fedora Linux:
 
     sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
 
