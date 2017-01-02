@@ -135,10 +135,10 @@ for creating the Wolfram Programming Language.
 
 # SEE ALSO
 
-1. [Graph](http://search.cpan.org/perldoc?Graph "Graph module")
+1. [Graph](http://search.cpan.org/perldoc?Graph "Graph module") - the `Graph` module.
 2. [Hamiltonian Cycle](http://mathworld.wolfram.com/HamiltonianCycle.html "Hamiltonian Cycle")
 3. [P versus NP](https://en.wikipedia.org/wiki/P_versus_NP_problem "P versus NP")
-
+4. [Hamiltonian Path](https://en.wikipedia.org/wiki/Hamiltonian_path "Hamiltonian Path")
 
 # REPOSITORY
 
@@ -153,6 +153,6 @@ Ashwin Dixit &lt;ashwin at ownlifeful dot com&gt;
 # COPYRIGHT AND LICENSE
 
 
-This software is copyright (c) 2016 by Ashwin Dixit.
+This software is copyright (c) 2016-2017 by Ashwin Dixit.
 
 This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
