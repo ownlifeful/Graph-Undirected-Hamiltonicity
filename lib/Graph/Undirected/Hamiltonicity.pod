@@ -41,8 +41,8 @@ This module exports only one subroutine -- graph_is_hamiltonian()
 
 Takes a Graph::Undirected object.
 
-Returns a result ( hashref ) indicating whether the given graph
-contains a Hamiltonian Cycle.
+Returns 1 if the graph contains a Hamiltonian Cycle,
+        0 otherwise.
 
 =head1 AUTHOR
 

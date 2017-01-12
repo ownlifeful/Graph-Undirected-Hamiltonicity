@@ -59,6 +59,8 @@ The subroutines that can be imported individually, by name, are:
 
 =item * &test_min_degree
 
+=item * &test_dirac
+
 =item * &test_required
 
 =item * &test_required_cyclic
@@ -100,6 +102,13 @@ If the graph contains an edge, removing which would make the graph
 unconnected, the graph is not Hamiltonian.
 
 Such an edge is called a Graph Bridge.
+
+=head2 test_dirac
+
+A simple graph with v vertices (v >= 3) is Hamiltonian if every vertex 
+has degree v / 2 or greater. -- Dirac (1952)
+https://en.wikipedia.org/wiki/Hamiltonian_path
+
 
 =head2 test_required
 

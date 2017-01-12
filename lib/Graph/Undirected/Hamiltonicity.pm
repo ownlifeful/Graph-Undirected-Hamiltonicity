@@ -11,67 +11,21 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
 
 use Exporter qw(import);
 
-=head1 NAME
-
-Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
-contains a Hamiltonian Cycle.
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
+# Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
+# contains a Hamiltonian Cycle.
 
 our $VERSION = '0.01';
-
 our @EXPORT = qw(graph_is_hamiltonian);    # exported by default
-
 our @EXPORT_OK = qw(graph_is_hamiltonian);
+our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
-our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
-
-=head1 SYNOPSIS
-
-
-This module decides whether a given Graph::Undirected contains 
-a Hamiltonian Cycle.
-
-    use Graph::Undirected;
-    use Graph::Undirected::Hamiltonicity;
-
-    # Create and initialize an undirected graph.
-    my $g = Graph::Undirected->new( vertices => [ 0..3 ] );
-    $g->add_edge(0,1);
-    $g->add_edge(0,3);
-    $g->add_edge(1,2);
-    $g->add_edge(1,3);
-
-    if ( graph_is_hamiltonian( $g ) ) {
-        print "The graph contains a Hamiltonian Cycle.\n";
-    } else {
-        print "The graph does not contain a Hamiltonian Cycle.\n";
-    }
-
-=head1 EXPORT
-
-This module exports only one subroutine -- graph_is_hamiltonian()
-
-=head1 SUBROUTINES
-
-
-
-=cut
 
 ##########################################################################
 
-=head2 graph_is_hamiltonian
-
-Takes a Graph::Undirected object.
-
-Returns a result ( hashref ) indicating whether the given graph
-contains a Hamiltonian Cycle.
-
-=cut
+# Takes a Graph::Undirected object.
+#
+# Returns a result ( hashref ) indicating whether the given graph
+# contains a Hamiltonian Cycle.
 
 sub graph_is_hamiltonian {
     my ($g) = @_;
@@ -152,8 +106,8 @@ sub is_hamiltonian {
             delete_non_required_neighbors( $g, $required_graph );
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
-            output(
-                "Shrank the graph by removing $deleted_edges edge$s.<BR/>");
+            output("Shrank the graph by removing " . 
+                   "$deleted_edges"edge$s.<BR/>");
             @_ = ($g);
             goto &is_hamiltonian;
         }
@@ -162,9 +116,8 @@ sub is_hamiltonian {
             shrink_required_walks_longer_than_2_edges( $g, $required_graph );
         if ($deleted_edges) {
             if ( $deleted_edges == 1 ) {
-                output(
-                    "Shrank the graph by removing one vertex and one edge.<BR/>"
-                );
+                output("Shrank the graph by removing 1 vertex " .
+                       "and 1 edge.<BR/>");
             } else {
                 output(   "Shrank the graph by removing "
                         . "$deleted_edges edges and vertices.<BR/>" );
@@ -181,8 +134,10 @@ sub is_hamiltonian {
     if (@undecided_vertices) {
         my $vertex =
             get_chosen_vertex( $g, $required_graph, \@undecided_vertices );
+
         my $tentative_combinations =
             get_tentative_combinations( $g, $required_graph, $vertex );
+
         foreach my $tentative_edge_pair (@$tentative_combinations) {
             my $g1 = $g->deep_copy_graph();
             output(   "For vertex: $vertex, protecting "
@@ -273,48 +228,8 @@ sub get_chosen_vertex {
 
 ##########################################################################
 
-=head1 AUTHOR
+# You can get documentation for this module with this command:
+#    perldoc Graph::Undirected::Hamiltonicity
 
-Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-graph-undirected-hamiltonicity at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Graph-Undirected-Hamiltonicity>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Graph::Undirected::Hamiltonicity
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Graph-Undirected-Hamiltonicity>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Graph-Undirected-Hamiltonicity>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Graph-Undirected-Hamiltonicity>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Graph-Undirected-Hamiltonicity/>
-
-=back
-
-=cut
 
 1;    # End of Graph::Undirected::Hamiltonicity
