@@ -112,7 +112,7 @@ sub is_hamiltonian {
         if ($deleted_edges) {
             my $s = $deleted_edges == 1 ? '' : 's';
             output("Shrank the graph by removing " . 
-                   "$deleted_edges"edge$s.<BR/>");
+                   "$deleted_edges edge$s.<BR/>");
             @_ = ($g);
             goto &is_hamiltonian;
         }
