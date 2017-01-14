@@ -1,5 +1,8 @@
 package Graph::Undirected::Hamiltonicity::Transforms;
 
+# You can get documentation for this module with this command:
+#    perldoc Graph::Undirected::Hamiltonicity::Transforms
+
 use 5.006;
 use strict;
 use warnings;
@@ -23,7 +26,7 @@ our @EXPORT_OK = qw(
     &swap_vertices
 );
 
-our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
+our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 our $VERSION = '0.01';
 
@@ -53,9 +56,11 @@ sub get_required_graph {
 
                 $required_graph->add_edge( $vertex, $neighbor_vertex );
 
-                if ($g1->get_edge_attribute(
-                        $vertex, $neighbor_vertex, 'required'
-                    )
+                if ( $g1->get_edge_attribute(
+                                              $vertex,
+                                              $neighbor_vertex,
+                                              'required'
+                                            )
                     )
                 {
                     output(   "<LI>$vertex=$neighbor_vertex is already "
@@ -63,8 +68,10 @@ sub get_required_graph {
                     next;
                 }
 
-                $g1->set_edge_attribute( $vertex, $neighbor_vertex,
-                    'required', 1 );
+                $g1->set_edge_attribute(
+                    $vertex, $neighbor_vertex,
+                    'required', 1
+                    );
                 output(   "<LI>Marking $vertex=$neighbor_vertex "
                         . "as required</LI>" );
             }
@@ -124,8 +131,8 @@ sub delete_non_required_neighbors {
                 $g1 //= $g->deep_copy_graph();
 
                 next
-                    unless $g1->has_edge( $required_vertex,
-                    $neighbor_vertex );
+                    unless $g1->has_edge(
+                        $required_vertex, $neighbor_vertex );
 
                 $g1->delete_edge( $required_vertex, $neighbor_vertex );
                 $deleted_edges++;
@@ -216,7 +223,7 @@ sub get_common_neighbors {
     my %common_neighbors;
     my %vertex_1_neighbors;
     foreach my $neighbor_vertex ( $g->neighbors($vertex_1) ) {
-        $vertex_1_neighbors{$neighbor_vertex}++;
+        $vertex_1_neighbors{$neighbor_vertex} = 1;
     }
 
     foreach my $neighbor_vertex ( $g->neighbors($vertex_2) ) {
@@ -228,6 +235,12 @@ sub get_common_neighbors {
 }
 
 ##########################################################################
+
+# Takes a string representation of a Graph::Undirected
+# The string is the same format as the result of calling the stringify()
+# method on a Graph::Undirected object.
+#
+# Returns a Graph::Undirected object, constructed from its string form.
 
 sub string_to_graph {
     my ($string) = @_;
@@ -260,6 +273,10 @@ sub string_to_graph {
 }
 
 ##########################################################################
+
+# Takes a Graph::Undirected ( $g )
+#
+# Returns a Graph::Undirected  ( $g1 ) which is an isomorph of $g
 
 sub get_random_isomorph {
     my ($g) = @_;
@@ -294,7 +311,8 @@ sub add_random_edges {
     my $max_edges = ( $v * $v - $v ) / 2;
 
     if ( ($e + $edges_to_add) > $max_edges ) {
-        croak "Can only add up to: ", $max_edges - $e, " edges. NOT [$edges_to_add]; e=[$e]\n";
+        croak "Can only add up to: ", $max_edges - $e, 
+              " edges. NOT [$edges_to_add]; e=[$e]\n";
     }
 
     my $g1 = $g->deep_copy_graph();

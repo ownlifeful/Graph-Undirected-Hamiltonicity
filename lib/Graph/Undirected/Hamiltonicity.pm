@@ -1,5 +1,8 @@
 package Graph::Undirected::Hamiltonicity;
 
+# You can get documentation for this module with this command:
+#    perldoc Graph::Undirected::Hamiltonicity
+
 use 5.006;
 use strict;
 use warnings;
@@ -14,9 +17,9 @@ use Exporter qw(import);
 # Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
 # contains a Hamiltonian Cycle.
 
-our $VERSION = '0.01';
-our @EXPORT = qw(graph_is_hamiltonian);    # exported by default
-our @EXPORT_OK = qw(graph_is_hamiltonian);
+our $VERSION     = '0.01';
+our @EXPORT      = qw(graph_is_hamiltonian);    # exported by default
+our @EXPORT_OK   = qw(graph_is_hamiltonian);
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 
@@ -24,8 +27,10 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 # Takes a Graph::Undirected object.
 #
-# Returns a result ( hashref ) indicating whether the given graph
-# contains a Hamiltonian Cycle.
+# Returns 
+#         1 if the given graph contains a Hamiltonian Cycle.
+#         0 otherwise.
+#
 
 sub graph_is_hamiltonian {
     my ($g) = @_;
@@ -227,9 +232,6 @@ sub get_chosen_vertex {
 }
 
 ##########################################################################
-
-# You can get documentation for this module with this command:
-#    perldoc Graph::Undirected::Hamiltonicity
 
 
 1;    # End of Graph::Undirected::Hamiltonicity
