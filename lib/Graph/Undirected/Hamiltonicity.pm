@@ -110,9 +110,6 @@ sub is_hamiltonian {
         ( $deleted_edges, $g ) =
             delete_non_required_neighbors( $g, $required_graph );
         if ($deleted_edges) {
-            my $s = $deleted_edges == 1 ? '' : 's';
-            output("Shrank the graph by removing " . 
-                   "$deleted_edges edge$s.<BR/>");
             @_ = ($g);
             goto &is_hamiltonian;
         }
@@ -120,14 +117,6 @@ sub is_hamiltonian {
         ( $deleted_edges, $g ) =
             shrink_required_walks_longer_than_2_edges( $g, $required_graph );
         if ($deleted_edges) {
-            if ( $deleted_edges == 1 ) {
-                output("Shrank the graph by removing 1 vertex " .
-                       "and 1 edge.<BR/>");
-            } else {
-                output(   "Shrank the graph by removing "
-                        . "$deleted_edges edges and vertices.<BR/>" );
-            }
-
             @_ = ($g);
             goto &is_hamiltonian;
         }

@@ -143,6 +143,10 @@ sub delete_non_required_neighbors {
         }
     }
 
+    my $s = $deleted_edges == 1 ? '' : 's';
+    output("Shrank the graph by removing " . 
+           "$deleted_edges edge$s.<BR/>");
+
     return ( $deleted_edges, $deleted_edges ? $g1 : $g );
 }
 
@@ -179,8 +183,16 @@ sub shrink_required_walks_longer_than_2_edges {
         $deleted_edges++;
     }
 
-    output("Deleted $deleted_edges edges to shrink the graph.")
-        if $deleted_edges;
+
+    if ( $deleted_edges ) {
+        if ( $deleted_edges == 1 ) {
+            output("Shrank the graph by removing 1 vertex " .
+                   "and 1 edge.<BR/>");
+        } else {
+            output("Shrank the graph by removing " .
+                   "$deleted_edges edges and vertices.<BR/>" );
+        }
+    }
 
     return ( $deleted_edges, $deleted_edges ? $g1 : $g );
 }
