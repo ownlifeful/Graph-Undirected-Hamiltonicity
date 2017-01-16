@@ -204,6 +204,8 @@ sub test_required {
 
 sub test_required_cyclic {
 
+    output("Entering test_required_cyclic()<BR/>");
+
     my ($required_graph) = @_;
 
     return $DONT_KNOW if $required_graph->is_acyclic();

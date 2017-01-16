@@ -44,6 +44,11 @@ Takes a Graph::Undirected object.
 Returns 1 if the graph contains a Hamiltonian Cycle,
         0 otherwise.
 
+
+=head1 SUPPORT
+
+Please report issues L<on GitHub|https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/issues>.
+
 =head1 AUTHOR
 
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>

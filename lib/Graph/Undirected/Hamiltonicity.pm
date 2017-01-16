@@ -1,5 +1,8 @@
 package Graph::Undirected::Hamiltonicity;
 
+# Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
+# contains a Hamiltonian Cycle.
+
 # You can get documentation for this module with this command:
 #    perldoc Graph::Undirected::Hamiltonicity
 
@@ -14,17 +17,15 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
 
 use Exporter qw(import);
 
-# Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
-# contains a Hamiltonian Cycle.
-
 our $VERSION     = '0.01';
 our @EXPORT      = qw(graph_is_hamiltonian);    # exported by default
 our @EXPORT_OK   = qw(graph_is_hamiltonian);
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
-
 ##########################################################################
 
+# graph_is_hamiltonian()
+#
 # Takes a Graph::Undirected object.
 #
 # Returns 
@@ -101,12 +102,10 @@ sub is_hamiltonian {
     }
 
     if ( $required_graph->edges() ) {
-        output("Now calling test_required_cyclic()<BR/>");
         ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);
         return ( $is_hamiltonian, $reason )
             unless $is_hamiltonian == $DONT_KNOW;
 
-        output("Now calling deleted_non_required_neighbors()<BR/>");
         ( $deleted_edges, $g ) =
             delete_non_required_neighbors( $g, $required_graph );
         if ($deleted_edges) {

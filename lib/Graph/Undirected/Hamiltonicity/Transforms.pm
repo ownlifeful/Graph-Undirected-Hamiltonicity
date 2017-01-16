@@ -116,6 +116,8 @@ sub delete_unusable_edges {
 ##########################################################################
 
 sub delete_non_required_neighbors {
+    output("Entering deleted_non_required_neighbors()<BR/>");
+
     my ( $g, $required_graph ) = @_;
     my $g1;
     my $deleted_edges = 0;
