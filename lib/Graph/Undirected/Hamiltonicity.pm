@@ -122,8 +122,8 @@ sub is_hamiltonian {
         }
     }
 
-    output(   "Now running an exhaustive, recursive, and conclusive search, "
-            . "only slightly better than brute force.<BR/>" );
+    output("Now running an exhaustive, recursive, and conclusive search, " .
+           "only slightly better than brute force.<BR/>" );
     my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {
         my $vertex =
@@ -134,9 +134,9 @@ sub is_hamiltonian {
 
         foreach my $tentative_edge_pair (@$tentative_combinations) {
             my $g1 = $g->deep_copy_graph();
-            output(   "For vertex: $vertex, protecting "
-                    . ( join ',', map {"$vertex=$_"} @$tentative_edge_pair )
-                    . "<BR/>" );
+            output("For vertex: $vertex, protecting " .
+                    ( join ',', map {"$vertex=$_"} @$tentative_edge_pair ) .
+                   "<BR/>" );
             foreach my $neighbor ( $g1->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
