@@ -8,7 +8,7 @@ use Graph::Undirected::Hamiltonicity::Transforms
 
 use Test::More;
 
-plan tests => 57;
+plan tests => 77;
 
 my $herschel_graph_text =
     '0=1,0=10,0=3,0=9,10=6,10=8,1=2,1=4,2=5,2=9,3=4,3=6,4=5,4=7,5=8,6=7,7=8,8=9';
@@ -25,6 +25,9 @@ my @tests = (
         expected_required_graph_text => '0=1,0=4,10=11,11=7,2=3,3=5,6=8,8=9',
     },
 
+    {   input_graph_text           => '0=1,0=3,1=2,2=3,2=8,3=4,3=5,3=7,4=6,4=7,4=8,5=6,5=7,6=7,6=8',
+        expected_required_graph_text => '0=1,0=3,1=2,4,5,6,7,8'
+    },
 );
 
 foreach my $test (@tests) {

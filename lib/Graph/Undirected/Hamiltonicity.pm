@@ -95,11 +95,11 @@ sub is_hamiltonian {
     return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
 
     my $deleted_edges;
-    ( $deleted_edges, $g ) = delete_unusable_edges($g);
-    if ($deleted_edges) {
-        @_ = ($g);
-        goto &is_hamiltonian;
-    }
+#    ( $deleted_edges, $g ) = delete_unusable_edges($g);
+#    if ($deleted_edges) {
+#        @_ = ($g);
+#        goto &is_hamiltonian;
+#    }
 
     if ( $required_graph->edges() ) {
         ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);

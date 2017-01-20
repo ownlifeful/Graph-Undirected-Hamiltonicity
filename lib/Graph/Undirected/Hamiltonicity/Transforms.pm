@@ -16,6 +16,7 @@ use Exporter qw(import);
 
 our @EXPORT_OK = qw(
     &add_random_edges
+    &delete_cycle_closing_edges
     &delete_non_required_neighbors
     &delete_unusable_edges
     &get_common_neighbors
@@ -87,7 +88,6 @@ sub get_required_graph {
 ##########################################################################
 
 sub delete_unusable_edges {
-
     my ($g) = @_;
     my $deleted_edges = 0;
     my $g1;
@@ -107,6 +107,61 @@ sub delete_unusable_edges {
                     . ( join '=', @neighbors )
                     . ", between neighbors of a degree 2 vertex ($vertex)<BR/>"
             );
+        }
+    }
+
+    return ( $deleted_edges, $deleted_edges ? $g1 : $g );
+}
+
+##########################################################################
+
+# For each required walk, delete the edge connecting its endpoints,
+# as such an edge would make the graph non-Hamiltonian, and therefore
+# the edge can never be part of a Hamiltonian cycle.
+
+sub delete_cycle_closing_edges {
+    my ($g, $required_graph) = @_;
+    my $deleted_edges = 0;
+    my $g1;
+    my %eliminated;
+
+    foreach my $vertex ( $required_graph->vertices() ) {
+        next if $required_graph->degree($vertex) != 1;
+        next if $eliminated{$vertex}++;
+        my $first_vertex = $vertex;
+        my ( $current_vertex ) = $required_graph->neighbors($vertex);
+        my $loops = 0;
+        my $length = 1;
+        my $found_last_vertex = 0;
+        while ( ! $found_last_vertex ) {
+            my ( $next_vertex ) = 
+                grep { ! $eliminated{$_} }
+                $required_graph->neighbors($current_vertex);
+
+            my $required_degree = $required_graph->degree($next_vertex);
+
+            if ( $required_degree == 1 ) {
+                $found_last_vertex = 1;
+                $g1 //= $g->deep_copy_graph();
+
+                if ( $length == $required_graph->vertices() ) {
+                    output("Found a Hamiltonian Cycle<BR/>");
+                }
+
+                if ( $g1->has_edge($first_vertex, $next_vertex) ) {
+                    $g1->delete_edge($first_vertex, $next_vertex);
+                    $required_graph->delete_edge($first_vertex, $next_vertex);
+                    $deleted_edges++;
+                    $eliminated{$next_vertex} = 1;
+
+                    output( "Deleted edge $first_vertex=$next_vertex"
+                            . ", between endpoints of a required walk.<BR/>" );
+                }
+            }
+
+            $eliminated{$current_vertex} = 1;
+            $length++;
+            $current_vertex = $next_vertex;
         }
     }
 
