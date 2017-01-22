@@ -84,40 +84,28 @@ sub is_hamiltonian {
     my $required_graph;
     ( $required_graph, $g ) = get_required_graph($g);
 
-    if ( scalar( $required_graph->edges() ) ) {
-        output("required graph:");
-        output( $required_graph, { required => 1 } );
-    } else {
-        output("required graph has no edges.<BR/>");
-    }
-
     ( $is_hamiltonian, $reason ) = test_required($required_graph);
     return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
-
-    my $deleted_edges;
-#    ( $deleted_edges, $g ) = delete_unusable_edges($g);
-#    if ($deleted_edges) {
-#        @_ = ($g);
-#        goto &is_hamiltonian;
-#    }
 
     if ( $required_graph->edges() ) {
         ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);
         return ( $is_hamiltonian, $reason )
             unless $is_hamiltonian == $DONT_KNOW;
 
-        ( $deleted_edges, $g ) =
-            delete_non_required_neighbors( $g, $required_graph );
-        if ($deleted_edges) {
-            @_ = ($g);
-            goto &is_hamiltonian;
-        }
+        my @transforms_1 = (
+            \&delete_cycle_closing_edges,
+            \&delete_non_required_neighbors,
+            \&shrink_required_walks_longer_than_2_edges,
+            );
 
-        ( $deleted_edges, $g ) =
-            shrink_required_walks_longer_than_2_edges( $g, $required_graph );
-        if ($deleted_edges) {
-            @_ = ($g);
-            goto &is_hamiltonian;
+        foreach my $transform_sub (@transforms_1) {
+            my $deleted_edges;
+            ( $deleted_edges, $g ) =
+                &$transform_sub( $g, $required_graph );
+            if ($deleted_edges) {
+                @_ = ($g);
+                goto &is_hamiltonian;
+            }
         }
     }
 
