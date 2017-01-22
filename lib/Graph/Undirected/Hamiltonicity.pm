@@ -108,10 +108,12 @@ sub is_hamiltonian {
         }
     }
 
-    output("Now running an exhaustive, recursive, and conclusive search, " .
-           "only slightly better than brute force.<BR/>" );
+
     my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {
+        output(  "Now running an exhaustive, recursive,"
+               . " and conclusive search,"
+               . " only slightly better than brute force.<BR/>" );
         my $vertex =
             get_chosen_vertex( $g, $required_graph, \@undecided_vertices );
 
