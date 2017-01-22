@@ -103,48 +103,25 @@ sub delete_cycle_closing_edges {
     my $g1;
     my %eliminated;
 
-    print "Line: ", __LINE__, " g=($g)\n"; ### DEBUG
-    print "Line: ", __LINE__, " required_graph=($required_graph)\n"; ### DEBUG
-
     foreach my $vertex ( $required_graph->vertices() ) {
-        print "Line: ", __LINE__, " vertex=$vertex\n"; ### DEBUG
         next if $required_graph->degree($vertex) != 1;
-        print "Line: ", __LINE__, " vertex=$vertex; degree=", $required_graph->degree($vertex)  ,"\n"; ### DEBUG
         next if $eliminated{$vertex}++;
-        print "Line: ", __LINE__, " vertex=$vertex has not been eliminated.\n"; ### DEBUG
 
         my $first_vertex = $vertex;
         my ( $current_vertex ) = $required_graph->neighbors($vertex);
-
-        print "Line: ", __LINE__, " vertex ( $vertex ) is a neighbor of current_vertex ($current_vertex)\n"; ### DEBUG
 
         my $loops = 0;
         my $length = 1;
         my $found_last_vertex = 0;
         while ( ! $found_last_vertex ) {
-            print "Line: ", __LINE__, " current_vertex=$current_vertex\n"; ### DEBUG
 
             my ( $next_vertex ) = 
                 grep { ! $eliminated{$_} }
                 $required_graph->neighbors($current_vertex);
 
-            unless ( defined $next_vertex ) {
-                print "next_vertex not defined. (((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((\n"; ### DEBUG
-            }
-
-            print "Line: ", __LINE__, " next_vertex=$next_vertex\n"; ### DEBUG
-
-            ### die "Seppuku ----------------------------\n" if $loops++ == 10; ### DEBUG
-
             $eliminated{$next_vertex} = 1;
 
             my $required_degree = $required_graph->degree($next_vertex);
-
-            unless ( defined $required_degree ) {
-                print "required_degree not defined. )))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))\n"; ### DEBUG
-            }
-
-
             if ( $required_degree == 1 ) {
                 $found_last_vertex = 1;
                 $g1 //= $g->deep_copy_graph();
@@ -158,12 +135,8 @@ sub delete_cycle_closing_edges {
                     $required_graph->delete_edge($first_vertex, $next_vertex);
                     $deleted_edges++;
 
-                    print "Line: ", __LINE__, " Deleted edge $first_vertex=$next_vertex, between endpoints of a required walk.\n"; ### DEBUG
-
                     output( "Deleted edge $first_vertex=$next_vertex"
                             . ", between endpoints of a required walk.<BR/>" );
-                } else {
-                    print "Line: ", __LINE__, " The edge $first_vertex=$next_vertex, doesn't exist.\n"; ### DEBUG
                 }
             }
 
