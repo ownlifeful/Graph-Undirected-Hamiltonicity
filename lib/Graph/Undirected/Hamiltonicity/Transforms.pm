@@ -18,7 +18,6 @@ our @EXPORT_OK = qw(
     &add_random_edges
     &delete_cycle_closing_edges
     &delete_non_required_neighbors
-    &delete_unusable_edges
     &get_common_neighbors
     &get_required_graph
     &shrink_required_walks_longer_than_2_edges
@@ -90,34 +89,6 @@ sub get_required_graph {
     }
 
     return ( $required_graph, $g1 );
-}
-
-##########################################################################
-
-sub delete_unusable_edges {
-    my ($g) = @_;
-    my $deleted_edges = 0;
-    my $g1;
-    foreach my $vertex ( $g->vertices() ) {
-        next if $g->degree($vertex) != 2;
-        my @neighbors = $g->neighbors($vertex);
-
-        if ( $g->has_edge(@neighbors) ) {
-
-            ### Clone graph lazily
-            $g1 //= $g->deep_copy_graph();
-
-            next unless $g1->has_edge(@neighbors);
-            $g1->delete_edge(@neighbors);
-            $deleted_edges++;
-            output(   "Deleted edge "
-                    . ( join '=', @neighbors )
-                    . ", between neighbors of a degree 2 vertex ($vertex)<BR/>"
-            );
-        }
-    }
-
-    return ( $deleted_edges, $deleted_edges ? $g1 : $g );
 }
 
 ##########################################################################
@@ -202,7 +173,7 @@ sub delete_cycle_closing_edges {
         }
     }
 
-    return ( $deleted_edges, $deleted_edges ? $g1 : $g );
+    return ( $deleted_edges, $g1 );
 }
 
 ##########################################################################
@@ -241,7 +212,7 @@ sub delete_non_required_neighbors {
     output("Shrank the graph by removing " . 
            "$deleted_edges edge$s.<BR/>");
 
-    return ( $deleted_edges, $deleted_edges ? $g1 : $g );
+    return ( $deleted_edges, $g1 );
 }
 
 ##########################################################################
@@ -288,7 +259,7 @@ sub shrink_required_walks_longer_than_2_edges {
         }
     }
 
-    return ( $deleted_edges, $deleted_edges ? $g1 : $g );
+    return ( $deleted_edges, $g1 );
 }
 
 ##########################################################################

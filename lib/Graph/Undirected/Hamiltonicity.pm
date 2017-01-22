@@ -99,11 +99,10 @@ sub is_hamiltonian {
             );
 
         foreach my $transform_sub (@transforms_1) {
-            my $deleted_edges;
-            ( $deleted_edges, $g ) =
+            my ( $deleted_edges, $g1 ) =
                 &$transform_sub( $g, $required_graph );
             if ($deleted_edges) {
-                @_ = ($g);
+                @_ = ($g1);
                 goto &is_hamiltonian;
             }
         }

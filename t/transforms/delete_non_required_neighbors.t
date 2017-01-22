@@ -64,9 +64,13 @@ foreach my $test (@tests) {
         $test->{expected_deleted_edges},
         "Deleted the expected number of edges."
     );
-    is( "$output_graph",
-        $test->{expected_output_graph_text},
-        "Deleted all the edges expected."
-    );
+
+    if ( $deleted_edges ) {
+        is( "$output_graph",
+            $test->{expected_output_graph_text},
+            "Deleted all the edges expected."
+            );
+    }
+
 }
 

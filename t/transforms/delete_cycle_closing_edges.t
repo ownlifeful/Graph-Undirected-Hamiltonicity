@@ -12,7 +12,7 @@ use Graph::Undirected::Hamiltonicity::Transforms
 
 use Test::More;
 
-plan tests => 4;
+plan tests => 3;
 
 my $herschel_graph_text =
     '0=1,0=10,0=3,0=9,10=6,10=8,1=2,1=4,2=5,2=9,3=4,3=6,4=5,4=7,5=8,6=7,7=8,8=9';
@@ -39,9 +39,13 @@ foreach my $test (@tests) {
         $test->{expected_deleted_edges},
         "Deleted the expected number of cycle closing edges."
     );
-    is( "$output_graph",
-        $test->{expected_output_graph_text},
-        "Deleted all the cycle closing edges expected."
-    );
+
+    if ( $deleted_edges ) {
+        is( "$output_graph",
+            $test->{expected_output_graph_text},
+            "Deleted all the cycle closing edges expected."
+            );
+    }
+
 }
 
