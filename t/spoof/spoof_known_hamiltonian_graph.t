@@ -39,6 +39,6 @@ for my $v ( 10 .. 20 ) {
     is( scalar( $g->vertices() ), $v, "Spoofed graph has $v vertices." );
     is( scalar( $g->edges() ),    $e, "Spoofed graph has $e edges." );
     my $is_hamiltonian = graph_is_hamiltonian($g);
-    is( $is_hamiltonian, 1, "Spoofed graph is Hamiltonian" );
+    is( $is_hamiltonian, 1, "Spoofed graph is Hamiltonian." );
 }
 

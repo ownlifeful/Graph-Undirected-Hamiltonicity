@@ -84,18 +84,18 @@ sub is_hamiltonian {
     my $required_graph;
     ( $required_graph, $g ) = get_required_graph($g);
 
-    ( $is_hamiltonian, $reason ) = test_required($required_graph);
-    return ( $is_hamiltonian, $reason ) unless $is_hamiltonian == $DONT_KNOW;
-
     if ( $required_graph->edges() ) {
-        ( $is_hamiltonian, $reason ) = test_required_cyclic($required_graph);
-        return ( $is_hamiltonian, $reason )
-            unless $is_hamiltonian == $DONT_KNOW;
+        my @tests_2 = ( \&test_required, \&test_required_cyclic );
+        foreach my $test_sub (@tests_2) {
+            ( $is_hamiltonian, $reason ) = &$test_sub($required_graph);
+            return ( $is_hamiltonian, $reason )
+                unless $is_hamiltonian == $DONT_KNOW;
+        }
 
         my @transforms_1 = (
-            \&delete_cycle_closing_edges,
             \&delete_non_required_neighbors,
             \&shrink_required_walks_longer_than_2_edges,
+            \&delete_cycle_closing_edges,
             );
 
         foreach my $transform_sub (@transforms_1) {
@@ -107,7 +107,6 @@ sub is_hamiltonian {
             }
         }
     }
-
 
     my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {

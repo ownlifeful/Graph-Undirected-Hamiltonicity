@@ -128,7 +128,6 @@ sub test_articulation_vertex {
 
     return $DONT_KNOW if $g->is_biconnected();
 
-
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
              "This graph is not biconnected, therefore not Hamiltonian. ");
 

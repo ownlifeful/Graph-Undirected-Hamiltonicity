@@ -111,7 +111,7 @@ sub delete_cycle_closing_edges {
         my ( $current_vertex ) = $required_graph->neighbors($vertex);
 
         my $loops = 0;
-        my $length = 1;
+        my $length = 2;
         my $found_last_vertex = 0;
         while ( ! $found_last_vertex ) {
 
