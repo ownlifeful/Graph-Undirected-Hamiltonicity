@@ -182,8 +182,7 @@ sub delete_non_required_neighbors {
     }
 
     my $s = $deleted_edges == 1 ? '' : 's';
-    output("Shrank the graph by removing " . 
-           "$deleted_edges edge$s.<BR/>");
+    output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
 
     return ( $deleted_edges, $g1 );
 }

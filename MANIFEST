@@ -30,7 +30,6 @@ t/tests/test_all.t
 t/transforms/add_random_edges.t
 t/transforms/delete_cycle_closing_edges.t
 t/transforms/delete_non_required_neighbors.t
-t/transforms/delete_unusable_edges.t
 t/transforms/get_common_neighbors.t
 t/transforms/get_required_graph.t
 t/transforms/shrink_required_walks_longer_than_2_edges.t
