@@ -20,7 +20,6 @@ our @EXPORT_OK = qw(
     &delete_non_required_neighbors
     &get_common_neighbors
     &get_required_graph
-    &shrink_required_walks_longer_than_2_edges
     &get_random_isomorph
     &string_to_graph
     &swap_vertices
@@ -183,53 +182,6 @@ sub delete_non_required_neighbors {
 
     my $s = $deleted_edges == 1 ? '' : 's';
     output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
-
-    return ( $deleted_edges, $g1 );
-}
-
-##########################################################################
-
-sub shrink_required_walks_longer_than_2_edges {
-    my ( $g, $required_graph ) = @_;
-
-    my $g1;
-    my $deleted_edges = 0;
-
-    foreach my $vertex ( sort { $a <=> $b } $required_graph->vertices() ) {
-        next unless $required_graph->degree($vertex) == 2;
-
-        my @neighbors = $required_graph->neighbors($vertex);
-        next
-            if (( $required_graph->degree( $neighbors[0] ) == 1 )
-            and ( $required_graph->degree( $neighbors[1] ) == 1 ) );
-
-        ### Clone graph lazily
-        $g1 //= $g->deep_copy_graph();
-
-        unless ( $g1->has_edge(@neighbors) ) {
-            $required_graph->add_edge(@neighbors);
-            $g1->add_edge(@neighbors);
-            output("Added edge $neighbors[0]=$neighbors[1] and ");
-        }
-
-        output(   "deleted vertex $vertex because it was part of a "
-                . "long required walk.<BR/>" );
-        $g1->set_edge_attribute( @neighbors, 'required', 1 );
-        $required_graph->delete_vertex($vertex);
-        $g1->delete_vertex($vertex);
-        $deleted_edges++;
-    }
-
-
-    if ( $deleted_edges ) {
-        if ( $deleted_edges == 1 ) {
-            output("Shrank the graph by removing 1 vertex " .
-                   "and 1 edge.<BR/>");
-        } else {
-            output("Shrank the graph by removing " .
-                   "$deleted_edges edges and vertices.<BR/>" );
-        }
-    }
 
     return ( $deleted_edges, $g1 );
 }

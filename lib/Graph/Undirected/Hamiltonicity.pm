@@ -94,7 +94,6 @@ sub is_hamiltonian {
 
         my @transforms_1 = (
             \&delete_non_required_neighbors,
-            \&shrink_required_walks_longer_than_2_edges,
             \&delete_cycle_closing_edges,
             );
 
