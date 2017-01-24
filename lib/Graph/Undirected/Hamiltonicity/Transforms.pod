@@ -42,17 +42,6 @@ Return the graph with the edges deleted, and also the number of edges deleted.
 
      my ($deleted_edges, $g1) = delete_non_required_neighbors( $g );
 
-
-=head2 shrink_required_walks_longer_than_2_edges
-
-Shrink all required walks longer than 2 edges.
-
-Return the graph with the edges deleted, and also the number of edges deleted.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&shrink_required_walks_longer_than_2_edges);
-
-     my ($deleted_edges, $g1) = shrink_required_walks_longer_than_2_edges( $g );
-
 =head2 swap_vertices
 
 For a given graph, and two specified vertices, modify the graph so that 
