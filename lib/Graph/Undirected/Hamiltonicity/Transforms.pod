@@ -84,6 +84,10 @@ Add random edges to a given graph.
 
      # $g1 is like $g, but with 7 extra edges.
 
+=head1 SUPPORT
+
+Please report issues L<on GitHub|https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/issues>.
+
 =head1 AUTHOR
 
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>

@@ -127,19 +127,13 @@ then the input graph is not Hamiltonian.
 If the cycle has the same number of edges as vertices,
 then the input graph is Hamiltonian.
 
+=head1 SUPPORT
+
+Please report issues L<on GitHub|https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/issues>.
+
 =head1 AUTHOR
 
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
-
-=head1 BUGS
-
-No open bugs as of this writing.
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Graph::Undirected::Hamiltonicity::Tests
 
 =cut
 
