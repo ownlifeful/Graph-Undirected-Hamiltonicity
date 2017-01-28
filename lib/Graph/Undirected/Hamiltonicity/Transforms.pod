@@ -48,7 +48,8 @@ the neighbors of vertex1 become the neighbors of vertex2 and vice versa.
 =head2 get_common_neighbors
 
 For a given graph, and two specified vertices, return a reference to 
-a hash whose keys are all the vertices that vertex1 and vertex2 share.
+a hash whose keys are all the vertices that vertex1 and vertex2 share 
+as common neighbors.
 
      use Graph::Undirected::Hamiltonicity::Transforms qw(&get_common_neighbors);
 
