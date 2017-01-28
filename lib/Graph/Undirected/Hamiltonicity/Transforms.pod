@@ -13,7 +13,7 @@ Version 0.01
 For each vertex in the graph that has degree == 2,
 mark the edges adjacent to the vertex as "required".
 
-Create a graph that has the same edges as the input graph,
+Create a graph that has the same vertices as the input graph,
 but only the edges marked "required".
 
 Return the "required" graph, and also a copy of the original graph,
@@ -22,14 +22,6 @@ with the required edges marked.
      use Graph::Undirected::Hamiltonicity::Transforms qw(&get_required_graph);
 
      my ( $required_graph, $g1 ) = get_required_graph( $g );
-
-=head2 delete_unusable_edges
-
-Delete edges connecting neighbors of vertices with degree 2.
-
-     use Graph::Undirected::Hamiltonicity::Transforms qw(&delete_unusable_edges);
-
-     my $g1 = delete_unusable_edges( $g );
 
 =head2 delete_non_required_neighbors
 
@@ -97,9 +89,4 @@ Add random edges to a given graph.
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
 
 =cut
-
-
-
-
-
 
