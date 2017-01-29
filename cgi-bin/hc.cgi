@@ -90,7 +90,7 @@ print get_textarea($g);
 print qq{</form>\n};;
 print "<br/><br/>\n";
 
-if ( $graph_text =~ /\d=\d/ ) {
+if ( $graph_text =~ /\d/ ) {
 
     print qq{<h2>Here is the program's trace output:</h2><BR/>\n};
 
