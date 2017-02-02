@@ -40,10 +40,8 @@ our $VERSION = '0.01';
 sub test_trivial {
     my ($g) = @_;
 
-    my @edges     = $g->edges;
-    my $e         = @edges;
-    my @vertices  = $g->vertices;
-    my $v         = @vertices;
+    my $e         = scalar( $g->edges );
+    my $v         = scalar( $g->vertices );
     my $max_edges = ( $v * $v - $v ) / 2;
 
     if ( $v == 1 ) {

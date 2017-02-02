@@ -35,7 +35,25 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 sub graph_is_hamiltonian {
     my ($g) = @_;
-    my ( $is_hamiltonian, $reason ) = is_hamiltonian($g);
+
+
+    my ( $is_hamiltonian, $reason );
+
+    my @once_only_tests = (
+        \&test_trivial,
+        \&test_dirac,
+        );
+
+    foreach my $test_sub (@once_only_tests) {
+        ( $is_hamiltonian, $reason ) = &$test_sub($g);
+        last if $is_hamiltonian != $DONT_KNOW;
+    }
+
+    if ( $is_hamiltonian == $DONT_KNOW ) {
+        ( $is_hamiltonian, $reason ) = is_hamiltonian($g);
+    }
+
+
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
     return wantarray ? ( $final_bit, $reason ) : $final_bit;
 }
@@ -49,10 +67,6 @@ sub graph_is_hamiltonian {
 # Returns a result ( $is_hamiltonian, $reason )
 # indicating whether the given graph contains a Hamiltonian Cycle.
 #
-# This subroutine implements the core of the algorithm.
-# Its time complexity is still being calculated.
-# If P=NP, then by adding enough polynomial time tests to this subroutine,
-# its time complexity can be made polynomial time as well.
 #
 
 sub is_hamiltonian {
@@ -67,9 +81,7 @@ sub is_hamiltonian {
     my ( $is_hamiltonian, $reason );
 
     my @tests_1 = (
-        \&test_trivial,
         \&test_min_degree,
-        \&test_dirac,
         \&test_articulation_vertex,
         \&test_graph_bridge,
     );
