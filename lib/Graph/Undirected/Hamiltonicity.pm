@@ -49,6 +49,12 @@ sub graph_is_hamiltonian {
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
         ( $is_hamiltonian, $reason ) = is_hamiltonian($g);
+    } else {
+        my $spaced_string = "$g";
+        $spaced_string =~ s/\,/, /g;
+        output("<HR NOSHADE>");
+        output("In graph_is_hamiltonian($spaced_string)");
+        output($g);
     }
 
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
@@ -216,6 +222,5 @@ sub get_chosen_vertex {
 }
 
 ##########################################################################
-
 
 1;    # End of Graph::Undirected::Hamiltonicity

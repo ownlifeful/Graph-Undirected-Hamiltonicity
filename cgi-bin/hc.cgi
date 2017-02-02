@@ -43,8 +43,12 @@ print <<'END_OF_HEADER';
 
 <script>
     $(document).ready(function(){
-       var modal_to_open = window.is_hamiltonian ? '#ham' : '#non';
-       $( modal_to_open ).modal();
+
+       if (typeof window.is_hamiltonian !== 'undefined') {
+           var modal_to_open = window.is_hamiltonian ? '#ham' : '#non';
+           $( modal_to_open ).modal();
+       }
+
     });
 </script>
 
@@ -81,8 +85,10 @@ if ( $graph_text =~ /\d/ ) {
         print_instructions();
     }
 } else {
-    print "Here is the Null Graph <TT>K<sub>0</sub></TT>. ";
-    print "It is not Hamiltonian.\n<BR/><P/>\n";        
+    if ( $ENV{QUERY_STRING} =~ /\bgraph_text=/ ) {
+        print "Here is the Null Graph <TT>K<sub>0</sub></TT>. ";
+        print "It is not Hamiltonian.\n<BR/><P/>\n";
+    }
     print_instructions();
 }
 
