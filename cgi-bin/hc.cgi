@@ -127,6 +127,8 @@ print q{
     <H1>The graph is <u>not</u> Hamiltonian!</H1>
   </div>
 </div>
+
+<BR/><P/>
 </BODY></HTML>
 };
 
