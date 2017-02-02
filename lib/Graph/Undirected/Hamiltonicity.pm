@@ -36,9 +36,7 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 sub graph_is_hamiltonian {
     my ($g) = @_;
 
-
     my ( $is_hamiltonian, $reason );
-
     my @once_only_tests = (
         \&test_trivial,
         \&test_dirac,
@@ -52,7 +50,6 @@ sub graph_is_hamiltonian {
     if ( $is_hamiltonian == $DONT_KNOW ) {
         ( $is_hamiltonian, $reason ) = is_hamiltonian($g);
     }
-
 
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
     return wantarray ? ( $final_bit, $reason ) : $final_bit;
