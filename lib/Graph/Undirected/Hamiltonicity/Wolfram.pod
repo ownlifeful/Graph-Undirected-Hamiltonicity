@@ -41,7 +41,7 @@ Throws: an exception if an error is encountered.
 
 =head1 SEE ALSO
 
-https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/blob/master/WOLFRAM.md
+L<WOLFRAM.md|https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/blob/master/WOLFRAM.md>
 
 =head1 SUPPORT
 
