@@ -15,7 +15,7 @@ Version 0.01
         # $g is a Graph::Undirected
         $result = is_hamiltonian_per_wolfram( $g );
     };
-    warn $@ if $@;
+    die $@ if $@;
 
    if ( $result ) {
        print "Graph is Hamiltonian.\n";
