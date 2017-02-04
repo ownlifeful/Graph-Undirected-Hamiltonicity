@@ -1,6 +1,6 @@
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity::Wolfram - determine the Hamiltonicity of a given graph using the Wolfram Cloud.
+Graph::Undirected::Hamiltonicity::Wolfram - determine the Hamiltonicity of a given graph using the Wolfram Open Cloud.
 
 =head1 VERSION
 
@@ -38,6 +38,10 @@ Returns: 1     if the graph is Hamiltonian according to the Wolfram Open Cloud,
          0     if the graph is non-Hamiltonian
 
 Throws: an exception if an error is encountered.
+
+=head1 SEE ALSO
+
+<WOLFRAM.md|https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/blob/master/WOLFRAM.md>
 
 =head1 SUPPORT
 
