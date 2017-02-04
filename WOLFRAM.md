@@ -9,7 +9,15 @@ Wolfram Open Cloud, using a built-in function of the Wolfram Programming Languag
 This feature is quite useful in cross-checking the result you get from the algorithm 
 implemented in this Perl distribution.
 
+## Synopsis
 
+    use Graph::Undirected::Hamiltonicity::Wolfram;
+
+    if ( is_hamiltonian_per_wolfram( $g ) ) {
+        print "The graph contains a Hamiltonian Cycle.\n";
+    } else {
+        print "The graph does not contain a Hamiltonian Cycle.\n";
+    }
 
 ## Installation
 
