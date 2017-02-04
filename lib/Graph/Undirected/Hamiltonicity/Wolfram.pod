@@ -34,21 +34,18 @@ The is_hamiltonian_per_wolfram() subroutine is exported by default.
 
 Takes: a Graph::Undirected
 
-Returns: 1     if the graph is Hamiltonian
+Returns: 1     if the graph is Hamiltonian according to the Wolfram Open Cloud,
          0     if the graph is non-Hamiltonian
 
 Throws: an exception if an error is encountered.
 
+=head1 SUPPORT
+
+Please report issues L<on GitHub|https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/issues>.
+
 =head1 AUTHOR
 
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
-
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Graph::Undirected::Hamiltonicity::Wolfram
 
 =cut
 
