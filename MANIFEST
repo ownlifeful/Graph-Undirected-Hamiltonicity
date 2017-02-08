@@ -12,7 +12,6 @@ lib/Graph/Undirected/Hamiltonicity/Tests.pod
 lib/Graph/Undirected/Hamiltonicity/Transforms.pm
 lib/Graph/Undirected/Hamiltonicity/Transforms.pod
 Makefile.PL
-LICENSE
 MANIFEST			This list of files
 README.md
 hamilton.ini
