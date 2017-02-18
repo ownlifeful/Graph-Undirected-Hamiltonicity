@@ -56,4 +56,4 @@ After:
 
 ## Notes
 
-**1.** The Cloud Object you created in step 5, will expire after a while ( a month ). You will then have to repeat steps 3-8.
+**1.** The Cloud Object you created in step 5, will expire after a month. You will then have to repeat steps 3-8.
