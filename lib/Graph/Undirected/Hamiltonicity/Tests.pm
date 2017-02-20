@@ -145,8 +145,8 @@ sub test_graph_bridge {
 
     return $DONT_KNOW if $g->is_edge_connected();
 
-   return ( $GRAPH_IS_NOT_HAMILTONIAN,
-            "This graph has a bridge, and is therefore not Hamiltonian.");
+    return ( $GRAPH_IS_NOT_HAMILTONIAN,
+             "This graph has a bridge, and is therefore not Hamiltonian.");
 
 #    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
 #
