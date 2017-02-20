@@ -109,7 +109,6 @@ sub delete_cycle_closing_edges {
         my $first_vertex = $vertex;
         my ( $current_vertex ) = $required_graph->neighbors($vertex);
 
-        my $loops = 0;
         my $length = 2;
         my $found_last_vertex = 0;
         while ( ! $found_last_vertex ) {
@@ -151,7 +150,7 @@ sub delete_cycle_closing_edges {
 ##########################################################################
 
 sub delete_non_required_neighbors {
-    output("Entering deleted_non_required_neighbors()<BR/>");
+    output("Entering delete_non_required_neighbors()<BR/>");
 
     my ( $g, $required_graph ) = @_;
     my $g1;
