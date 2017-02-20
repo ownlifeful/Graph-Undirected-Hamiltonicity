@@ -57,6 +57,10 @@ sub graph_is_hamiltonian {
         output($g);
     }
 
+    if ( $is_hamiltonian == $DONT_KNOW ) {
+        output("<h1>Assertion failed.</h1><BR/>");
+    }
+
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
     return wantarray ? ( $final_bit, $reason ) : $final_bit;
 }
@@ -160,7 +164,7 @@ sub is_hamiltonian {
     }
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
-        "The graph did not pass any tests for Hamiltonicity." );
+        "The graph passed through an exhaustive search for Hamiltonian Cycles." );
 
 }
 
