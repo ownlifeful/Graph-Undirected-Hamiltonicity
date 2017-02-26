@@ -86,7 +86,6 @@ sub is_hamiltonian {
     output($g);
 
     my ( $is_hamiltonian, $reason );
-
     my @tests_1 = (
         \&test_min_degree,
         \&test_articulation_vertex,
@@ -164,25 +163,28 @@ sub is_hamiltonian {
     }
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
-        "The graph passed through an exhaustive search for Hamiltonian Cycles." );
+             "The graph passed through an exhaustive search " . 
+             "for Hamiltonian Cycles." );
 
 }
 
 ##########################################################################
 
 sub get_tentative_combinations {
+
+    # Generate all allowable combinations of 2 edges,
+    # incident on a given vertex.
+
     my ( $g, $required_graph, $vertex ) = @_;
     my @tentative_combinations;
     my @neighbors = $g->neighbors($vertex);
     if ( $required_graph->degree($vertex) == 1 ) {
         my ($fixed_neighbor) = $required_graph->neighbors($vertex);
-
         foreach my $tentative_neighbor (@neighbors) {
             next if $fixed_neighbor == $tentative_neighbor;
             push @tentative_combinations,
                 [ $fixed_neighbor, $tentative_neighbor ];
         }
-
     } else {
         for ( my $i = 0; $i < scalar(@neighbors) - 1; $i++ ) {
             for ( my $j = $i + 1; $j < scalar(@neighbors); $j++ ) {
@@ -200,7 +202,14 @@ sub get_tentative_combinations {
 sub get_chosen_vertex {
     my ( $g, $required_graph, $undecided_vertices ) = @_;
 
-    ### Choose the vertex with the highest degree first
+    # 1. Choose the vertex with the highest degree first.
+    #
+    # 2. If degrees are equal, prefer vertices which already have
+    #    a required edge incident on them.
+    #
+    # 3. Break a tie from rules 1 & 2, by picking the lowest
+    #    numbered vertex first.
+
     my $chosen_vertex;
     my $chosen_vertex_degree;
     my $chosen_vertex_required_degree;
