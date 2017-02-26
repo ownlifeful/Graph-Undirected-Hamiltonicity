@@ -44,7 +44,7 @@ sub graph_is_hamiltonian {
 
     foreach my $test_sub (@once_only_tests) {
         ( $is_hamiltonian, $reason ) = &$test_sub($g);
-        last if $is_hamiltonian != $DONT_KNOW;
+        last unless $is_hamiltonian == $DONT_KNOW;
     }
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
