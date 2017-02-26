@@ -42,7 +42,7 @@ sub is_hamiltonian_per_wolfram {
     ### Create a request
     my $req = HTTP::Request->new( POST => $url );
     $req->content_type('application/x-www-form-urlencoded');
-    $req->content("x=$g");
+    $req->content("x=" . $g->stringify() );
 
     # Pass request to the user agent and get a response back
     my $res = $ua->request($req);

@@ -50,7 +50,7 @@ sub graph_is_hamiltonian {
     if ( $is_hamiltonian == $DONT_KNOW ) {
         ( $is_hamiltonian, $reason ) = is_hamiltonian($g);
     } else {
-        my $spaced_string = "$g";
+        my $spaced_string = $g->stringify();
         $spaced_string =~ s/\,/, /g;
         output("<HR NOSHADE>");
         output("In graph_is_hamiltonian($spaced_string)");
@@ -79,7 +79,7 @@ sub graph_is_hamiltonian {
 sub is_hamiltonian {
     my ($g) = @_;
 
-    my $spaced_string = "$g";
+    my $spaced_string = $g->stringify();
     $spaced_string =~ s/\,/, /g;
     output("<HR NOSHADE>");
     output("Calling is_hamiltonian($spaced_string)");
