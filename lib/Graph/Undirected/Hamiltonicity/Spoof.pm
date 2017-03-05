@@ -99,7 +99,7 @@ sub spoof_randomish_graph {
     }
 
     my $try_count = 0;
-    my $max_tries = $edges_to_remove + 1;
+    my $max_tries = 2 * $edges_to_remove;
     ### Seek out vertices with degree > 2
     ### with neighbor of degree < 3
     ### and delete edges.

@@ -61,7 +61,7 @@ sub output_image_svg {
     my %params = %{ $hash_ref // {} };
     my $image_size = $params{size} || 600;
 
-    print qq{<div style="height: 600px; width: 1500px;">\n};
+    print qq{<div style="height: 600px; width: 95%;">\n};
 
     ### Output image
     print qq{<?xml version="1.0" standalone="no"?>
