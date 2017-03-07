@@ -61,7 +61,7 @@ sub output_image_svg {
     my %params = %{ $hash_ref // {} };
     my $image_size = $params{size} || 600;
 
-    print qq{<div style="height: 600px; width: 95%;">\n};
+    print qq{<div style="height: 600px; width: 1000px;">\n};
 
     ### Output image
     print qq{<?xml version="1.0" standalone="no"?>
@@ -74,7 +74,7 @@ xmlns="http://www.w3.org/2000/svg">
 };
 
     output_graph_svg( $g, { %params, image_size => $image_size } );
-    if ( $g->vertices() <= 20 ) {
+    if ( $g->vertices() <= 15 ) {
         output_adjacency_matrix_svg( $g,
             { %params, image_size => $image_size } );
     }
