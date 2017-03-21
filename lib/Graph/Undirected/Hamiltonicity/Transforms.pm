@@ -179,8 +179,12 @@ sub delete_non_required_neighbors {
         }
     }
 
-    my $s = $deleted_edges == 1 ? '' : 's';
-    output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
+    if ( $deleted_edges ) {
+        my $s = $deleted_edges == 1 ? '' : 's';
+        output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
+    } else {
+        output("Did not shrink the graph.<BR/>");
+    }
 
     return ( $deleted_edges, $g1 );
 }
