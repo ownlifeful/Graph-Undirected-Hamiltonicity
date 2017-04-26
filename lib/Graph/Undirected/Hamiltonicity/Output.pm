@@ -141,8 +141,11 @@ sub output_graph_svg {
 
         my $required = $params{required}
             || $g->get_edge_attribute( $orig, $dest, 'required' );
-        my $stroke_width = $required ? 3         : 1;
-        my $color        = $required ? '#FF0000' : '#000000';
+
+        my $override_attrs = "";
+        if ( $required ) {
+            $override_attrs = qq{ stroke-width="3" stroke="#FF0000" };
+        }
 
         $edges_xml .= qq{<line id="${orig}_${dest}};
         $edges_xml .= q{" x1="};
@@ -153,7 +156,7 @@ sub output_graph_svg {
         $edges_xml .= $vertex_coordinates[$dest]->[0];
         $edges_xml .= q{" y2="};
         $edges_xml .= $vertex_coordinates[$dest]->[1];
-        $edges_xml .= qq{" stroke-width="$stroke_width" stroke="$color" />};
+        $edges_xml .= qq{"$override_attrs />};
         $edges_xml .= "\n";
     }
 
@@ -165,7 +168,7 @@ sub output_graph_svg {
 <svg width="100%" height="100%" version="1.1"
 xmlns="http://www.w3.org/2000/svg">
 
-<g id="edges" style="opacity:1; stroke: black; stroke-opacity: 1">
+<g id="edges" style="opacity:1; stroke: black; stroke-opacity: 1; stroke-width: 1 ">
 $edges_xml</g>
 
 <g id="vertices" 
