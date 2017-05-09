@@ -80,7 +80,8 @@ sub is_hamiltonian {
     my ($g, $params) = @_;
 
     $params //= {
-        transformed => 0
+        transformed => 0,
+        tentative   => 0
     };
 
     my $spaced_string = $g->stringify();
