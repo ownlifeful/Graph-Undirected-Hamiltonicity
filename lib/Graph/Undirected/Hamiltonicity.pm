@@ -77,7 +77,11 @@ sub graph_is_hamiltonian {
 #
 
 sub is_hamiltonian {
-    my ($g) = @_;
+    my ($g, $params) = @_;
+
+    $params //= {
+        transformed => 0
+    };
 
     my $spaced_string = $g->stringify();
     $spaced_string =~ s/\,/, /g;
@@ -93,7 +97,7 @@ sub is_hamiltonian {
     );
 
     foreach my $test_sub (@tests_1) {
-        ( $is_hamiltonian, $reason ) = &$test_sub($g);
+        ( $is_hamiltonian, $reason ) = &$test_sub($g, $params);
         return ( $is_hamiltonian, $reason )
             unless $is_hamiltonian == $DONT_KNOW;
     }
@@ -105,7 +109,7 @@ sub is_hamiltonian {
     if ( $required_graph->edges() ) {
         my @tests_2 = ( \&test_required, \&test_required_cyclic );
         foreach my $test_sub (@tests_2) {
-            ( $is_hamiltonian, $reason ) = &$test_sub($required_graph);
+            ( $is_hamiltonian, $reason ) = &$test_sub($required_graph, $params);
             return ( $is_hamiltonian, $reason )
                 unless $is_hamiltonian == $DONT_KNOW;
         }
@@ -119,7 +123,8 @@ sub is_hamiltonian {
             my ( $deleted_edges, $g1 ) =
                 &$transform_sub( $g, $required_graph );
             if ($deleted_edges) {
-                @_ = ($g1);
+                $params->{transformed} = 1;
+                @_ = ($g1, $params);
                 goto &is_hamiltonian;
             }
         }
@@ -127,9 +132,12 @@ sub is_hamiltonian {
 
     my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {
-        output(  "Now running an exhaustive, recursive,"
-               . " and conclusive search,"
-               . " only slightly better than brute force.<BR/>" );
+        unless ( $params->{tentative} ) {
+            output(  "Now running an exhaustive, recursive,"
+                     . " and conclusive search,"
+                     . " only slightly better than brute force.<BR/>" );
+        }
+
         my $vertex =
             get_chosen_vertex( $g, $required_graph, \@undecided_vertices );
 
@@ -155,7 +163,8 @@ sub is_hamiltonian {
                     . " protected:<BR/>" );
             output($g1);
 
-            ( $is_hamiltonian, $reason ) = is_hamiltonian($g1);
+            $params->{tentative} = 1;
+            ( $is_hamiltonian, $reason ) = is_hamiltonian($g1, $params);
             if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
                 return ( $is_hamiltonian, $reason );
             }

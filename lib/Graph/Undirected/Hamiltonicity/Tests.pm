@@ -107,12 +107,16 @@ sub test_canonical {
 
 
 sub test_min_degree {
-    my ($g) = @_;
+    my ($g, $params) = @_;
 
     foreach my $vertex ( $g->vertices ) {
         if ( $g->degree($vertex) < 2 ) {
-            return ( $GRAPH_IS_NOT_HAMILTONIAN,
-                "This graph has a vertex ($vertex) with degree < 2" );
+
+            my $reason = $params->{transformed} 
+            ? "After removing edges according to constraints, this graph was found to have a vertex ($vertex) with degree < 2"
+                : "This graph has a vertex ($vertex) with degree < 2";
+
+            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason );
         }
     }
 
@@ -122,12 +126,16 @@ sub test_min_degree {
 ##########################################################################
 
 sub test_articulation_vertex {
-    my ($g) = @_;
+    my ($g, $params) = @_;
 
     return $DONT_KNOW if $g->is_biconnected();
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN,
-             "This graph is not biconnected, therefore not Hamiltonian. ");
+
+    my $reason = $params->{transformed}
+    ? "After removing edges according to constraints, the graph was no longer biconnected."
+        : "This graph is not biconnected, therefore not Hamiltonian. ";
+    
+    return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason );
 
 #    my $vertices_string = join ',', $g->articulation_points();
 #
@@ -141,12 +149,17 @@ sub test_articulation_vertex {
 ##########################################################################
 
 sub test_graph_bridge {
-    my ($g) = @_;
+    my ($g, $params) = @_;
 
     return $DONT_KNOW if $g->is_edge_connected();
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN,
-             "This graph has a bridge, and is therefore not Hamiltonian.");
+
+    my $reason = $params->{transformed}
+    ? "After removing edges according to constraints, " .
+        "the graph was found to have a bridge, and is therefore, not Hamiltonian."
+        : "This graph has a bridge, and is therefore not Hamiltonian.";
+
+    return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason );
 
 #    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
 #
@@ -183,14 +196,19 @@ sub test_dirac {
 ##########################################################################
 
 sub test_required {
-    my ($required_graph) = @_;
+    my ($required_graph, $params) = @_;
 
     foreach my $vertex ( $required_graph->vertices() ) {
         my $degree = $required_graph->degree($vertex);
         if ( $degree > 2 ) {
-            return ( $GRAPH_IS_NOT_HAMILTONIAN,
-                      "Vertex $vertex is required by $degree edges. "
-                    . "It can only be required by upto 2 edges." );
+            my $reason = $params->{transformed}
+            ? "After removing edges according to rules, the vertex $vertex "
+                . "was found to be required by $degree edges."
+                : "Vertex $vertex is required by $degree edges.";
+
+            $reason .= " It can only be required by upto 2 edges.";
+
+            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason );
         }
     }
 
@@ -201,11 +219,12 @@ sub test_required {
 
 sub test_required_cyclic {
 
-    output("Entering test_required_cyclic()<BR/>");
-
     my ($required_graph) = @_;
     my %eliminated;
     my %connected_vertices;
+
+    output("Entering test_required_cyclic()<BR/>");
+
     foreach my $edge_ref ( $required_graph->edges() ) {
         foreach my $connected_vertex ( @$edge_ref ) {
             $connected_vertices{ $connected_vertex } = 1;
