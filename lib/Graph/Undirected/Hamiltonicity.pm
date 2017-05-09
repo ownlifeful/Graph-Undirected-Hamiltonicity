@@ -56,7 +56,7 @@ sub graph_is_hamiltonian {
     }
     my $time_end = time;
 
-    $params->{time_elapsed} = $time_end - $time_begin;
+    $params->{time_elapsed} = int($time_end - $time_begin);
     $params->{calls} //= 0;
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
