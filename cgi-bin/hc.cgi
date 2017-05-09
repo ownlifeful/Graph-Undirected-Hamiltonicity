@@ -100,7 +100,7 @@ if ( $graph_text =~ /\d/ ) {
 
     print qq{<h2>Here is the program's trace output:</h2><BR/>\n};
 
-    my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($g);
+    my ( $is_hamiltonian, $reason, $params ) = graph_is_hamiltonian($g);
     print qq{<BR/>\n};
     print qq{<A NAME="conclusion"></A><B>Conclusion:</B>\n};
     print qq{<span style="background: yellow;">\n};
@@ -113,6 +113,7 @@ if ( $graph_text =~ /\d/ ) {
     }
     print qq{</span>\n};
     print qq{($reason)\n};
+    print qq{<BR/>It took }, $params->{calls}, qq{ calls.\n} if defined $params->{calls};
     print qq{<BR/><P/>\n};
 }
 
