@@ -37,11 +37,9 @@ sub graph_is_hamiltonian {
     my ($g) = @_;
 
     my ( $is_hamiltonian, $reason, $params );
-    my @once_only_tests = (
-        \&test_trivial,
-        \&test_dirac,
-        );
 
+    my $time_begin = time;
+    my @once_only_tests = ( \&test_trivial, \&test_dirac);
     foreach my $test_sub (@once_only_tests) {
         ( $is_hamiltonian, $reason ) = &$test_sub($g);
         last unless $is_hamiltonian == $DONT_KNOW;
@@ -56,6 +54,10 @@ sub graph_is_hamiltonian {
         output("In graph_is_hamiltonian($spaced_string)");
         output($g);
     }
+    my $time_end = time;
+
+    $params->{time_elapsed} = $time_end - $time_begin;
+    $params->{calls} //= 0;
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
         output("<h1>Assertion failed.</h1><BR/>");

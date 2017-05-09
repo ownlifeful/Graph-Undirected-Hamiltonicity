@@ -78,11 +78,9 @@ foreach my $g (@G) {
         print "The graph is not Hamiltonian.\n";
     }
 
-    print "($reason)\n\n";
-
-    if ( defined $params->{calls} ) {
-        print "It took ", $params->{calls}, " calls.\n\n";
-    }
+    print "($reason)\n";
+    print qq{It took }, $params->{calls}, qq{ calls, and };
+    print $params->{time_elapsed}, qq{ seconds.\n\n};
 
     if ($url) {
         my $is_hamiltonian_per_wolfram = is_hamiltonian_per_wolfram($g);
