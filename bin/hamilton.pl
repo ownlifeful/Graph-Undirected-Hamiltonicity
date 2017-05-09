@@ -80,7 +80,8 @@ foreach my $g (@G) {
 
     print "($reason)\n";
     print qq{It took }, $params->{calls}, qq{ calls, and };
-    print $params->{time_elapsed}, qq{ seconds.\n\n};
+    my $s = $params->{time_elapsed} == 1 ? "" : "s";
+    print $params->{time_elapsed}, qq{ second$s.\n\n};
 
     if ($url) {
         my $is_hamiltonian_per_wolfram = is_hamiltonian_per_wolfram($g);

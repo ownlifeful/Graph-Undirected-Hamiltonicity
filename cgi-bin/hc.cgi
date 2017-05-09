@@ -114,7 +114,8 @@ if ( $graph_text =~ /\d/ ) {
     print qq{</span>\n};
     print qq{($reason)\n};
     print qq{<BR/>It took }, $params->{calls}, qq{ calls, and };
-    print $params->{time_elapsed}, qq{ seconds.\n};
+    my $s = $params->{time_elapsed} == 1 ? "" : "s";
+    print $params->{time_elapsed}, qq{ second$s.\n};
     print qq{<BR/><P/>\n};
 }
 
