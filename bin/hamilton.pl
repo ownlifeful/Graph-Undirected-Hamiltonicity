@@ -68,7 +68,7 @@ my $url = get_url_from_config();
 foreach my $g (@G) {
     print "graph=($g)\n";
 
-    my ( $is_hamiltonian, $reason ) = graph_is_hamiltonian($g);
+    my ( $is_hamiltonian, $reason, $params ) = graph_is_hamiltonian($g);
 
     print "\n\n";
     print "Conclusion: ";
@@ -79,6 +79,10 @@ foreach my $g (@G) {
     }
 
     print "($reason)\n\n";
+
+    if ( defined $params->{calls} ) {
+        print "It took ", $params->{calls}, " calls.\n\n";
+    }
 
     if ($url) {
         my $is_hamiltonian_per_wolfram = is_hamiltonian_per_wolfram($g);

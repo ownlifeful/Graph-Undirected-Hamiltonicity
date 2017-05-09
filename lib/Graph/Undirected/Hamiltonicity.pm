@@ -36,7 +36,7 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 sub graph_is_hamiltonian {
     my ($g) = @_;
 
-    my ( $is_hamiltonian, $reason );
+    my ( $is_hamiltonian, $reason, $params );
     my @once_only_tests = (
         \&test_trivial,
         \&test_dirac,
@@ -48,7 +48,7 @@ sub graph_is_hamiltonian {
     }
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
-        ( $is_hamiltonian, $reason ) = is_hamiltonian($g);
+        ( $is_hamiltonian, $reason, $params ) = is_hamiltonian($g);
     } else {
         my $spaced_string = $g->stringify();
         $spaced_string =~ s/\,/, /g;
@@ -62,7 +62,7 @@ sub graph_is_hamiltonian {
     }
 
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
-    return wantarray ? ( $final_bit, $reason ) : $final_bit;
+    return wantarray ? ( $final_bit, $reason, $params ) : $final_bit;
 }
 
 ##########################################################################
@@ -81,8 +81,11 @@ sub is_hamiltonian {
 
     $params //= {
         transformed => 0,
-        tentative   => 0
+        tentative   => 0,
+        calls       => 0
     };
+
+    $params->{calls}++;
 
     my $spaced_string = $g->stringify();
     $spaced_string =~ s/\,/, /g;
@@ -99,7 +102,7 @@ sub is_hamiltonian {
 
     foreach my $test_sub (@tests_1) {
         ( $is_hamiltonian, $reason ) = &$test_sub($g, $params);
-        return ( $is_hamiltonian, $reason )
+        return ( $is_hamiltonian, $reason, $params )
             unless $is_hamiltonian == $DONT_KNOW;
     }
 
@@ -111,7 +114,7 @@ sub is_hamiltonian {
         my @tests_2 = ( \&test_required, \&test_required_cyclic );
         foreach my $test_sub (@tests_2) {
             ( $is_hamiltonian, $reason ) = &$test_sub($required_graph, $params);
-            return ( $is_hamiltonian, $reason )
+            return ( $is_hamiltonian, $reason, $params )
                 unless $is_hamiltonian == $DONT_KNOW;
         }
 
@@ -165,16 +168,16 @@ sub is_hamiltonian {
             output($g1);
 
             $params->{tentative} = 1;
-            ( $is_hamiltonian, $reason ) = is_hamiltonian($g1, $params);
+            ( $is_hamiltonian, $reason, $params ) = is_hamiltonian($g1, $params);
             if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
-                return ( $is_hamiltonian, $reason );
+                return ( $is_hamiltonian, $reason, $params );
             }
         }
     }
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
              "The graph passed through an exhaustive search " . 
-             "for Hamiltonian Cycles." );
+             "for Hamiltonian Cycles.", $params );
 
 }
 
