@@ -79,8 +79,11 @@ foreach my $g (@G) {
     }
 
     print "($reason)\n";
-    print qq{It took }, $params->{calls}, qq{ calls, and };
-    my $s = $params->{time_elapsed} == 1 ? "" : "s";
+
+    my $s;
+    $s = $params->{calls} == 1 ? "" : "s";
+    print qq{It took }, $params->{calls}, qq{ call$s, and };
+    $s = $params->{time_elapsed} == 1 ? "" : "s";
     print $params->{time_elapsed}, qq{ second$s.\n\n};
 
     if ($url) {

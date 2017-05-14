@@ -22,6 +22,8 @@ our @EXPORT      = qw(graph_is_hamiltonian);    # exported by default
 our @EXPORT_OK   = qw(graph_is_hamiltonian);
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
+our $calls = 0; ### number of calls made to is_hamiltonian()
+
 ##########################################################################
 
 # graph_is_hamiltonian()
@@ -57,7 +59,7 @@ sub graph_is_hamiltonian {
     my $time_end = time;
 
     $params->{time_elapsed} = int($time_end - $time_begin);
-    $params->{calls} //= 0;
+    $params->{calls} = $calls;
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
         output("<h1>Assertion failed.</h1><BR/>");
@@ -83,11 +85,10 @@ sub is_hamiltonian {
 
     $params //= {
         transformed => 0,
-        tentative   => 0,
-        calls       => 0
+        tentative   => 0
     };
 
-    $params->{calls}++;
+    $calls++;
 
     my $spaced_string = $g->stringify();
     $spaced_string =~ s/\,/, /g;
