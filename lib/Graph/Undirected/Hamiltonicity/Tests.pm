@@ -23,6 +23,7 @@ our @EXPORT_OK = (
         &test_dirac
         &test_graph_bridge
         &test_min_degree
+        &test_ore
         &test_required
         &test_required_cyclic
         &test_trivial
@@ -116,7 +117,7 @@ sub test_min_degree {
             ? "After removing edges according to constraints, this graph was found to have a vertex ($vertex) with degree < 2"
                 : "This graph has a vertex ($vertex) with degree < 2";
 
-            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason );
+            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
         }
     }
 
@@ -135,7 +136,7 @@ sub test_articulation_vertex {
     ? "After removing edges according to constraints, the graph was no longer biconnected."
         : "This graph is not biconnected, therefore not Hamiltonian. ";
     
-    return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason );
+    return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
 
 #    my $vertices_string = join ',', $g->articulation_points();
 #
@@ -159,7 +160,7 @@ sub test_graph_bridge {
         "the graph was found to have a bridge, and is therefore, not Hamiltonian."
         : "This graph has a bridge, and is therefore not Hamiltonian.";
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason );
+    return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
 
 #    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
 #
@@ -190,6 +191,35 @@ sub test_dirac {
 
     return ($GRAPH_IS_HAMILTONIAN,
             "Every vertex has degree $half_v or more.");
+
+}
+
+##########################################################################
+
+### A graph with n vertices (n >= 3) is Hamiltonian if, 
+### for every pair of non-adjacent vertices, the sum of their degrees 
+### is n or greater (see Ore's theorem).
+### https://en.wikipedia.org/wiki/Ore%27s_theorem
+
+sub test_ore {
+    my ($g, $params) = @_;
+    my $v = $g->vertices();
+    return $DONT_KNOW if $v < 3;
+
+    foreach my $vertex1 ( $g->vertices() ) {
+        foreach my $vertex2 ( $g->vertices() ) {
+            next if $vertex1 == $vertex2;
+            next if $g->has_edge($vertex1, $vertex2);
+            return $DONT_KNOW if ( 
+                $g->degree($vertex1) + $g->degree($vertex2) ) < $v;
+        }
+    }
+
+    my $reason = "The sum of degrees of each pair of non-adjacent vertices";
+    $reason .= " >= v.";
+    $reason .= " ( Ore's Theorem. )";
+
+    return ($GRAPH_IS_HAMILTONIAN, $reason, $params);
 
 }
 

@@ -98,6 +98,7 @@ sub is_hamiltonian {
 
     my ( $is_hamiltonian, $reason );
     my @tests_1 = (
+        \&test_ore,
         \&test_min_degree,
         \&test_articulation_vertex,
         \&test_graph_bridge,
