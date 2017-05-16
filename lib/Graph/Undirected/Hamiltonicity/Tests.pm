@@ -240,7 +240,7 @@ sub test_required {
 
             $reason .= " It can only be required by upto 2 edges.";
 
-            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason );
+            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
         }
     }
 
