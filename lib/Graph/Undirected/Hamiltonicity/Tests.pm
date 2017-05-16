@@ -114,7 +114,8 @@ sub test_min_degree {
         if ( $g->degree($vertex) < 2 ) {
 
             my $reason = $params->{transformed} 
-            ? "After removing edges according to constraints, this graph was found to have a vertex ($vertex) with degree < 2"
+            ? "After removing edges according to constraints, this graph " 
+                . "was found to have a vertex ($vertex) with degree < 2"
                 : "This graph has a vertex ($vertex) with degree < 2";
 
             return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
@@ -133,7 +134,8 @@ sub test_articulation_vertex {
 
 
     my $reason = $params->{transformed}
-    ? "After removing edges according to constraints, the graph was no longer biconnected."
+    ? "After removing edges according to constraints, the graph was no" .
+        " longer biconnected, therefore not Hamiltonian."
         : "This graph is not biconnected, therefore not Hamiltonian. ";
     
     return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
@@ -156,17 +158,17 @@ sub test_graph_bridge {
 
 
     my $reason = $params->{transformed}
-    ? "After removing edges according to constraints, " .
-        "the graph was found to have a bridge, and is therefore, not Hamiltonian."
+    ? "After removing edges according to constraints, the graph was " . 
+        "found to have a bridge, and is therefore, not Hamiltonian."
         : "This graph has a bridge, and is therefore not Hamiltonian.";
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
 
-#    my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
+#   my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
 #
-#    return ( $GRAPH_IS_NOT_HAMILTONIAN,
-#              "This graph is not edge-connected, therefore not Hamiltonian. "
-#            . " It contains the following bridges ($bridge_string)." );
+#   return ( $GRAPH_IS_NOT_HAMILTONIAN,
+#            "This graph is not edge-connected, therefore not Hamiltonian. "
+#          . " It contains the following bridges ($bridge_string)." );
 
 }
 
