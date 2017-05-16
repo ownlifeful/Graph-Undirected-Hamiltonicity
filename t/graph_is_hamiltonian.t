@@ -9,6 +9,8 @@ use Graph::Undirected::Hamiltonicity::Wolfram qw(:all);
 
 use Test::More;
 
+$ENV{HC_OUTPUT_FORMAT} = 'none';
+
 my $url = get_url_from_config();
 if ($url) {
     plan tests => 28;

@@ -212,8 +212,8 @@ sub test_ore {
         foreach my $vertex2 ( $g->vertices() ) {
             next if $vertex1 == $vertex2;
             next if $g->has_edge($vertex1, $vertex2);
-            return $DONT_KNOW if ( 
-                $g->degree($vertex1) + $g->degree($vertex2) ) < $v;
+            my $sum_of_degrees = $g->degree($vertex1) + $g->degree($vertex2);
+            return $DONT_KNOW if $sum_of_degrees < $v;
         }
     }
 
