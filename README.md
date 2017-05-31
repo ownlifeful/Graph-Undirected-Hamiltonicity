@@ -53,11 +53,10 @@ The modules in this distribution are:
 
 ### To install the core module:
 
-    perl Makefile.PL
-    make
-    make test
-    make install
+Please install the `Dist::Zilla` module from CPAN, then run:
 
+
+    dzil install
 
 
 
@@ -71,7 +70,7 @@ On macOS:
 
     sudo cp cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
 
-On CentOS, RHEL and Fedora Linux:
+On Red Hat, CentOS and Fedora Linux:
 
     sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
 
