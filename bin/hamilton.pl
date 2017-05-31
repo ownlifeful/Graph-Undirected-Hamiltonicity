@@ -1,4 +1,5 @@
 #!/usr/bin/env perl
+use Modern::Perl;
 
 use Carp;
 use Getopt::Long;
@@ -9,9 +10,6 @@ use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph
 &spoof_randomish_graph
 );
 use Graph::Undirected::Hamiltonicity::Wolfram qw(:all);
-
-use warnings;
-use strict;
 
 $| = 1;    # piping hot pipes
 

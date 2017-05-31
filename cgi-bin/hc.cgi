@@ -7,13 +7,12 @@
 # It uses CGI::Minimal to keep it fairly portable.
 #
 
+use Modern::Perl;
+
 use CGI::Minimal;
 use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph);
-
-use warnings;
-use strict;
 
 $ENV{HC_OUTPUT_FORMAT} = 'html';
 $| = 1;

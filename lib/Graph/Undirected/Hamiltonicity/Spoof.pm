@@ -1,10 +1,8 @@
 package Graph::Undirected::Hamiltonicity::Spoof;
 
-use 5.006;
-use strict;
-use warnings;
-
+use Modern::Perl;
 use Carp;
+
 use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity::Transforms qw(&add_random_edges &get_random_isomorph);
 

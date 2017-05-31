@@ -3,10 +3,7 @@ package Graph::Undirected::Hamiltonicity::Transforms;
 # You can get documentation for this module with this command:
 #    perldoc Graph::Undirected::Hamiltonicity::Transforms
 
-use 5.006;
-use strict;
-use warnings;
-
+use Modern::Perl;
 use Carp;
 
 use Graph::Undirected;
@@ -26,9 +23,6 @@ our @EXPORT_OK = qw(
 );
 
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
-
-our $VERSION = '0.01';
-
 
 #####################################################
 

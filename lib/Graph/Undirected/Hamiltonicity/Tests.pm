@@ -1,10 +1,6 @@
 package Graph::Undirected::Hamiltonicity::Tests;
 
-use 5.006;
-use strict;
-use warnings;
-no warnings 'recursion';
-
+use Modern::Perl;
 use Exporter qw(import);
 
 use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
@@ -39,6 +35,7 @@ our $VERSION = '0.01';
 ##########################################################################
 
 sub test_trivial {
+    output("Entering test_trivial()<BR/>");
     my ($g) = @_;
 
     my $e         = scalar( $g->edges );
@@ -77,6 +74,7 @@ sub test_trivial {
 ##########################################################################
 
 sub test_canonical {
+    output("Entering test_canonical()<BR/>");
     my ($g) = @_;
     my @vertices = sort { $a <=> $b } $g->vertices();
     my $v = scalar(@vertices);
@@ -106,8 +104,10 @@ sub test_canonical {
 
 ##########################################################################
 
-
 sub test_min_degree {
+
+    output("Entering test_min_degree()<BR/>");
+
     my ($g, $params) = @_;
 
     foreach my $vertex ( $g->vertices ) {
@@ -128,10 +128,10 @@ sub test_min_degree {
 ##########################################################################
 
 sub test_articulation_vertex {
+    output("Entering test_articulation_vertex()<BR/>");
+    
     my ($g, $params) = @_;
-
     return $DONT_KNOW if $g->is_biconnected();
-
 
     my $reason = $params->{transformed}
     ? "After removing edges according to constraints, the graph was no" .
@@ -152,8 +152,8 @@ sub test_articulation_vertex {
 ##########################################################################
 
 sub test_graph_bridge {
+    output("Entering test_graph_bridge()<BR/>");
     my ($g, $params) = @_;
-
     return $DONT_KNOW if $g->is_edge_connected();
 
 
@@ -179,6 +179,9 @@ sub test_graph_bridge {
 ### https://en.wikipedia.org/wiki/Hamiltonian_path
 
 sub test_dirac {
+
+    output("Entering test_dirac()<BR/>");
+
     my ($g) = @_;
     my $v = $g->vertices();
     return $DONT_KNOW if $v < 3;
@@ -204,6 +207,8 @@ sub test_dirac {
 ### https://en.wikipedia.org/wiki/Ore%27s_theorem
 
 sub test_ore {
+    output("Entering test_ore()<BR/>");
+
     my ($g, $params) = @_;
     my $v = $g->vertices();
     return $DONT_KNOW if $v < 3;
@@ -228,8 +233,10 @@ sub test_ore {
 ##########################################################################
 
 sub test_required {
-    my ($required_graph, $params) = @_;
+    output("Entering test_required()<BR/>");
 
+    my ($required_graph, $params) = @_;
+    
     foreach my $vertex ( $required_graph->vertices() ) {
         my $degree = $required_graph->degree($vertex);
         if ( $degree > 2 ) {
@@ -250,12 +257,11 @@ sub test_required {
 ##########################################################################
 
 sub test_required_cyclic {
+    output("Entering test_required_cyclic()<BR/>");
 
     my ($required_graph) = @_;
     my %eliminated;
     my %connected_vertices;
-
-    output("Entering test_required_cyclic()<BR/>");
 
     foreach my $edge_ref ( $required_graph->edges() ) {
         foreach my $connected_vertex ( @$edge_ref ) {
@@ -293,7 +299,7 @@ sub test_required_cyclic {
     my @cycle        = $required_graph->find_a_cycle();
     my $cycle_string = join ', ', @cycle;
     output( $required_graph, { required => 1 } );
-    output("cycle_string=[$cycle_string]<BR/>");    ### DEBUG
+    output("Found a cycle: [$cycle_string]<BR/>");
 
     if ( $required_graph->is_connected() ) {
         return ( $GRAPH_IS_HAMILTONIAN,

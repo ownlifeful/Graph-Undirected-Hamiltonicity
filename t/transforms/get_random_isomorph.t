@@ -1,7 +1,5 @@
 #!perl
-use 5.006;
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms

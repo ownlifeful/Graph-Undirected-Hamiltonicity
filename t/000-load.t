@@ -1,7 +1,5 @@
 #!perl
-use 5.006;
-use strict;
-use warnings;
+use Modern::Perl;
 use Test::More;
 
 plan tests => 5;

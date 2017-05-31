@@ -1,7 +1,5 @@
 #!perl
-use 5.006;
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Graph::Undirected::Hamiltonicity::Transforms
     qw(&string_to_graph &delete_non_required_neighbors);

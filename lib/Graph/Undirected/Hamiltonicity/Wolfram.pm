@@ -1,9 +1,6 @@
 package Graph::Undirected::Hamiltonicity::Wolfram;
 
-use 5.006;
-use strict;
-use warnings;
-
+use Modern::Perl;
 use Carp;
 use Config::INI::Reader;
 use LWP::UserAgent;

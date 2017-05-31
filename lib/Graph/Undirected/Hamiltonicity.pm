@@ -5,10 +5,7 @@ package Graph::Undirected::Hamiltonicity;
 # You can get documentation for this module with this command:
 #    perldoc Graph::Undirected::Hamiltonicity
 
-use 5.006;
-use strict;
-use warnings;
-no warnings 'recursion';
+use Modern::Perl;
 
 use Graph::Undirected::Hamiltonicity::Output qw(&output);
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
@@ -135,8 +132,12 @@ sub is_hamiltonian {
                 goto &is_hamiltonian;
             }
         }
+    } else {
+            output("The requird graph has no edges.<BR/>");
     }
 
+
+    
     my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {
         unless ( $params->{tentative} ) {
