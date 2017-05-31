@@ -54,6 +54,7 @@ The modules in this distribution are:
 ### To install the core module:
 
     cpanm Dist::Zilla
+    dzil authordeps | cpanm
     dzil listdeps | cpanm
     dzil install
 
