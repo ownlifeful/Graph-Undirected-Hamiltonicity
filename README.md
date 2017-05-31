@@ -53,9 +53,8 @@ The modules in this distribution are:
 
 ### To install the core module:
 
-Please install the `Dist::Zilla` module from CPAN, then run:
-
-
+    cpanm Dist::Zilla
+    dzil listdeps | cpanm
     dzil install
 
 
