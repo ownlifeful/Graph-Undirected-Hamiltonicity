@@ -1,7 +1,6 @@
 package Graph::Undirected::Hamiltonicity;
 
-# Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
-# contains a Hamiltonian Cycle.
+# ABSTRACT: decide whether a given Graph::Undirected contains a Hamiltonian Cycle.
 
 # You can get documentation for this module with this command:
 #    perldoc Graph::Undirected::Hamiltonicity
@@ -176,6 +175,7 @@ sub is_hamiltonian {
             if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
                 return ( $is_hamiltonian, $reason, $params );
             }
+            output("...backtracking.<BR/>");
         }
     }
 
