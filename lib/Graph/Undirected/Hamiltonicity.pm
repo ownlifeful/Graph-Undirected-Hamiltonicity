@@ -111,9 +111,12 @@ sub is_hamiltonian {
     ( $required_graph, $g ) = get_required_graph($g);
 
     if ( $required_graph->edges() ) {
-        my @tests_2 = ( \&test_required, \&test_required_cyclic );
+        my @tests_2 = (
+            \&test_required, 
+            \&test_required_connected, 
+            \&test_required_cyclic );
         foreach my $test_sub (@tests_2) {
-            ( $is_hamiltonian, $reason ) = &$test_sub($required_graph, $params);
+            ( $is_hamiltonian, $reason, $params ) = &$test_sub($required_graph, $g, $params);
             return ( $is_hamiltonian, $reason, $params )
                 unless $is_hamiltonian == $DONT_KNOW;
         }

@@ -53,11 +53,24 @@ The modules in this distribution are:
 
 ### To install the core module:
 
+If you need to get `cpanm`:
+    curl -L https://cpanmin.us | perl - App::cpanminus
+
+then:
     cpanm Dist::Zilla
     dzil authordeps | cpanm
     dzil listdeps | cpanm
     dzil install
 
+If you run into trouble installing `Net::SSLeay` as part of `Dist::Zilla`, try the following.
+
+On Red Hat / CentOS / Fedora:
+
+    sudo yum install openssl-devel
+
+On Debian / Ubuntu:
+
+    sudo apt-get install libssl-dev
 
 
 ### To install the optional CGI script:
@@ -70,7 +83,7 @@ On macOS:
 
     sudo cp cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
 
-On Red Hat, CentOS and Fedora Linux:
+On Red Hat / CentOS / Fedora Linux:
 
     sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
 

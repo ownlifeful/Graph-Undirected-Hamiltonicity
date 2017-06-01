@@ -6,7 +6,7 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph);
 
 use Test::More;
 
-plan tests => 25;
+plan tests => 20;
 
 $ENV{HC_OUTPUT_FORMAT} = 'none';
 
@@ -71,16 +71,6 @@ test_canonical|1|a simple 3 vertex, 3 edge graph|0=1,0=2,1=2
 test_canonical|0|a 6 vertex, 6 edge non-connected graph|0=1,0=2,1=2,3=4,3=5,4=5
 
 test_canonical|0|a medium sized graph|0=11,0=6,10=12,10=2,11=13,11=14,11=15,11=9,12=14,12=16,12=19,13=16,13=18,14=5,14=6,15=16,15=2,16=4,16=5,17=18,17=5,17=9,19=2,19=7,1=4,1=8,2=3,3=4,3=5,7=8
-
-test_required_cyclic|2|a 6 vertex, 6 edge non-connected graph|0=1,0=2,1=2,3=4,3=5,4=5
-
-test_required_cyclic|1|a simple 3 vertex, 3 edge graph|0=1,0=2,1=2
-
-test_required_cyclic|2|a simple 4 vertex, 3 edge graph|0=1,0=2,1=2,3
-
-test_required_cyclic|1|a simple 4 vertex, 4 edge canonical graph|0=1,0=3,1=2,2=3
-
-test_required_cyclic|2|a graph with a non-Hamiltonian cycle in it|0=1,0=3,1=2,2=3,4
 
 test_dirac|0|a single vertex graph|0
 

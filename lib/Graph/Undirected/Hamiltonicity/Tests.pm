@@ -21,6 +21,7 @@ our @EXPORT_OK = (
         &test_min_degree
         &test_ore
         &test_required
+        &test_required_connected
         &test_required_cyclic
         &test_trivial
         )
@@ -235,7 +236,7 @@ sub test_ore {
 sub test_required {
     output("Entering test_required()<BR/>");
 
-    my ($required_graph, $params) = @_;
+    my ($required_graph, $g, $params) = @_;
     
     foreach my $vertex ( $required_graph->vertices() ) {
         my $degree = $required_graph->degree($vertex);
@@ -256,10 +257,52 @@ sub test_required {
 
 ##########################################################################
 
+sub test_required_connected {
+    output("Entering test_required_connected()<BR/>");
+
+    my ($required_graph, $g, $params) = @_;
+
+    if ( $required_graph->is_connected() ) {
+        my @degree1_vertices =
+            grep
+                 { $required_graph->degree($_) == 1 }
+                 $required_graph->vertices();
+
+        unless ( @degree1_vertices ) {
+            my $reason = $params->{transformed}
+            ? "After removing edges according to rules, the required graph was "
+                . "found to be connected, with no vertices of degree 1."
+                : "The required graph is connected, and has no vertices with degree 1.";
+
+            return ( $GRAPH_IS_HAMILTONIAN, $reason, $params );
+        }
+        
+        if ( $g->has_edge( @degree1_vertices ) ) {
+            my $reason = $params->{transformed}
+            ? "After removing edges according to rules, the required graph was "
+                . "found to contain a Hamiltonian Cycle."
+                : "The required graph contains a Hamiltonian Cycle";
+
+            return ( $GRAPH_IS_HAMILTONIAN, $reason, $params );
+        } else {
+            my $reason = $params->{transformed}
+            ? "After removing edges according to rules, the required graph was "
+                . "found to be connected, but not cyclic."
+                : "The required graph is connected, but not cyclic";
+            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
+        }
+    }
+
+    return $DONT_KNOW;
+
+}
+
+##########################################################################
+
 sub test_required_cyclic {
     output("Entering test_required_cyclic()<BR/>");
 
-    my ($required_graph) = @_;
+    my ($required_graph, $g, $params) = @_;
     my %eliminated;
     my %connected_vertices;
 
