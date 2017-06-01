@@ -269,7 +269,7 @@ sub test_required_connected {
                  $required_graph->vertices();
 
         unless ( @degree1_vertices ) {
-            _output_required_cycle($required_graph);
+            _output_cycle($required_graph);
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
                 . "found to be connected, with no vertices of degree 1."
@@ -282,7 +282,7 @@ sub test_required_connected {
             unless ( $required_graph->has_edge(@degree1_vertices) ) {
                 $required_graph->add_edge(@degree1_vertices);
             }
-            _output_required_cycle($required_graph);
+            _output_cycle($required_graph);
 
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
@@ -322,11 +322,11 @@ sub test_required_cyclic {
 
 ##########################################################################
 
-sub _output_required_cycle {
-    my ($required_graph) = @_;
-    my @cycle        = $required_graph->find_a_cycle();
+sub _output_cycle {
+    my ($g) = @_;
+    my @cycle        = $g->find_a_cycle();
     my $cycle_string = join ', ', @cycle;
-    output( $required_graph, { required => 1 } );
+    output( $g );
     output("Found a cycle: [$cycle_string]<BR/>");
 }
 
