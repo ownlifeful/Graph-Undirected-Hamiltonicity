@@ -54,9 +54,11 @@ The modules in this distribution are:
 ### To install the core module:
 
 If you need to get `cpanm`:
+
     curl -L https://cpanmin.us | perl - App::cpanminus
 
 then:
+
     cpanm Dist::Zilla
     dzil authordeps | cpanm
     dzil listdeps | cpanm
