@@ -20,7 +20,7 @@ our @EXPORT_OK = (
         &test_graph_bridge
         &test_min_degree
         &test_ore
-        &test_required
+        &test_required_max_degree
         &test_required_connected
         &test_required_cyclic
         &test_trivial
@@ -233,8 +233,8 @@ sub test_ore {
 
 ##########################################################################
 
-sub test_required {
-    output("Entering test_required()<BR/>");
+sub test_required_max_degree {
+    output("Entering test_required_max_degree()<BR/>");
 
     my ($required_graph, $g, $params) = @_;
     

@@ -112,7 +112,7 @@ sub is_hamiltonian {
 
     if ( $required_graph->edges() ) {
         my @tests_2 = (
-            \&test_required, 
+            \&test_required_max_degree, 
             \&test_required_connected, 
             \&test_required_cyclic );
         foreach my $test_sub (@tests_2) {

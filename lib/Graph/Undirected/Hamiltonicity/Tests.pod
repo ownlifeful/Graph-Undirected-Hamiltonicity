@@ -61,7 +61,7 @@ The subroutines that can be imported individually, by name, are:
 
 =item * &test_dirac
 
-=item * &test_required
+=item * &test_required_max_degree
 
 =item * &test_required_cyclic
 
@@ -110,7 +110,7 @@ has degree v / 2 or greater. -- Dirac (1952)
 https://en.wikipedia.org/wiki/Hamiltonian_path
 
 
-=head2 test_required
+=head2 test_required_max_degree
 
 Takes a Graph::Undirected, which is the "required graph" of the input.
 The "required graph" contains the same vertices as the input graph, but
