@@ -269,6 +269,7 @@ sub test_required_connected {
                  $required_graph->vertices();
 
         unless ( @degree1_vertices ) {
+            _output_required_cycle($required_graph);
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
                 . "found to be connected, with no vertices of degree 1."
@@ -278,6 +279,11 @@ sub test_required_connected {
         }
         
         if ( $g->has_edge( @degree1_vertices ) ) {
+            unless ( $required_graph->has_edge(@degree1_vertices) ) {
+                $required_graph->add_edge(@degree1_vertices);
+            }
+            _output_required_cycle($required_graph);
+
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
                 . "found to contain a Hamiltonian Cycle."
@@ -301,59 +307,29 @@ sub test_required_connected {
 
 sub test_required_cyclic {
     output("Entering test_required_cyclic()<BR/>");
-
     my ($required_graph, $g, $params) = @_;
-    my %eliminated;
-    my %connected_vertices;
 
-    foreach my $edge_ref ( $required_graph->edges() ) {
-        foreach my $connected_vertex ( @$edge_ref ) {
-            $connected_vertices{ $connected_vertex } = 1;
-        }
+    if ( $required_graph->has_a_cycle ) {
+        my $reason = $params->{transformed}
+        ? "After removing edges according to rules, the required graph was "
+            . "found to be cyclic, but not connected."
+            : "The required graph is cyclic, but not connected.";
+        return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
     }
 
-    foreach my $vertex ( $required_graph->vertices() ) {
-        next if $required_graph->degree($vertex) != 1;
-        next if $eliminated{$vertex}++;
-
-        my ( $current_vertex ) = $required_graph->neighbors($vertex);
-        my $found_last_vertex = 0;
-        while ( ! $found_last_vertex ) {
-
-            my ( $next_vertex ) = 
-                grep { ! $eliminated{$_} }
-                $required_graph->neighbors($current_vertex);
-
-            $eliminated{$next_vertex} = 1;
-            my $required_degree = $required_graph->degree($next_vertex);
-            $found_last_vertex = 1 if $required_degree == 1;
-            $eliminated{$current_vertex} = 1;
-            $current_vertex = $next_vertex;
-        }
-    }
-
-    if ( scalar( keys %connected_vertices ) == scalar( keys %eliminated ) ) {
-        ### Eliminated all connected vertices.
-        ### The required graph is acyclic.
-        return $DONT_KNOW;
-    }
-
-    ### The required graph is cyclic.
-    my @cycle        = $required_graph->find_a_cycle();
-    my $cycle_string = join ', ', @cycle;
-    output( $required_graph, { required => 1 } );
-    output("Found a cycle: [$cycle_string]<BR/>");
-
-    if ( $required_graph->is_connected() ) {
-        return ( $GRAPH_IS_HAMILTONIAN,
-                 "The required graph is cyclic, and connected." );
-    } else {
-        return ( $GRAPH_IS_NOT_HAMILTONIAN,
-                 "The required graph is cyclic, but not connected." );
-    }
+    return $DONT_KNOW;    
 }
 
 ##########################################################################
 
+sub _output_required_cycle {
+    my ($required_graph) = @_;
+    my @cycle        = $required_graph->find_a_cycle();
+    my $cycle_string = join ', ', @cycle;
+    output( $required_graph, { required => 1 } );
+    output("Found a cycle: [$cycle_string]<BR/>");
+}
+
+##########################################################################
 
 1;    # End of Graph::Undirected::Hamiltonicity::Tests
