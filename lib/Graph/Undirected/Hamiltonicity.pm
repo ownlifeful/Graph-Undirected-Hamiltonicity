@@ -136,11 +136,9 @@ sub is_hamiltonian {
             }
         }
     } else {
-            output("The requird graph has no edges.<BR/>");
+        output("The requird graph has no edges.<BR/>");
     }
 
-
-    
     my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {
         unless ( $params->{tentative} ) {
