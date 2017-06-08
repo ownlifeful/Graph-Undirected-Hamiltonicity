@@ -121,23 +121,16 @@ sub is_hamiltonian {
                 unless $is_hamiltonian == $DONT_KNOW;
         }
 
-        my @transforms_1 = (
-            \&delete_non_required_neighbors,
-            \&delete_cycle_closing_edges,
-            );
-
-        foreach my $transform_sub (@transforms_1) {
-            my ( $deleted_edges, $g1 ) =
-                &$transform_sub( $g, $required_graph );
-            if ($deleted_edges) {
-                $params->{transformed} = 1;
-                @_ = ($g1, $params);
-                goto &is_hamiltonian;
-            }
+        ### Delete edges that can be safely eliminated so far.
+        my ( $deleted_edges , $g1 ) = delete_cycle_closing_edges($g, $required_graph);
+        my ( $deleted_edges2, $g2 ) = delete_non_required_neighbors($g1, $required_graph);
+        if ($deleted_edges || $deleted_edges2) {
+            $params->{transformed} = 1;
+            @_ = ($g2, $params);
+            goto &is_hamiltonian;
         }
-    } else {
-        output("The requird graph has no edges.<BR/>");
     }
+
 
     my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {

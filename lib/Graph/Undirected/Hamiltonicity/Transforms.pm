@@ -27,7 +27,6 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 # but with only the edges incident on vertices of degree == 2.
 
 sub get_required_graph {
-
     my ($g) = @_;
 
     output(   "Beginning a sweep to mark all edges adjacent to degree 2 "
@@ -106,8 +105,14 @@ sub delete_cycle_closing_edges {
                 . ", between endpoints of a required walk.<BR/>" );
     }
 
-    output("Deleted $deleted_edges edges.<BR/>");
-    return ( $deleted_edges, $g1 );
+    if ( $deleted_edges ) {
+        my $s = $deleted_edges == 1 ? '' : 's';
+        output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
+        return ( $deleted_edges, $g1 );
+    } else {
+        output("Did not shrink the graph.<BR/>");
+        return ( $deleted_edges, $g );
+    }
 }
 
 ##########################################################################
@@ -143,11 +148,11 @@ sub delete_non_required_neighbors {
     if ( $deleted_edges ) {
         my $s = $deleted_edges == 1 ? '' : 's';
         output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
+        return ( $deleted_edges, $g1 );
     } else {
         output("Did not shrink the graph.<BR/>");
+        return ( $deleted_edges, $g );
     }
-
-    return ( $deleted_edges, $g1 );
 }
 
 ##########################################################################
