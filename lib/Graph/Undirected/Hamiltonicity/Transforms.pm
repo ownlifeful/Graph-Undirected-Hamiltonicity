@@ -41,44 +41,36 @@ sub get_required_graph {
 
     foreach my $vertex (@vertices) {
         my $degree = $g1->degree($vertex);
-        output("Vertex $vertex : Degree=[$degree] ");
-
-        if ( $degree == 2 ) {
-            output("<UL>");
-            foreach my $neighbor_vertex ( $g1->neighbors($vertex) ) {
-
-                $required_graph->add_edge( $vertex, $neighbor_vertex );
-
-                if ( $g1->get_edge_attribute(
-                                              $vertex,
-                                              $neighbor_vertex,
-                                              'required'
-                                            )
-                    )
-                {
-                    output(   "<LI>$vertex=$neighbor_vertex is already "
-                            . "marked required</LI>" );
-                    next;
-                }
-
-                $g1->set_edge_attribute(
-                    $vertex, $neighbor_vertex,
-                    'required', 1
-                    );
-                output(   "<LI>Marking $vertex=$neighbor_vertex "
-                        . "as required</LI>" );
-            }
-            output("</UL>");
-        } else {
-            output(" ...skipping.<BR/>");
+        if ( $degree != 2 ) {
+            output("Vertex $vertex : Degree=[$degree] ...skipping.<BR/>");
+            next;
         }
+
+        output("Vertex $vertex : Degree=[$degree] ");
+        output("<UL>");
+        foreach my $neighbor_vertex ( $g1->neighbors($vertex) ) {
+            $required_graph->add_edge( $vertex, $neighbor_vertex );
+
+            if ( $g1->get_edge_attribute( $vertex, $neighbor_vertex,
+                                          'required') ) {
+                output( "<LI>$vertex=$neighbor_vertex is already "
+                        . "marked required</LI>" );
+                next;
+            }
+
+            $g1->set_edge_attribute($vertex, $neighbor_vertex,
+                                    'required', 1);
+            output( "<LI>Marking $vertex=$neighbor_vertex "
+                    . "as required</LI>" );
+        }
+        output("</UL>");
     }
 
-    if ( scalar( $required_graph->edges() ) ) {
+    if ( $required_graph->edges() ) {
         output("required graph:");
         output( $required_graph, { required => 1 } );
     } else {
-        output("required graph has no edges.<BR/>");
+        output("The required graph has no edges.<BR/>");
     }
 
     return ( $required_graph, $g1 );
