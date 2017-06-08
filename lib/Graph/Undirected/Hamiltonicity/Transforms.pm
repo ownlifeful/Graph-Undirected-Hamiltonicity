@@ -1,8 +1,5 @@
 package Graph::Undirected::Hamiltonicity::Transforms;
 
-# You can get documentation for this module with this command:
-#    perldoc Graph::Undirected::Hamiltonicity::Transforms
-
 use Modern::Perl;
 use Carp;
 
@@ -24,7 +21,10 @@ our @EXPORT_OK = qw(
 
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
-#####################################################
+##########################################################################
+
+# The "required graph" contains the same vertices as the original graph,
+# but with only the edges incident on vertices of degree == 2.
 
 sub get_required_graph {
 
@@ -123,22 +123,20 @@ sub delete_non_required_neighbors {
         foreach my $neighbor_vertex ( $g->neighbors($required_vertex) ) {
             my $required =
                 $g->get_edge_attribute( $required_vertex,
-                $neighbor_vertex, 'required' );
-            unless ($required) {
+                                        $neighbor_vertex, 'required' );
+            next if $required;
+            ### Clone graph lazily
+            $g1 //= $g->deep_copy_graph();
 
-                ### Clone graph lazily
-                $g1 //= $g->deep_copy_graph();
+            next
+                unless $g1->has_edge(
+                    $required_vertex, $neighbor_vertex );
 
-                next
-                    unless $g1->has_edge(
-                        $required_vertex, $neighbor_vertex );
-
-                $g1->delete_edge( $required_vertex, $neighbor_vertex );
-                $deleted_edges++;
-                output(   "Deleted edge $required_vertex=$neighbor_vertex "
-                        . "because vertex $required_vertex has degree==2 "
-                        . "in the required graph.<BR/>" );
-            }
+            $g1->delete_edge( $required_vertex, $neighbor_vertex );
+            $deleted_edges++;
+            output( "Deleted edge $required_vertex=$neighbor_vertex "
+                    . "because vertex $required_vertex has degree==2 "
+                    . "in the required graph.<BR/>" );
         }
     }
 
@@ -156,7 +154,6 @@ sub delete_non_required_neighbors {
 
 sub swap_vertices {
     my ( $g, $vertex_1, $vertex_2 ) = @_;
-
     my $g1 = $g->deep_copy_graph();
 
     my %common_neighbors =
@@ -186,7 +183,6 @@ sub swap_vertices {
 
 sub get_common_neighbors {
     my ( $g, $vertex_1, $vertex_2 ) = @_;
-
     my %common_neighbors;
     my %vertex_1_neighbors;
     foreach my $neighbor_vertex ( $g->neighbors($vertex_1) ) {
@@ -216,7 +212,6 @@ sub string_to_graph {
 
     foreach my $chunk ( split( /\,/, $string ) ) {
         if ( $chunk =~ /=/ ) {
-
             my @endpoints = map {s/\b0+([1-9])/$1/gr}
                 split( /=/, $chunk );
 
