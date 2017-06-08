@@ -165,10 +165,8 @@ sub is_hamiltonian {
                 $g1->delete_edge( $vertex, $neighbor );
             }
 
-            output(   "The Graph with $vertex="
-                    . $tentative_edge_pair->[0]
-                    . ", $vertex="
-                    . $tentative_edge_pair->[1]
+            output(   "The Graph with $vertex=" . $tentative_edge_pair->[0]
+                    . ", $vertex=" . $tentative_edge_pair->[1]
                     . " protected:<BR/>" );
             output($g1);
 

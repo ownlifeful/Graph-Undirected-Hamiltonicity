@@ -91,53 +91,30 @@ sub get_required_graph {
 # the edge can never be part of a Hamiltonian cycle.
 
 sub delete_cycle_closing_edges {
+    output("Entering delete_cycle_closing_edges()<BR/>");
     my ($g, $required_graph) = @_;
     my $deleted_edges = 0;
     my $g1;
     my %eliminated;
 
     foreach my $vertex ( $required_graph->vertices() ) {
-        next if $required_graph->degree($vertex) != 1;
+        next unless $required_graph->degree($vertex) == 1;
         next if $eliminated{$vertex}++;
 
-        my $first_vertex = $vertex;
-        my ( $current_vertex ) = $required_graph->neighbors($vertex);
+        my @reachable = $required_graph->all_reachable($vertex);
 
-        my $length = 2;
-        my $found_last_vertex = 0;
-        while ( ! $found_last_vertex ) {
+        my ( $other_vertex ) = grep { $required_graph->degree($_) == 1 } @reachable;
+        $g1 //= $g->deep_copy_graph();
+        next unless $g1->has_edge($vertex, $other_vertex);
+        $g1->delete_edge($vertex, $other_vertex);
+        $required_graph->delete_edge($vertex, $other_vertex);
+        $deleted_edges++;
 
-            my ( $next_vertex ) = 
-                grep { ! $eliminated{$_} }
-                $required_graph->neighbors($current_vertex);
-
-            $eliminated{$next_vertex} = 1;
-
-            my $required_degree = $required_graph->degree($next_vertex);
-            if ( $required_degree == 1 ) {
-                $found_last_vertex = 1;
-                $g1 //= $g->deep_copy_graph();
-
-                if ( $length == $required_graph->vertices() ) {
-                    output("Found a Hamiltonian Cycle<BR/>");
-                }
-
-                if ( $g1->has_edge($first_vertex, $next_vertex) ) {
-                    $g1->delete_edge($first_vertex, $next_vertex);
-                    $required_graph->delete_edge($first_vertex, $next_vertex);
-                    $deleted_edges++;
-
-                    output( "Deleted edge $first_vertex=$next_vertex"
-                            . ", between endpoints of a required walk.<BR/>" );
-                }
-            }
-
-            $eliminated{$current_vertex} = 1;
-            $length++;
-            $current_vertex = $next_vertex;
-        }
+        output( "Deleted edge $vertex=$other_vertex"
+                . ", between endpoints of a required walk.<BR/>" );
     }
 
+    output("Deleted $deleted_edges edges.<BR/>");
     return ( $deleted_edges, $g1 );
 }
 
