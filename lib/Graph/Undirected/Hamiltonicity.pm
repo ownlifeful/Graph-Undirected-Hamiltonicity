@@ -32,14 +32,19 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 sub graph_is_hamiltonian {
     my ($g) = @_;
 
-    my ( $is_hamiltonian, $reason, $params );
-
+    my ( $is_hamiltonian, $reason );
     my $time_begin = time;
     my @once_only_tests = ( \&test_trivial, \&test_dirac);
     foreach my $test_sub (@once_only_tests) {
         ( $is_hamiltonian, $reason ) = &$test_sub($g);
         last unless $is_hamiltonian == $DONT_KNOW;
     }
+
+    my $params = {
+        transformed => 0,
+        tentative   => 0,
+        calls       => 0,
+    };
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
         ( $is_hamiltonian, $reason, $params ) = is_hamiltonian($g);
@@ -53,10 +58,6 @@ sub graph_is_hamiltonian {
     my $time_end = time;
 
     $params->{time_elapsed} = int($time_end - $time_begin);
-
-    if ( $is_hamiltonian == $DONT_KNOW ) {
-        output("<h1>Assertion failed.</h1><BR/>");
-    }
 
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
     return wantarray ? ( $final_bit, $reason, $params ) : $final_bit;
@@ -75,12 +76,6 @@ sub graph_is_hamiltonian {
 
 sub is_hamiltonian {
     my ($g, $params) = @_;
-
-    $params //= {
-        transformed => 0,
-        tentative   => 0,
-        calls       => 0,
-    };
 
     $params->{calls}++;
 
