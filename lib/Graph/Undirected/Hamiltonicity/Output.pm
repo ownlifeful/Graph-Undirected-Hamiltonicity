@@ -71,7 +71,7 @@ xmlns="http://www.w3.org/2000/svg">
 };
 
     output_graph_svg( $g, { %params, image_size => $image_size } );
-    if ( $g->vertices() <= 15 ) {
+    if ( $g->vertices() <= 12 ) {
         output_adjacency_matrix_svg( $g,
             { %params, image_size => $image_size } );
     }
