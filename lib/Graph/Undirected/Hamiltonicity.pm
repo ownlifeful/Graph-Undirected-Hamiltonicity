@@ -18,6 +18,8 @@ our @EXPORT      = qw(graph_is_hamiltonian);    # exported by default
 our @EXPORT_OK   = qw(graph_is_hamiltonian);
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
+our $calls = 0; ### Number of calls to is_hamiltonian()
+
 ##########################################################################
 
 # graph_is_hamiltonian()
@@ -32,6 +34,7 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 sub graph_is_hamiltonian {
     my ($g) = @_;
 
+    $calls = 0;
     my ( $is_hamiltonian, $reason );
     my $time_begin = time;
     my @once_only_tests = ( \&test_trivial, \&test_dirac);
@@ -43,7 +46,6 @@ sub graph_is_hamiltonian {
     my $params = {
         transformed => 0,
         tentative   => 0,
-        calls       => 0,
     };
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
@@ -58,7 +60,8 @@ sub graph_is_hamiltonian {
     my $time_end = time;
 
     $params->{time_elapsed} = int($time_end - $time_begin);
-
+    $params->{calls}        = $calls;
+    
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
     return wantarray ? ( $final_bit, $reason, $params ) : $final_bit;
 }
@@ -77,7 +80,7 @@ sub graph_is_hamiltonian {
 sub is_hamiltonian {
     my ($g, $params) = @_;
 
-    $params->{calls}++;
+    $calls++;
 
     my $spaced_string = $g->stringify();
     $spaced_string =~ s/\,/, /g;

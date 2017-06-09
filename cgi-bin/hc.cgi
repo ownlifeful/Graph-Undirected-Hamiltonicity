@@ -99,7 +99,14 @@ function spoof_graph(v, min_e) {
        }
 
        $( "#spoof_button" ).click(function() {
-          $('#graph_text').val( spoof_graph(10,0) );
+          var x = $('#graph_text').val();
+          var v;
+          if ( x.match(/ash/) ) {
+             v = parseInt(x);
+          } else {
+             v = 10;
+          }
+          $('#graph_text').val( spoof_graph(v,0) );
        });
     });
 </script>
