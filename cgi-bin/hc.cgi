@@ -6,7 +6,6 @@
 #
 # It uses CGI::Minimal to keep it fairly portable.
 #
-
 use Modern::Perl;
 
 use CGI::Minimal;
@@ -28,10 +27,10 @@ print <<'END_OF_HEADER';
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
 <head>
-<title>Hamiltonian Cycle Detector</title>
-
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Hamiltonian Cycle Detector</title>
 
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.8.0/jquery.modal.min.css" integrity="sha256-rll6wTV76AvdluCY5Pzv2xJfw2x7UXnK+fGfj9tQocc=" crossorigin="anonymous" />
@@ -41,6 +40,57 @@ print <<'END_OF_HEADER';
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.8.0/jquery.modal.min.js" integrity="sha256-UeH9wuUY83m/pXN4vx0NI5R6rxttIW73OhV0fE0p/Ac=" crossorigin="anonymous"></script>
 
 <script>
+
+// -----------------------------------------------------------------------------
+function random_integer(min,max) {
+    return Math.floor((Math.random() * max) + min);
+}
+// -----------------------------------------------------------------------------
+function spoof_graph(v, min_e) {
+     if ( min_e < v ) {
+         min_e =  random_integer(v, ( v * v - v ) / 2 );
+     }
+
+     var X = new Array();
+     for ( var h=0; h < v; h++ ) {
+        X[h] = new Array();
+     }
+
+     for ( var i=0; i < min_e; i++ ) {
+        var vertex1 = random_integer(0,v);
+        var vertex2 = random_integer(0,v);
+        if (vertex1 == vertex2) continue;
+        if ( X[vertex1].indexOf(vertex2) !== -1 ) continue;
+        X[vertex1].push(vertex2);
+        X[vertex2].push(vertex1);
+     }
+
+     for ( var j=0; j < v; j++ ) {
+        var neighbors = X[j].length;
+        if (neighbors > 1) continue;
+        while ( neighbors < 2 ) {
+            var vertex1 = j;
+            var vertex2 = random_integer(0,v);
+            if (vertex1 == vertex2) continue;
+            if (X[vertex1].indexOf(vertex2) !== -1) continue;
+            X[vertex1].push(vertex2);
+            X[vertex2].push(vertex1);
+            neighbors++;
+         }
+    }
+
+    var edge_pairs = new Array();
+    for ( var m=0; m < v; m++ ) {
+       for ( var n=0; n < X[m].length; n++ ) {
+           if ( m > X[m][n] ) continue;
+           edge_pairs.push( m + "=" + X[m][n] );
+       }
+    }
+
+   var result = edge_pairs.join(",");
+   return result;
+}
+// -----------------------------------------------------------------------------
     $(document).ready(function(){
 
        if (typeof window.is_hamiltonian !== 'undefined') {
@@ -48,6 +98,9 @@ print <<'END_OF_HEADER';
            $( modal_to_open ).modal();
        }
 
+       $( "#spoof_button" ).click(function() {
+          $('#graph_text').val( spoof_graph(10,0) );
+       });
     });
 </script>
 
@@ -144,10 +197,11 @@ sub get_textarea {
     my $result = <<END_OF_TEXTAREA;
         <DIV style="background-color: #DDD; padding-top: 10px; padding-bottom: 10px;">
             <div style="padding-top: 10px; padding-bottom: 10px; padding-left: 20px;">
-                <textarea name="graph_text"  rows="3" cols="100" placeholder="Example: 0=1,0=2,1=2,2=3" style="font-family: monospace;">$printable_string</textarea>
+                <textarea id="graph_text" name="graph_text"  rows="3" cols="100" placeholder="Example: 0=1,0=2,1=2,2=3" style="font-family: monospace;">$printable_string</textarea>
             </div>
             <div style="padding-top: 10px; padding-bottom: 10px; padding-left: 20px; padding-right: 10px;">
             <input type="submit" name=".submit" value="Is this graph, Hamiltonian or not?" class="btn btn-primary">
+            <input type="button" id="spoof_button" value="Spoof a Graph!" class="btn btn-primary">
             </div>
         </DIV>
 END_OF_TEXTAREA
