@@ -172,9 +172,14 @@ if ( $graph_text =~ /\d/ ) {
     }
     print qq{</span>\n};
     print qq{($reason)\n};
-    print qq{<BR/>It took }, $params->{calls}, qq{ calls, and };
+
+    print qq{<HR NOSHADE><BR/>\n};
+    print qq{vertices: }, scalar($g->vertices()), qq{<BR/>\n};
+    print qq{edges: }, scalar($g->edges()), qq{<BR/>\n};
+    print qq{calls: }, $params->{calls}, qq{<BR/>\n};
+    print qq{time: };
     my $s = $params->{time_elapsed} == 1 ? "" : "s";
-    print $params->{time_elapsed}, qq{ second$s.\n};
+    print $params->{time_elapsed}, qq{ second$s\n};
     print qq{<BR/><P/>\n};
 }
 
