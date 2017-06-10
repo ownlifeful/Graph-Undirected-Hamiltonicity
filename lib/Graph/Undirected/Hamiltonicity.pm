@@ -37,7 +37,7 @@ sub graph_is_hamiltonian {
     $calls = 0;
     my ( $is_hamiltonian, $reason );
     my $time_begin = time;
-    my @once_only_tests = ( \&test_trivial, \&test_dirac);
+    my @once_only_tests = ( \&test_trivial, \&test_dirac );
     foreach my $test_sub (@once_only_tests) {
         ( $is_hamiltonian, $reason ) = &$test_sub($g);
         last unless $is_hamiltonian == $DONT_KNOW;
@@ -49,7 +49,7 @@ sub graph_is_hamiltonian {
     };
 
     if ( $is_hamiltonian == $DONT_KNOW ) {
-        ( $is_hamiltonian, $reason, $params ) = is_hamiltonian($g);
+        ( $is_hamiltonian, $reason, $params ) = is_hamiltonian($g, $params);
     } else {
         my $spaced_string = $g->stringify();
         $spaced_string =~ s/\,/, /g;
@@ -79,7 +79,6 @@ sub graph_is_hamiltonian {
 
 sub is_hamiltonian {
     my ($g, $params) = @_;
-
     $calls++;
 
     my $spaced_string = $g->stringify();
@@ -127,7 +126,7 @@ sub is_hamiltonian {
         }
     }
 
-
+    ### If there are undecided vrtices, choose between them recursively.
     my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
     if (@undecided_vertices) {
         unless ( $params->{tentative} ) {
