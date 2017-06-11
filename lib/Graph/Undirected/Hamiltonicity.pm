@@ -182,7 +182,7 @@ sub get_tentative_combinations {
 
     my ( $g, $required_graph, $vertex ) = @_;
     my @tentative_combinations;
-    my @neighbors = $g->neighbors($vertex);
+    my @neighbors = sort { $a <=> $b } $g->neighbors($vertex);
     if ( $required_graph->degree($vertex) == 1 ) {
         my ($fixed_neighbor) = $required_graph->neighbors($vertex);
         foreach my $tentative_neighbor (@neighbors) {
