@@ -59,10 +59,7 @@ If you need to get `cpanm`:
 
 then:
 
-    cpanm Dist::Zilla
-    dzil authordeps | cpanm
-    dzil listdeps | cpanm
-    dzil install
+    perl Build.PL 1 && ./Build
 
 If you run into trouble installing `Net::SSLeay` as part of `Dist::Zilla`, try the following.
 
