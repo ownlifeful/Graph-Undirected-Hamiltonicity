@@ -1,5 +1,4 @@
 language: perl
-install: true
 perl:
   - "5.24.1"
   - "5.24"

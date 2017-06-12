@@ -1,9 +1,10 @@
 #!/usr/bin/env perl
 
+use strict;
+use warnings;
+
 # This file is used by http://travis-ci.com/
 # to generate and test a Build file
-
-use Modern::Perl;
 
 my $file = "./Build";
 
