@@ -13,8 +13,12 @@ open(my $fh, ">", $file) or die $!;
 print $fh "cpanm Dist::Zilla\n";
 print $fh "dzil authordeps | cpanm\n";
 print $fh "dzil listdeps | cpanm\n";
-print $fh "dzil install\n";
-print $fh "dzil test\n" unless @ARGV[0];
+
+if ( $ARGV[0] ) {
+    print $fh "dzil install\n";
+} else {
+    print $fh "dzil test\n";
+}
 
 close($fh);
 
