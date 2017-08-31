@@ -55,6 +55,11 @@ sub test_trivial {
     }
 
     if ( $e < $v ) {
+        foreach my $vertex ( $g->vertices ) {
+            say "vertex=[$vertex]"; ### DEBUG: REMOVE!
+        }
+
+        
         return ( $GRAPH_IS_NOT_HAMILTONIAN,
             "e < v, therefore the graph is not Hamiltonian. e=$e, v=$v" );
     }
