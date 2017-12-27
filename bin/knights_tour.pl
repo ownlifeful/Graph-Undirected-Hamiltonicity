@@ -10,12 +10,6 @@ use Graph::Undirected;
 use Graph::Undirected::Hamiltonicity;
 
 my $board_size = 8; # 8x8 board
-
-
-
-
-
-
 my ( @vertices, @edges, @A, %H );
 
 my $i = 0;
@@ -29,15 +23,14 @@ for my $x ( 1 .. $board_size ) {
     }
 }
 
-
 for my $x ( 1 .. $board_size ) {
     for my $y ( 1 .. $board_size ) {
         my $v = $x . $y;
-        
+
         push @vertices, $H{$v};
 
         say "v=$v" if $DEBUG;
-        
+
         if ( $x > 2 ) {
             if ( $y > 1 ) {
                 push @edges, [ $H{$v}, $H{ ($x - 2) . ($y - 1) } ];
@@ -83,17 +76,13 @@ if ( $DEBUG ) {
     print join ",", sort { $a <=> $b } @vertices;
     print "\n\n";
     print scalar(@vertices);
-    print "\n\n";    
+    print "\n\n";
 }
-
-
 
 my $chessboard = new Graph::Undirected(
     vertices => \@vertices,
     edges => \@edges
 );
-
-
 
 my ( $is_hamiltonian, $reason, $params ) = graph_is_hamiltonian( $chessboard );
 
@@ -105,9 +94,4 @@ if ( $is_hamiltonian ) {
 
 print "REASON: ( $reason )\n";
 
-
-
-
 say $chessboard;
-
-
