@@ -26,7 +26,7 @@ our $calls = 0; ### Number of calls to is_hamiltonian()
 #
 # Takes a Graph::Undirected object.
 #
-# Returns 
+# Returns
 #         1 if the given graph contains a Hamiltonian Cycle.
 #         0 otherwise.
 #
@@ -61,8 +61,9 @@ sub graph_is_hamiltonian {
 
     $params->{time_elapsed} = int($time_end - $time_begin);
     $params->{calls}        = $calls;
-    
+
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
+    $final_bit = 0; ### intentionally break the build to test Travis CI
     return wantarray ? ( $final_bit, $reason, $params ) : $final_bit;
 }
 
@@ -107,8 +108,8 @@ sub is_hamiltonian {
 
     if ( $required_graph->edges() ) {
         my @tests_2 = (
-            \&test_required_max_degree, 
-            \&test_required_connected, 
+            \&test_required_max_degree,
+            \&test_required_connected,
             \&test_required_cyclic );
         foreach my $test_sub (@tests_2) {
             ( $is_hamiltonian, $reason, $params ) = &$test_sub($required_graph, $g, $params);
@@ -168,7 +169,7 @@ sub is_hamiltonian {
     }
 
     return ( $GRAPH_IS_NOT_HAMILTONIAN,
-             "The graph passed through an exhaustive search " . 
+             "The graph passed through an exhaustive search " .
              "for Hamiltonian Cycles.", $params );
 
 }
