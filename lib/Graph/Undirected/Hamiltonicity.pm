@@ -63,7 +63,6 @@ sub graph_is_hamiltonian {
     $params->{calls}        = $calls;
 
     my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
-    $final_bit = 0; ### intentionally break the build to test Travis CI
     return wantarray ? ( $final_bit, $reason, $params ) : $final_bit;
 }
 
