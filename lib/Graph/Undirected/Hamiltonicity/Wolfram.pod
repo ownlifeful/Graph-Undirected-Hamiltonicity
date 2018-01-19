@@ -18,9 +18,9 @@ Version 0.01
     die $@ if $@;
 
    if ( $result ) {
-       print "Graph is Hamiltonian.\n";
+       say "Graph is Hamiltonian.";
    } else {
-       print "Graph is not Hamiltonian.\n";
+        say "Graph is not Hamiltonian.";
    }
 
 
@@ -52,4 +52,3 @@ Please report issues L<on GitHub|https://github.com/ownlifeful/Graph-Undirected-
 Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
 
 =cut
-

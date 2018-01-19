@@ -73,10 +73,10 @@ for my $x ( 1 .. $board_size ) {
 }
 
 if ( $DEBUG ) {
-    print join ",", sort { $a <=> $b } @vertices;
-    print "\n\n";
-    print scalar(@vertices);
-    print "\n\n";
+    say join ",", sort { $a <=> $b } @vertices;
+    say "";
+    say scalar(@vertices);
+    say "";
 }
 
 my $chessboard = new Graph::Undirected(
@@ -87,11 +87,11 @@ my $chessboard = new Graph::Undirected(
 my ( $is_hamiltonian, $reason, $params ) = graph_is_hamiltonian( $chessboard );
 
 if ( $is_hamiltonian ) {
-    print "The graph contains a Hamiltonian Cycle.\n";
+    say "The graph contains a Hamiltonian Cycle.";
 } else {
-    print "The graph does not contain a Hamiltonian Cycle.\n";
+    say "The graph does not contain a Hamiltonian Cycle.";
 }
 
-print "REASON: ( $reason )\n";
+say "REASON: ( $reason )";
 
 say $chessboard;

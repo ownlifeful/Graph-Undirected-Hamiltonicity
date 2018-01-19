@@ -6,7 +6,7 @@
 The optional module, `Graph::Undirected::Hamiltonicity::Wolfram` lets you determine
 the Hamiltonicity of a given undirected graph, by evaluating the graph in the
 Wolfram Open Cloud, using a built-in function of the Wolfram Programming Language.
-This feature is quite useful in cross-checking the result you get from the algorithm 
+This feature is quite useful in cross-checking the result you get from the algorithm
 implemented in this Perl distribution.
 
 ## Synopsis
@@ -14,9 +14,9 @@ implemented in this Perl distribution.
     use Graph::Undirected::Hamiltonicity::Wolfram;
 
     if ( is_hamiltonian_per_wolfram( $g ) ) {
-        print "The graph contains a Hamiltonian Cycle.\n";
+        say "The graph contains a Hamiltonian Cycle.";
     } else {
-        print "The graph does not contain a Hamiltonian Cycle.\n";
+        say "The graph does not contain a Hamiltonian Cycle.";
     }
 
 ## Installation

@@ -64,41 +64,41 @@ $ENV{HC_OUTPUT_FORMAT} =
 my $url = get_url_from_config();
 
 foreach my $g (@G) {
-    print "graph=($g)\n";
+    say "graph=($g)";
 
     my ( $is_hamiltonian, $reason, $params ) = graph_is_hamiltonian($g);
 
-    print "\n\n";
-    print "Conclusion: ";
+    say "\n";
+    say "Conclusion: ";
     if ( $is_hamiltonian ) {
-        print "The graph is Hamiltonian.\n";
+        say "The graph is Hamiltonian.";
     } else {
-        print "The graph is not Hamiltonian.\n";
+        say "The graph is not Hamiltonian.";
     }
 
-    print "($reason)\n";
+    say "($reason)";
 
     my $s;
     $s = $params->{calls} == 1 ? "" : "s";
     print qq{It took }, $params->{calls}, qq{ call$s, and };
     $s = $params->{time_elapsed} == 1 ? "" : "s";
-    print $params->{time_elapsed}, qq{ second$s.\n\n};
+    say $params->{time_elapsed}, qq{ second$s.\n};
 
     if ($url) {
         my $is_hamiltonian_per_wolfram = is_hamiltonian_per_wolfram($g);
         if ( $is_hamiltonian != $is_hamiltonian_per_wolfram ) {
-            print '<' x 60, " WOLFRAM DIFFERS!\n";
-            print "is_hamiltonian=$is_hamiltonian\n";
-            print "is_hamiltonian_per_wolfram=$is_hamiltonian_per_wolfram\n";
-            print "\n\n";
+            say '<' x 60, " WOLFRAM DIFFERS!";
+            say "is_hamiltonian=$is_hamiltonian";
+            say "is_hamiltonian_per_wolfram=$is_hamiltonian_per_wolfram";
+            say "\n";
         } else {
-            print '>' x 60, " WOLFRAM CONCURS!\n";
+            say '>' x 60, " WOLFRAM CONCURS!";
         }
     } else {
-        print "...skipped Wolfram cross-check.\n";
+        say "...skipped Wolfram cross-check.";
     }
 
-    print "\n\n";
+    say "\n";
 
 }
 
@@ -108,11 +108,11 @@ sub show_usage_and_exit {
 
     my $exit_code = 0;
     if ( $_[0] ) {
-        print "ERROR: ", $_[0], "\n\n";
+        say "ERROR: ", $_[0], "\n";
         $exit_code = 1;
     }
 
-    print <<END_OF_USAGE_INSTRUCTIONS;
+    say <<END_OF_USAGE_INSTRUCTIONS;
 
 USAGE INSTRUCTIONS:
 
@@ -157,7 +157,7 @@ USAGE INSTRUCTIONS:
 
 
 
-    You can optionally specify the trace output format with the 
+    You can optionally specify the trace output format with the
     --output_format or --o command-line option.
     Example: perl $0 --v 42 --o text
 
@@ -180,4 +180,3 @@ END_OF_USAGE_INSTRUCTIONS
 }
 
 ##############################################################################
-

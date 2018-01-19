@@ -28,20 +28,20 @@ sub output {
         if ( ref $input ) {
             output_image_svg(@_);
         } else {
-            print $input, "\n";
+            say $input;
         }
 
     } elsif ( $format eq 'text' ) {
         if ( ref $input ) {
             ### Print the graph's edge-list as a string.
-            print "$input\n";
+            say "$input";
         } else {
             ### Strip out HTML
             $input =~ s@<LI>@* @gi;
             $input =~ s@<BR/>@@gi;
             $input =~ s@</?(LI|UL|OL|CODE|TT|PRE|H[1-6])>@@gi;
             $input =~ s@<HR[^>]*?>@=================@gi;
-            print $input, "\n";
+            say $input;
         }
     } else {
         croak "Environment variable HC_OUTPUT_FORMAT should be "
@@ -58,16 +58,15 @@ sub output_image_svg {
     my %params = %{ $hash_ref // {} };
     my $image_size = $params{size} || 600;
 
-    print qq{<div style="height: 600px; width: 1000px;">\n};
+    say qq{<div style="height: 600px; width: 1000px;">};
 
     ### Output image
-    print qq{<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+    say qq{<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
 "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
 <svg width="100%" height="100%" version="1.1"
 xmlns="http://www.w3.org/2000/svg">
-
 };
 
     output_graph_svg( $g, { %params, image_size => $image_size } );
@@ -75,8 +74,8 @@ xmlns="http://www.w3.org/2000/svg">
         output_adjacency_matrix_svg( $g,
             { %params, image_size => $image_size } );
     }
-    print qq{</svg>\n};
-    print qq{</div>\n\n};
+    say qq{</svg>};
+    say qq{</div>\n};
 }
 
 ##########################################################################
@@ -158,8 +157,8 @@ sub output_graph_svg {
     }
 
     ### Output image
-    print qq{<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+    say qq{<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
 "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 
 <svg width="100%" height="100%" version="1.1"
@@ -168,11 +167,11 @@ xmlns="http://www.w3.org/2000/svg">
 <g id="edges" style="opacity:1; stroke: black; stroke-opacity: 1; stroke-width: 1 ">
 $edges_xml</g>
 
-<g id="vertices" 
+<g id="vertices"
  style="opacity: 1; fill: blue; fill-opacity: 1; stroke: black; stroke-opacity: 1">
 $vertices_xml</g>
 
-<g id="text_labels" 
+<g id="text_labels"
  style="opacity: 1; fill: lightgreen; fill-opacity: 1; stroke: lightgreen; stroke-opacity: 1">
 
 $text_xml</g>
@@ -189,8 +188,8 @@ sub output_adjacency_matrix_svg {
 
     my %params = %{ $hash_ref // {} };
 
-    print qq{<?xml version="1.0" standalone="no"?>\n};
-    print qq{<g style="opacity:1; stroke: black; stroke-opacity: 1">\n};
+    say qq{<?xml version="1.0" standalone="no"?>};
+    say qq{<g style="opacity:1; stroke: black; stroke-opacity: 1">};
 
     my $square_size = 30;
     my @vertices = sort { $a <=> $b } $g->vertices();
@@ -242,7 +241,7 @@ sub output_adjacency_matrix_svg {
         $x = $x_init;
     }
 
-    print qq{\n</g>\n};
+    say qq{\n</g>};
 
 }
 

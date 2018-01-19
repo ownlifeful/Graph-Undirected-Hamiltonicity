@@ -21,9 +21,9 @@ version 0.01
     $g->add_edge(1,3);
 
     if ( graph_is_hamiltonian( $g ) ) {
-        print "The graph contains a Hamiltonian Cycle.\n";
+        say "The graph contains a Hamiltonian Cycle.";
     } else {
-        print "The graph does not contain a Hamiltonian Cycle.\n";
+        say "The graph does not contain a Hamiltonian Cycle.";
     }
 
 # DESCRIPTION
@@ -94,9 +94,9 @@ please read [WOLFRAM.md](WOLFRAM.md "Verification via Wolfram Cloud").
     use Graph::Undirected::Hamiltonicity::Wolfram;
 
     if ( is_hamiltonian_per_wolfram( $g ) ) {
-        print "The graph contains a Hamiltonian Cycle.\n";
+        say "The graph contains a Hamiltonian Cycle.";
     } else {
-        print "The graph does not contain a Hamiltonian Cycle.\n";
+        say "The graph does not contain a Hamiltonian Cycle.";
     }
 
 ## USAGE
@@ -139,7 +139,7 @@ Please report issues [on GitHub](https://github.com/ownlifeful/Graph-Undirected-
 
 # ACKNOWLEDGEMENTS
 
-Thanks to Larry Wall, for creating Perl; to Jarkko Hietaniemi, for creating the `Graph` module; and to Dr. Stephen Wolfram, 
+Thanks to Larry Wall, for creating Perl; to Jarkko Hietaniemi, for creating the `Graph` module; and to Dr. Stephen Wolfram,
 for creating the Wolfram Programming Language.
 
 

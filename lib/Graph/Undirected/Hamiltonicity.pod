@@ -1,7 +1,7 @@
 
 =head1 NAME
 
-Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected 
+Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected
     contains a Hamiltonian Cycle.
 
 =head1 VERSION
@@ -12,7 +12,7 @@ Version 0.01
 =head1 SYNOPSIS
 
 
-This module decides whether a given Graph::Undirected contains 
+This module decides whether a given Graph::Undirected contains
 a Hamiltonian Cycle.
 
     use Graph::Undirected;
@@ -26,9 +26,9 @@ a Hamiltonian Cycle.
     $g->add_edge(1,3);
 
     if ( graph_is_hamiltonian( $g ) ) {
-        print "The graph contains a Hamiltonian Cycle.\n";
+        say "The graph contains a Hamiltonian Cycle.";
     } else {
-        print "The graph does not contain a Hamiltonian Cycle.\n";
+        say "The graph does not contain a Hamiltonian Cycle.";
     }
 
 =head1 EXPORT

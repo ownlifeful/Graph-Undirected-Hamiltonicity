@@ -19,9 +19,9 @@ $| = 1;
 
 my ( $self_url ) = split /\?/, $ENV{REQUEST_URI};
 
-print qq{Content-Type: text/html\n\n};
+say qq{Content-Type: text/html\n};
 
-print <<'END_OF_HEADER';
+say <<'END_OF_HEADER';
 <!DOCTYPE html
     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -119,13 +119,13 @@ function spoof_graph(v, min_e) {
 
 END_OF_HEADER
 
-print qq{<form method="post" action="$self_url" enctype="multipart/form-data">\n};
+say qq{<form method="post" action="$self_url" enctype="multipart/form-data">};
 
 my $cgi = CGI::Minimal->new;
 if ($cgi->truncated) {
-    print qq{<H2>There was an error. The input size might be too big.</H2>\n};
-    print get_textarea();
-    print qq{</form></div></body></html>\n};
+    say qq{<H2>There was an error. The input size might be too big.</H2>};
+    say get_textarea();
+    say qq{</form></div></body></html>};
     exit;
 }
 
@@ -138,52 +138,52 @@ my $g;
 if ( $graph_text =~ /\d/ ) {
     eval { $g = string_to_graph($graph_text); };
     if ( my $exception = $@ ) {
-        print "That was not a valid graph, ";
-        print "according to the Graph::Undirected module.<BR/>\n";
-        print "[$graph_text][$exception]<BR/>\n";
+        say "That was not a valid graph, ";
+        say "according to the Graph::Undirected module.<BR/>";
+        say "[$graph_text][$exception]<BR/>";
         print_instructions();
     }
 } else {
     if ( $ENV{QUERY_STRING} =~ /\bgraph_text=/ ) {
-        print "Here is the Null Graph <TT>K<sub>0</sub></TT>. ";
-        print "It is not Hamiltonian.\n<BR/><P/>\n";
+        say "Here is the Null Graph <TT>K<sub>0</sub></TT>. ";
+        say "It is not Hamiltonian.\n<BR/><P/>;
     }
     print_instructions();
 }
 
-print get_textarea($g);
-print qq{</form>\n};;
-print "<br/><br/>\n";
+say get_textarea($g);
+say qq{</form>};;
+say "<br/><br/>";
 
 if ( $graph_text =~ /\d/ ) {
 
-    print qq{<h2>Here is the program's trace output:</h2><BR/>\n};
+    say qq{<h2>Here is the program's trace output:</h2><BR/>};
 
     my ( $is_hamiltonian, $reason, $params ) = graph_is_hamiltonian($g);
-    print qq{<BR/>\n};
-    print qq{<A NAME="conclusion"></A><B>Conclusion:</B>\n};
-    print qq{<span style="background: yellow;">\n};
+    say qq{<BR/>};
+    say qq{<A NAME="conclusion"></A><B>Conclusion:</B>};
+    say qq{<span style="background: yellow;">};
     if ( $is_hamiltonian ) {
-        print qq{The graph is Hamiltonian.\n};
-        print qq{<script>window.is_hamiltonian = true;</script>\n};
+        say qq{The graph is Hamiltonian.};
+        say qq{<script>window.is_hamiltonian = true;</script>};
     } else {
-        print qq{The graph is not Hamiltonian.\n};
-        print qq{<script>window.is_hamiltonian = false;</script>\n};
+        say qq{The graph is not Hamiltonian.};
+        say qq{<script>window.is_hamiltonian = false;</script>};
     }
-    print qq{</span>\n};
-    print qq{($reason)\n};
+    say qq{</span>};
+    say qq{($reason)};
 
-    print qq{<HR NOSHADE><BR/>\n};
-    print qq{vertices: }, scalar($g->vertices()), qq{<BR/>\n};
-    print qq{edges: }, scalar($g->edges()), qq{<BR/>\n};
-    print qq{calls: }, $params->{calls}, qq{<BR/>\n};
-    print qq{time: };
+    say qq{<HR NOSHADE><BR/>};
+    say qq{vertices: }, scalar($g->vertices()), qq{<BR/>};
+    say qq{edges: }, scalar($g->edges()), qq{<BR/>};
+    say qq{calls: }, $params->{calls}, qq{<BR/>};
+    say qq{time: };
     my $s = $params->{time_elapsed} == 1 ? "" : "s";
-    print $params->{time_elapsed}, qq{ second$s\n};
-    print qq{<BR/><P/>\n};
+    say $params->{time_elapsed}, qq{ second$s};
+    say qq{<BR/><P/>};
 }
 
-print q{
+say q{
  <!-- Hamiltonian modal -->
   <div id="ham" style="display:none; overflow: visible;">
     <H1>The graph is Hamiltonian!</H1>
@@ -199,7 +199,7 @@ print q{
 </BODY></HTML>
 };
 
-### print qq{<a href="#" rel="modal:close">Close</a> or press ESC};
+### say qq{<a href="#" rel="modal:close">Close</a> or press ESC};
 
 ############################################################
 
@@ -225,10 +225,9 @@ END_OF_TEXTAREA
 ##########################################################################
 
 sub print_instructions {
-    print "Please enter an undirected graph's edge list.\n";
-    print "e.g., <TT>0=1,1=2,0=2</TT><BR/>\n";
-    print "Each vertex should be 0, or a positive integer.<BR/>\n";
+    say "Please enter an undirected graph's edge list.";
+    say "e.g., <TT>0=1,1=2,0=2</TT><BR/>";
+    say "Each vertex should be 0, or a positive integer.<BR/>";
 }
 
 __END__
-

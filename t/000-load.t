@@ -5,11 +5,11 @@ use Test::More;
 plan tests => 5;
 
 BEGIN {
-    use_ok( 'Graph::Undirected::Hamiltonicity' ) || print "Bail out Hamiltonicity!\n";
-    use_ok( 'Graph::Undirected::Hamiltonicity::Output' ) || print "Bail out Output!\n";
-    use_ok( 'Graph::Undirected::Hamiltonicity::Spoof' ) || print "Bail out Spoof!\n";
-    use_ok( 'Graph::Undirected::Hamiltonicity::Transforms' ) || print "Bail out Transforms!\n";
-    use_ok( 'Graph::Undirected::Hamiltonicity::Tests' ) || print "Bail out Tests!\n";
+    use_ok( 'Graph::Undirected::Hamiltonicity' ) || say "Bail out Hamiltonicity!";
+    use_ok( 'Graph::Undirected::Hamiltonicity::Output' ) || say "Bail out Output!";
+    use_ok( 'Graph::Undirected::Hamiltonicity::Spoof' ) || say "Bail out Spoof!";
+    use_ok( 'Graph::Undirected::Hamiltonicity::Transforms' ) || say "Bail out Transforms!";
+    use_ok( 'Graph::Undirected::Hamiltonicity::Tests' ) || say "Bail out Tests!";
 }
 
 diag( "Testing Graph::Undirected::Hamiltonicity $Graph::Undirected::Hamiltonicity::VERSION, Perl $], $^X" );

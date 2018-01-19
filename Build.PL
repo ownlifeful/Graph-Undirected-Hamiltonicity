@@ -10,17 +10,16 @@ my $file = "./Build";
 
 open(my $fh, ">", $file) or die $!;
 
-print $fh "cpanm Dist::Zilla\n";
-print $fh "dzil authordeps | cpanm\n";
-print $fh "dzil listdeps | cpanm\n";
+say $fh "cpanm Dist::Zilla";
+say $fh "dzil authordeps | cpanm";
+say $fh "dzil listdeps | cpanm";
 
 if ( $ARGV[0] ) {
-    print $fh "dzil install\n";
+    say $fh "dzil install";
 } else {
-    print $fh "dzil test\n";
+    say $fh "dzil test";
 }
 
 close($fh);
 
 chmod (0755, $file) or exit(1);
-

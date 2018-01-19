@@ -15,7 +15,7 @@ if ($url) {
 } else {
     plan tests => 14;
     print $ENV{HOME} . "/hamilton.ini doesn't exist. ";
-    print "Skipping Wolfram verification.\n";
+    say "Skipping Wolfram verification.";
 }
 
 while ( defined( my $line = <DATA> ) ) {
@@ -48,7 +48,7 @@ __DATA__
 ###
 ###
 ###    expected_result: can be 1, or 0.
-###                     where 
+###                     where
 ###                           1 means GRAPH_IS_HAMILTONIAN
 ###                           0 means GRAPH_IS_NOT_HAMILTONIAN
 ###
