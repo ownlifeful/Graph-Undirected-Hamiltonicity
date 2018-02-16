@@ -100,11 +100,9 @@ function spoof_graph(v, min_e) {
 
        $( "#spoof_button" ).click(function() {
           var x = $('#graph_text').val();
-          var v;
-          if ( x.match(/ash/) ) {
-             v = parseInt(x);
-          } else {
-             v = 10;
+          var v = parseInt(x);
+          if ( ( v > 100 ) or ( v < 1 ) ) {
+            v = random_integer(10,50);
           }
           $('#graph_text').val( spoof_graph(v,0) );
        });
