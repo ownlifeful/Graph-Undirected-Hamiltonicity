@@ -140,7 +140,7 @@ Please report issues [on GitHub](https://github.com/ownlifeful/Graph-Undirected-
 # ACKNOWLEDGEMENTS
 
 Thanks to Larry Wall, for creating Perl; to Jarkko Hietaniemi, for creating the `Graph` module; and to Dr. Stephen Wolfram,
-for creating the Wolfram Programming Language.
+for creating the Wolfram Programming Language. Thanks to Dirac and Ore, for their results utilized here.
 
 
 
@@ -164,6 +164,6 @@ Ashwin Dixit &lt;ashwin at ownlifeful dot com&gt;
 # COPYRIGHT AND LICENSE
 
 
-This software is copyright (c) 2016-2018 by Ashwin Dixit.
+This software is copyright (c) 2016-2019 by Ashwin Dixit.
 
 This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
