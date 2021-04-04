@@ -6,6 +6,11 @@ Graph::Undirected::Hamiltonicity - determine the Hamiltonicity of a given undire
 
 version 0.01
 
+# WARNING
+
+This codebase is compatible with perl v5.24 and lower.
+Work is in progress on getting it running on perl v5.24.1 and higher.
+
 
 # SYNOPSIS
 
