@@ -21,8 +21,9 @@ if ( $ARGV[0] ) {
 } else {
     say $fh "/usr/bin/dzil test";
 }
-say $fh '=' x 40, '[', `which dzil` , "]"; ### DEBUG
-say $fh '=' x 40, '[', `pwd` , "]"; ### DEBUG
+say $fh 'echo ', '=' x 40, '[', `which dzil` , "]"; ### DEBUG
+say $fh 'echo ', '=' x 40, '[', `pwd` , "]"; ### DEBUG
+say $fh 'PATH=[', $ENV{PATH}, ']'; ### DEBUG
 close($fh);
 
 chmod (0755, $file) or exit(1);
