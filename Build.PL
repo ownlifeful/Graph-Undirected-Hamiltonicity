@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+use FindBin qw($Bin);
+
 use strict;
 use warnings;
 
@@ -20,6 +22,7 @@ if ( $ARGV[0] ) {
     say $fh "/usr/bin/dzil test";
 }
 say $fh '=' x 40, '[', `which dzil` , "]"; ### DEBUG
+say $fh '=' x 40, '[', `pwd` , "]"; ### DEBUG
 close($fh);
 
 chmod (0755, $file) or exit(1);
