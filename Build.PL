@@ -11,13 +11,13 @@ my $file = "./Build";
 open(my $fh, ">", $file) or die $!;
 
 say $fh "cpanm Dist::Zilla";
-say $fh "dzil authordeps | cpanm";
-say $fh "dzil listdeps | cpanm";
+say $fh "/usr/bin/dzil authordeps | cpanm";
+say $fh "/usr/bin/dzil listdeps | cpanm";
 
 if ( $ARGV[0] ) {
-    say $fh "dzil install";
+    say $fh "/usr/bin/dzil install";
 } else {
-    say $fh "dzil test";
+    say $fh "/usr/bin/dzil test";
 }
 
 close($fh);
