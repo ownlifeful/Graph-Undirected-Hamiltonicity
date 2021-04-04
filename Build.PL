@@ -24,6 +24,8 @@ if ( $ARGV[0] ) {
 say $fh 'echo ', '=' x 40, '[', `which dzil` , "]"; ### DEBUG
 say $fh 'echo ', '=' x 40, '[', `pwd` , "]"; ### DEBUG
 say $fh 'PATH=[', $ENV{PATH}, ']'; ### DEBUG
+say $fh "\$Bin=[$Bin]"; ### DEBUG
 close($fh);
+
 
 chmod (0755, $file) or exit(1);
