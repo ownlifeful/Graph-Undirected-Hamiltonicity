@@ -19,7 +19,7 @@ if ( $ARGV[0] ) {
 } else {
     say $fh "/usr/bin/dzil test";
 }
-
+say $fh '=' x 40, '[', `which dzil` , "]"; ### DEBUG
 close($fh);
 
 chmod (0755, $file) or exit(1);
