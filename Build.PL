@@ -23,13 +23,7 @@ if ( $ARGV[0] ) {
 } else {
     say $fh "$prefix/dzil test";
 }
-say $fh 'echo dzil', '=' x 40, '[', `which dzil` , "]"; ### DEBUG
-say $fh 'echo pwd', '=' x 40, '[', `pwd` , "]"; ### DEBUG
-say $fh 'echo PATH=[', $ENV{PATH}, ']'; ### DEBUG
-say $fh "echo \$Bin=[$Bin]"; ### DEBUG
-say $fh "echo TRAVIS_PERL_VERSIONn=\[$ENV{TRAVIS_PERL_VERSION}\]"; ### DEBUG
 
 close($fh);
-
 
 chmod (0755, $file) or exit(1);
