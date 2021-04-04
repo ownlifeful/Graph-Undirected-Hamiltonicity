@@ -14,7 +14,11 @@ open(my $fh, ">", $file) or die $!;
 
 say $fh "cpanm Dist::Zilla";
 
-my $prefix = $Bin . '/../../../perl5/perlbrew/perls/perl-' . $ENV{TRAVIS_PERL_VERSION} . '/bin';
+my @prefixes;
+$prefix[0] = $Bin . '/../../../perl5/perlbrew/perls/perl-' . $ENV{TRAVIS_PERL_VERSION} . '/bin';
+$prefix[1] = $Bin . '/../../../perl5/perlbrew/perls/'      . $ENV{TRAVIS_PERL_VERSION} . '/bin';
+my $prefix = ( grep { -e $_ } @prefixes ) [0];
+
 say $fh "$prefix/dzil authordeps | cpanm";
 say $fh "$prefix/dzil listdeps | cpanm";
 
