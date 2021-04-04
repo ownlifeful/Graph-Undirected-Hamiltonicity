@@ -21,10 +21,10 @@ if ( $ARGV[0] ) {
 } else {
     say $fh "/usr/bin/dzil test";
 }
-say $fh 'echo ', '=' x 40, '[', `which dzil` , "]"; ### DEBUG
-say $fh 'echo ', '=' x 40, '[', `pwd` , "]"; ### DEBUG
-say $fh 'PATH=[', $ENV{PATH}, ']'; ### DEBUG
-say $fh "\$Bin=[$Bin]"; ### DEBUG
+say $fh 'echo dzil', '=' x 40, '[', `which dzil` , "]"; ### DEBUG
+say $fh 'echo pwd', '=' x 40, '[', `pwd` , "]"; ### DEBUG
+say $fh 'echo PATH=[', $ENV{PATH}, ']'; ### DEBUG
+say $fh "echo \$Bin=[$Bin]"; ### DEBUG
 close($fh);
 
 
