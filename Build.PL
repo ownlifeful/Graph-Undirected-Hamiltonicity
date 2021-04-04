@@ -13,18 +13,22 @@ my $file = "./Build";
 open(my $fh, ">", $file) or die $!;
 
 say $fh "cpanm Dist::Zilla";
-say $fh "/usr/bin/dzil authordeps | cpanm";
-say $fh "/usr/bin/dzil listdeps | cpanm";
+
+my $prefix = $Bin/../../../perl5/perlbrew/perls/" . $ENV{TRAVIS_PERL_VERSION} . "/bin";
+say $fh "$prefix/dzil authordeps | cpanm";
+say $fh "$prefix/dzil listdeps | cpanm";
 
 if ( $ARGV[0] ) {
-    say $fh "/usr/bin/dzil install";
+    say $fh "$prefix/dzil install";
 } else {
-    say $fh "/usr/bin/dzil test";
+    say $fh "$prefix/dzil test";
 }
 say $fh 'echo dzil', '=' x 40, '[', `which dzil` , "]"; ### DEBUG
 say $fh 'echo pwd', '=' x 40, '[', `pwd` , "]"; ### DEBUG
 say $fh 'echo PATH=[', $ENV{PATH}, ']'; ### DEBUG
 say $fh "echo \$Bin=[$Bin]"; ### DEBUG
+say $fh "echo TRAVIS_PERL_VERSIONn=\[$ENV{TRAVIS_PERL_VERSION}\]"; ### DEBUG
+
 close($fh);
 
 
