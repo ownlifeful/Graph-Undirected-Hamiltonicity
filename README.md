@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ownlifeful/Graph-Undirected-Hamiltonicity.svg?branch=master)](https://travis-ci.org/ownlifeful/Graph-Undirected-Hamiltonicity)
+
 # NAME
 
 Graph::Undirected::Hamiltonicity - determine the Hamiltonicity of a given undirected graph.
