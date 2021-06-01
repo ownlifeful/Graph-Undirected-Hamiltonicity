@@ -14,11 +14,13 @@ open(my $fh, ">", $file) or die $!;
 
 say $fh "cpanm Dist::Zilla";
 
+my $perl_version = $ENV{TRAVIS_PERL_VERSION} || $^V || die "Could not determine perl version.\n";
+
 my @prefixes;
-push @prefixes, $Bin . '/../../../perl5/perlbrew/perls/perl-' . $ENV{TRAVIS_PERL_VERSION} . '/bin';
-push @prefixes, $Bin . '/../../../perl5/perlbrew/perls/'      . $ENV{TRAVIS_PERL_VERSION} . '/bin';
-push @prefixes, '~/perl5/perlbrew/perls/perl-' . $ENV{TRAVIS_PERL_VERSION} . '/bin';
-push @prefixes, '~/perl5/perlbrew/perls/' . $ENV{TRAVIS_PERL_VERSION} . '/bin';
+push @prefixes, $Bin . '/../../../perl5/perlbrew/perls/perl-' . $perl_version . '/bin';
+push @prefixes, $Bin . '/../../../perl5/perlbrew/perls/'      . $perl_version . '/bin';
+push @prefixes, '~/perl5/perlbrew/perls/perl-' . $perl_version . '/bin';
+push @prefixes, '~/perl5/perlbrew/perls/' . $perl_version . '/bin';
 
 my $prefix = ( grep { -e $_ } @prefixes ) [0];
 
