@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+require v5.6.0;
+
 use FindBin qw($Bin);
 
 use strict;
