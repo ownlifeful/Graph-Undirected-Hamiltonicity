@@ -79,7 +79,7 @@ If all is well, then proceed to install the module:
 
 If you run into trouble installing `Net::SSLeay` as part of `Dist::Zilla`, try the following.
 
-On Red Hat / CentOS / Fedora:
+On Fedora / Red Hat / CentOS / Rocky Linux:
 
     sudo yum install openssl-devel
 
