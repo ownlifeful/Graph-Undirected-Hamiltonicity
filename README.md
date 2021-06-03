@@ -60,7 +60,22 @@ If you need to get `cpanm`:
 
 then:
 
-    perl Build.PL 1 && ./Build
+    ./Build
+
+If all goes well, you will see output like this:
+
+
+    ...
+    All tests successful.
+    Files=15, Tests=604,  4 wallclock secs ( 0.08 usr  0.02 sys +  4.20 cusr  0.13 csys =  4.43 CPU)
+    Result: PASS
+    [DZ] all's well; removing .build/xHNLTYlN9o
+
+
+If all is well, then proceed to install the module:
+
+    dzil install
+
 
 If you run into trouble installing `Net::SSLeay` as part of `Dist::Zilla`, try the following.
 
