@@ -98,7 +98,7 @@ On macOS:
 
     sudo cp cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
 
-On Red Hat / CentOS / Fedora Linux:
+On Fedora / Red Hat / CentOS / Rocky Linux:
 
     sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
 
