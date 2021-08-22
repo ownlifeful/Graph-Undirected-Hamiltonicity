@@ -1,10 +1,5 @@
 #!/usr/bin/env perl
 
-42;
-__END__
-
-### That's the way to do it. 
-
 use FindBin qw($Bin);
 
 use strict;
@@ -17,24 +12,12 @@ my $file = "./Build";
 
 open(my $fh, ">", $file) or die $!;
 
-# my $dzil=qx(which dzil);
-# chomp $dzil;
-
 my $dzil = 'dzil';
 
-say $fh "cpanm Dist::Zilla";
-say $fh "$dzil authordeps | cpanm";
-say $fh "$dzil listdeps | cpanm";
- 
-
-### say $fh "$dzil test && $dzil install ";
-say $fh "$dzil test";
-
-# if ( $ARGV[0] ) {
-#     say $fh "$dzil install";
-# } else {
-#     say $fh "$dzil test";
-# }
+print $fh "cpanm Dist::Zilla\n";
+print $fh "$dzil authordeps | cpanm\n";
+print  $fh "$dzil listdeps | cpanm\n";
+print $fh "$dzil test\n";
 
 close($fh);
 
