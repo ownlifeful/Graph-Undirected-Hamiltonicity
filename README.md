@@ -56,8 +56,9 @@ The modules in this distribution are:
 
 ### To install from CPAN:
 If you just want to use the module, choose this method.
+Install [Graph::Undirected::Hamiltonicity](https://metacpan.org/pod/Graph::Undirected::Hamiltonicity) from cpan.
 
-    cpan [Graph::Undirected::Hamiltonicity](https://metacpan.org/pod/Graph::Undirected::Hamiltonicity)
+    cpan Graph::Undirected::Hamiltonicity
 
 ### To install the code repositories:
 If you want to tinker with the module and/or contribute bugfixes and enhancements, choose this method.
