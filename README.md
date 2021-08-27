@@ -52,14 +52,21 @@ The modules in this distribution are:
 
 ## INSTALLATION
 
-### To install the core module:
-
 If you need to get `cpanm`:
 
     curl -L https://cpanmin.us | perl - App::cpanminus
 
-then:
 
+### To install from CPAN:
+If you just want to use the module, choose this method.
+
+    cpan Graph::Undirected::Hamiltonicity
+
+
+### To install the core module from GitHub:
+If you want to tinker with the module and/or contribute bugfixes and enhancements, choose this method.
+
+    perl ./Build.PL
     ./Build
 
 If all goes well, you will see output like this:
