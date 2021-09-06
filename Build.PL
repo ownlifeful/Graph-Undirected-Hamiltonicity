@@ -15,7 +15,7 @@ my $dzil = 'dzil';
 print $fh "cpanm Dist::Zilla\n";
 print $fh "$dzil authordeps | cpanm\n";
 print $fh "$dzil listdeps | cpanm\n";
-print $fh "$dzil test && $dzil install\n";
+print $fh "$dzil install\n";
 
 close($fh);
 
