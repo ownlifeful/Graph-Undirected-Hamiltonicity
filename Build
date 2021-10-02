@@ -1,4 +1,0 @@
-/home/vagrant/perl5/perlbrew/perls/perl-5.34.0/bin/cpanm Dist::Zilla
-dzil authordeps | cpanm
-dzil listdeps | cpanm
-dzil install
