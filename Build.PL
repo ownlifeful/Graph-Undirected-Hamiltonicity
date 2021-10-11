@@ -3,8 +3,9 @@
 use strict;
 use warnings;
 
-# This file is used by http://travis-ci.com/
-# to generate and test a Build file
+# This file is used 
+# to generate and test
+# a Build file
 
 my $cpanm = get_cpanm() or die "Didn't find cpanm.\n";
 
