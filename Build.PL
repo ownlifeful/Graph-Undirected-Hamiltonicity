@@ -66,6 +66,9 @@ sub which {
 
 sub install_cpanm {
     my $install = qx( curl -L https://cpanmin.us | perl - App::cpanminus );
+    print '#=' x 40, "# BEGIN install=\n";
+    print $install, "\n";
+    print '#=' x 40, "# END install=\n";    
     my $cpanm = which('cpanm');
     return $cpanm;
 }
