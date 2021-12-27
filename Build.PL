@@ -22,7 +22,7 @@ print $fh "$dzil authordeps | $cpanm\n";
 print $fh "$dzil listdeps | $cpanm\n";
 print $fh "$dzil install\n";
 close($fh);
-chmod (0755, $file) or die "Error while chmodding.\n";
+chmod (0755, $file) or die "Error while chmodding.\n[$!]\n";
 
 #####################################################################
 
@@ -59,6 +59,7 @@ sub which {
     my $file = $_[0];
     my $command = qx( which $file );
     chomp $command;
+    print("command=[$command]\n");
     return $command;
 }
 
