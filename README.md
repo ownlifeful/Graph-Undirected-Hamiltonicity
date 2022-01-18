@@ -61,39 +61,18 @@ Install [Graph::Undirected::Hamiltonicity](https://metacpan.org/pod/Graph::Undir
 ### To install the code repositories:
 If you want to tinker with the module and/or contribute bugfixes and enhancements, choose this method.
 
-If you need to get `cpanm`:
+Clone the repository:
 
-    curl -L https://cpanmin.us | perl - App::cpanminus
+    git clone https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity.git
+    cd Graph-Undirected-Hamiltonicity
 
 then:
 
-    perl ./Build.PL
-    ./Build
+    perl ./Makefile.PL
+    make
+    make test
+    make install
 
-If all goes well, you will see output like this:
-
-
-    ...
-    All tests successful.
-    Files=15, Tests=604,  4 wallclock secs ( 0.08 usr  0.02 sys +  4.20 cusr  0.13 csys =  4.43 CPU)
-    Result: PASS
-    [DZ] all's well; removing .build/xHNLTYlN9o
-
-
-If all is well, then proceed to install the module:
-
-    dzil install
-
-
-If you run into trouble installing `Net::SSLeay` as part of `Dist::Zilla`, try the following.
-
-On Fedora / Red Hat / CentOS / Rocky Linux:
-
-    sudo yum install openssl-devel
-
-On Debian / Ubuntu:
-
-    sudo apt-get install libssl-dev
 
 
 ### To install the optional CGI script:
@@ -102,7 +81,6 @@ Copy the script to the appropriate location for your web server.
 
 
 On macOS:
-
 
     sudo cp cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
 
