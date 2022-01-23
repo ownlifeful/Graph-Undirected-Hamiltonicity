@@ -6,6 +6,7 @@ use Exporter qw(import);
 
 our @EXPORT_OK = qw(
     &output
+    &output_image_js
     &output_graph_svg
     &output_image_svg
     &output_adjacency_matrix_svg
@@ -14,6 +15,8 @@ our @EXPORT_OK = qw(
 our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 our $VERSION = '0.013';
+
+our $id = 1;
 
 ##############################################################################
 
@@ -30,7 +33,12 @@ sub output {
         } else {
             say $input;
         }
-
+    } elsif ( $format eq 'js' ) {
+        if ( ref $input ) {
+            output_image_js(@_);
+        } else {
+            say $input;
+        }
     } elsif ( $format eq 'text' ) {
         if ( ref $input ) {
             ### Print the graph's edge-list as a string.
@@ -48,6 +56,22 @@ sub output {
             . "one of: 'html', 'text', or 'none'\n";
     }
 
+}
+
+##########################################################################
+
+sub output_image_js {
+    my ( $g, $hash_ref ) = @_;
+
+    my %params = %{ $hash_ref // {} };
+    my $image_size = $params{size} || 600;
+
+    print qq{<h1>JS rendered</h1>\n};
+    print qq{<div id="b$id">\n};
+    print qq{<button  class="graph_button" g="$g" onClick="main2($id,'$g')"">Push button # $id</button>\n};
+    print qq{The graph has }, scalar($g->edges()) , qq{ edges.<BR/>\n};    
+    print qq{</div>\n\n};
+    $id++;
 }
 
 ##########################################################################
@@ -79,6 +103,7 @@ xmlns="http://www.w3.org/2000/svg">
 }
 
 ##########################################################################
+
 
 sub output_graph_svg {
     my ( $g, $hash_ref ) = @_;
