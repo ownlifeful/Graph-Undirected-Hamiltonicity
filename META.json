@@ -1,7 +1,7 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "decide whether a given Graph::Undirected     contains a Hamiltonian Cycle.",
    "author" : [
-      "Ashwin Dixit <ashwin@cpan.org>"
+      "Ashwin Dixit, C<< <ashwin at CPAN dot org> >>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v3.1.19, CPAN::Meta::Converter version 2.150010",
@@ -42,6 +42,13 @@
       },
       "runtime" : {
          "requires" : {
+            "CGI::Minimal" : "1.29",
+            "Carp" : "1.29",
+            "Config::INI::Reader" : "0.025",
+            "Exporter" : "5",
+            "Graph" : "0.9",
+            "LWP::UserAgent" : "6",
+            "Test::Exception" : "0",
             "perl" : "5.008001"
          }
       },
@@ -52,7 +59,24 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/issues"
+      },
+      "homepage" : "https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity",
+      "repository" : {
+         "type" : "git",
+         "url" : "https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity.git",
+         "web" : "https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity"
+      }
+   },
+   "version" : "0.14",
+   "x_contributors" : [
+      "Ashwin Dixit <ashwin.dixit@gmail.com>",
+      "Ashwin Dixit <ashwin.dixit@reopenlabs.com>",
+      "Ashwin Dixit <ashwin@cpan.org>",
+      "Ashwin Dixit <ashwin@ownlifeful.com>"
+   ],
    "x_serialization_backend" : "JSON::PP version 4.07",
    "x_static_install" : 1
 }

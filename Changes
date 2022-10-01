@@ -5,4 +5,6 @@ Revision history for Graph-Undirected-Hamiltonicity
 	Removed Dist::Zilla
 
 {{$NEXT}}
+
+0.14 2022-10-01T20:08:36Z
 	- version
