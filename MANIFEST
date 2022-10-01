@@ -36,3 +36,4 @@ t/transforms/get_random_isomorph.t
 t/transforms/get_required_graph.t
 t/transforms/string_to_graph.t
 t/transforms/swap_vertices.t
+cpanfile
