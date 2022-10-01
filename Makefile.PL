@@ -26,6 +26,7 @@ WriteMakefile(
         'Test::More'          => '0.98',
         'Test::Exception'     => '0',     # '0.43',
         'CGI::Minimal'        => '1.29',
+        'Modern::Perl'        => '0',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Graph-Undirected-Hamiltonicity-*' },

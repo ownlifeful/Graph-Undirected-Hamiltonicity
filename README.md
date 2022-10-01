@@ -6,7 +6,7 @@ Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected
 
 # VERSION
 
-Version 0.14
+Version 0.15
 
 # LICENSE
 

@@ -8,7 +8,7 @@ Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected
 
 =head1 VERSION
 
-Version 0.14
+Version 0.15
 
 =head1 LICENSE
 
@@ -40,7 +40,7 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
 
 use Exporter qw(import);
 
-our $VERSION     = '0.14';
+our $VERSION     = '0.15';
 our @EXPORT      = qw(graph_is_hamiltonian);    # exported by default
 our @EXPORT_OK   = qw(graph_is_hamiltonian);
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
