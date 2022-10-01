@@ -4,7 +4,7 @@ Graph::Undirected::Hamiltonicity - determine the Hamiltonicity of a given undire
 
 # VERSION
 
-version 0.013
+version 0.14
 
 # SYNOPSIS
 
