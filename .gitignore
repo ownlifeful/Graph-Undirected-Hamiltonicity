@@ -29,3 +29,25 @@ cover_db/
 MYMETA.*
 
 /Graph-Undirected-Hamiltonicity-*
+Makefile
+Makefile.old
+Build
+Build.bat
+META.*
+MYMETA.*
+.build/
+_build/
+cover_db/
+blib/
+inc/
+.lwpcookies
+.last_cover_stats
+nytprof.out
+pod2htm*.tmp
+pm_to_blib
+Graph-Undirected-Hamiltonicity-*
+Graph-Undirected-Hamiltonicity-*.tar.gz
+*~
+#*
+junk/
+local/
