@@ -1,3 +1,29 @@
+
+=encoding utf-8
+
+=head1 NAME
+
+Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected
+    contains a Hamiltonian Cycle.
+
+=head1 VERSION
+
+Version 0.014
+
+=head1 LICENSE
+
+Copyright (C) Ashwin Dixit.
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=head1 AUTHOR
+
+Ashwin Dixit, C<< <ashwin at CPAN dot org> >>
+
+=cut
+
+
 use Modern::Perl;
 use lib 'local/lib/perl5';
 

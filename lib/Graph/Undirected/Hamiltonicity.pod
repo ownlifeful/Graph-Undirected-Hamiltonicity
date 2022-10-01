@@ -51,6 +51,6 @@ Please report issues L<on GitHub|https://github.com/ownlifeful/Graph-Undirected-
 
 =head1 AUTHOR
 
-Ashwin Dixit, C<< <ashwin at ownlifeful dot com> >>
+Ashwin Dixit, C<< <ashwin at CPAN dot org> >>
 
 =cut
