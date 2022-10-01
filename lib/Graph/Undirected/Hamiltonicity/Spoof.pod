@@ -2,10 +2,6 @@
 
 Graph::Undirected::Hamiltonicity::Spoof - spoof undirected graphs.
 
-=head1 VERSION
-
-Version 0.013
-
 =head1 SYNOPSIS
 
     use Graph::Undirected::Hamiltonicity::Spoof qw(&spoof_known_hamiltonian_graph);

@@ -2,10 +2,6 @@
 
 Graph::Undirected::Hamiltonicity::Wolfram - determine the Hamiltonicity of a given graph using the Wolfram Open Cloud.
 
-=head1 VERSION
-
-Version 0.013
-
 =head1 SYNOPSIS
 
     use Graph::Undirected::Hamiltonicity::Wolfram;

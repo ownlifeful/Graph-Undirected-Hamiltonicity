@@ -2,10 +2,6 @@
 
 Graph::Undirected::Hamiltonicity::Tests - a collection of subroutines to decide whether the input Graph::Undirected is Hamiltonian.
 
-=head1 VERSION
-
-Version 0.013
-
 =head1 SYNOPSIS
 
 Each subroutine in this module:

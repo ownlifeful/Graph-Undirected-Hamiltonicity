@@ -13,10 +13,6 @@ our @EXPORT = qw(&is_hamiltonian_per_wolfram);
 
 our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
-
-our $VERSION = '0.013';
-
-
 ##############################################################################
 
 sub is_hamiltonian_per_wolfram {

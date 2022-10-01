@@ -29,10 +29,6 @@ our @EXPORT_OK = (
 
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
-
-our $VERSION = '0.013';
-
-
 ##########################################################################
 
 sub test_trivial {

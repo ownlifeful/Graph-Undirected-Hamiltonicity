@@ -2,10 +2,6 @@
 
 Graph::Undirected::Hamiltonicity::Transforms - subroutines that apply transformations to undirected graphs.
 
-=head1 VERSION
-
-Version 0.013
-
 =head1 SUBROUTINES
 
 =head2 get_required_graph

@@ -82,11 +82,11 @@ Copy the script to the appropriate location for your web server.
 
 On macOS:
 
-    sudo cp cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
+    sudo cp script/cgi-bin/hc.cgi /Library/WebServer/CGI-Executables/
 
 On Fedora / Red Hat / CentOS / Rocky Linux:
 
-    sudo cp cgi-bin/hc.cgi /var/www/cgi-bin/
+    sudo cp script/cgi-bin/hc.cgi /var/www/cgi-bin/
 
 ### To enable verification via Wolfram Open Cloud:
 
@@ -104,7 +104,7 @@ please read [WOLFRAM.md](WOLFRAM.md "Verification via Wolfram Cloud").
 ## USAGE
 
 ### CGI script:
-The included CGI script ( `cgi-bin/hc.cgi` ) lets you visualize and edit graphs through a browser. It draws graphs using inline SVG.
+The included CGI script ( `script/cgi-bin/hc.cgi` ) lets you visualize and edit graphs through a browser. It draws graphs using inline SVG.
 A demo of this script is hosted at: [http://ownlifeful.com/hamilton.html](http://ownlifeful.com/hamilton.html "Hamiltonian Cycle Detector" )
 
 
@@ -113,26 +113,26 @@ A demo of this script is hosted at: [http://ownlifeful.com/hamilton.html](http:/
 To test whether a given graph is Hamiltonian:
 
 
-    perl bin/hamilton.pl --graph_text 0=1,0=2,1=2
+    perl script/hamilton.pl --graph_text 0=1,0=2,1=2
 
 
 To test multiple graphs:
 
 
-    perl bin/hamilton.pl --graph_file list_of_graphs.txt
+    perl script/hamilton.pl --graph_file list_of_graphs.txt
 
 
 To spoof a random Hamiltonian graph with 42 vertices and test it for Hamiltonicity:
 
 
-    perl bin/hamilton.pl --vertices 42
+    perl script/hamilton.pl --vertices 42
 
 
 
 To get more detailed help:
 
 
-    perl bin/hamilton.pl --help
+    perl script/hamilton.pl --help
 
 # SUPPORT
 
@@ -141,8 +141,8 @@ Please report issues [on GitHub](https://github.com/ownlifeful/Graph-Undirected-
 
 # ACKNOWLEDGEMENTS
 
-Thanks to Larry Wall, for creating Perl; to Jarkko Hietaniemi, for creating the `Graph` module; and to Dr. Stephen Wolfram,
-for creating the Wolfram Programming Language. Thanks to Dirac and Ore, for their results utilized here.
+Thanks to Larry Wall, for creating Perl; to Jarkko Hietaniemi, for creating the `Graph` module; and to Dr. Stephen Wolfram, for creating the Wolfram Programming Language. Thanks to Dirac and Ore, for their results utilized here.
+Special thanks to my dear friend Dr. Lubomir Ivanov, who instilled in me, a sense of wonder about the P vs. NP conjecture.
 
 
 

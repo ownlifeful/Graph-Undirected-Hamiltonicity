@@ -3,11 +3,6 @@
 Graph::Undirected::Hamiltonicity::Output - convenience subroutines for
 printing output in various formats.
 
-=head1 VERSION
-
-Version 0.013
-
-
 =head1 SYNOPSIS
 
 The output() subroutine examines an environment variable called

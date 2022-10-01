@@ -4,9 +4,9 @@ Changes
 MANIFEST
 README.md
 WOLFRAM.md
-bin/hamilton.pl
-bin/knights_tour.pl
-cgi-bin/hc.cgi
+script/hamilton.pl
+script/knights_tour.pl
+script/cgi-bin/hc.cgi
 dist.ini
 hamilton.ini
 lib/Graph/Undirected/Hamiltonicity.pm

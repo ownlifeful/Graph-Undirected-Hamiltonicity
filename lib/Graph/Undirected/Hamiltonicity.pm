@@ -1,3 +1,6 @@
+use Modern::Perl;
+use lib 'local/lib/perl5';
+
 package Graph::Undirected::Hamiltonicity;
 
 # ABSTRACT: decide whether a given Graph::Undirected contains a Hamiltonian Cycle.
@@ -5,15 +8,13 @@ package Graph::Undirected::Hamiltonicity;
 # You can get documentation for this module with this command:
 #    perldoc Graph::Undirected::Hamiltonicity
 
-use Modern::Perl;
-
 use Graph::Undirected::Hamiltonicity::Output qw(&output);
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
 
 use Exporter qw(import);
 
-our $VERSION     = '0.013';
+our $VERSION     = '0.014';
 our @EXPORT      = qw(graph_is_hamiltonian);    # exported by default
 our @EXPORT_OK   = qw(graph_is_hamiltonian);
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
