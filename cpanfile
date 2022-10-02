@@ -1,4 +1,4 @@
-requires 'perl', '5.008001';
+requires 'perl', '5.18';
 
 on 'test' => sub {
     requires 'Test::More', '0.98';
@@ -11,3 +11,4 @@ requires 'Config::INI::Reader' , '0.025';
 requires 'Carp'                , '1.29';
 requires 'Test::Exception'     , '0';
 requires 'CGI::Minimal'        , '1.29';
+requires 'Modern::Perl'        , '0';
