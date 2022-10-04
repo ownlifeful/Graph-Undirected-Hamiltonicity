@@ -48,8 +48,9 @@
             "Exporter" : "5",
             "Graph" : "0.9",
             "LWP::UserAgent" : "6",
+            "Modern::Perl" : "0",
             "Test::Exception" : "0",
-            "perl" : "5.008001"
+            "perl" : "5.018004"
          }
       },
       "test" : {
@@ -70,7 +71,7 @@
          "web" : "https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity"
       }
    },
-   "version" : "0.15",
+   "version" : "0.16",
    "x_contributors" : [
       "Ashwin Dixit <ashwin.dixit@gmail.com>",
       "Ashwin Dixit <ashwin.dixit@reopenlabs.com>",

@@ -1,10 +1,12 @@
 Revision history for Graph-Undirected-Hamiltonicity
 
 0.15    2022/10/01
-       - Wake me up, when September ends.
-	Removed Dist::Zilla
+	- Added Modern::Perl
 
 {{$NEXT}}
+
+0.16 2022-10-04T21:50:46Z
+	- Added Modern::Perl to cpanfile
 
 0.15 2022-10-01T20:15:09Z
 	- Added Modern::Perl
