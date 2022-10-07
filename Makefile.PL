@@ -1,4 +1,4 @@
-use 5.18;
+use 5.18.0;
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -10,7 +10,7 @@ WriteMakefile(
     ABSTRACT_FROM    => 'lib/Graph/Undirected/Hamiltonicity.pod',
     LICENSE          => 'perl',
     PL_FILES         => {},
-    MIN_PERL_VERSION => 5.18,
+    MIN_PERL_VERSION => v5.18.0,
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => 0,
     },
@@ -26,7 +26,7 @@ WriteMakefile(
         'Test::More'          => '0.98',
         'Test::Exception'     => '0',     # '0.43',
         'CGI::Minimal'        => '1.29',
-        'Modern::Perl'        => '0',
+        'Modern::Perl'        => '1',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Graph-Undirected-Hamiltonicity-*' },

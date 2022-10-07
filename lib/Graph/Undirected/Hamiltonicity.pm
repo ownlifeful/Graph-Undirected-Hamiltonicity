@@ -40,7 +40,7 @@ use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
 
 use Exporter qw(import);
 
-our $VERSION     = '0.16';
+our $VERSION     = '0.17';
 our @EXPORT      = qw(graph_is_hamiltonian);    # exported by default
 our @EXPORT_OK   = qw(graph_is_hamiltonian);
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
