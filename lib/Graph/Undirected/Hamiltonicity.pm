@@ -8,7 +8,7 @@ Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected
 
 =head1 VERSION
 
-Version 0.16
+Version 0.17
 
 =head1 LICENSE
 

@@ -5,6 +5,9 @@ Revision history for Graph-Undirected-Hamiltonicity
 
 {{$NEXT}}
 
+0.17 2022-10-07T22:49:52Z
+	- Fix Bug #7
+
 0.16 2022-10-04T21:50:46Z
 	- Added Modern::Perl to cpanfile
 
