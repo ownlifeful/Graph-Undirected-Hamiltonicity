@@ -1,3 +1,5 @@
+[![Actions Status](https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/actions/workflows/test.yml/badge.svg)](https://github.com/ownlifeful/Graph-Undirected-Hamiltonicity/actions)
+
 # NAME
 
 Graph::Undirected::Hamiltonicity - determine the Hamiltonicity of a given undirected graph.
