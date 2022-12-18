@@ -7,11 +7,16 @@ use Carp;
 
 sub output {
     my $self = shift;
-    my ($input) = @_;
 
-    my $format = $ENV{HC_OUTPUT_FORMAT} || 'none';
+    use Data::Dump qw(dump);
+    my $x = dump($self);
+    die $x unless ref $self;
+    ### $self->output($x);
 
+    my $format = $self->{output_format};
     return if $format eq 'none';
+
+    my ($input) = @_;
 
     if ( $format eq 'html' ) {
         if ( ref $input ) {
@@ -21,14 +26,14 @@ sub output {
         }
 
     } elsif ( $format eq 'json' ) {
-	unless ( defined $self->{mojo} ) {
-	    say "ERROR: Please pass in Mojo";
-	    die;
+	my $mojo = $self->{'mojo'} // $Graph::Undirected::Hamiltonicity::mojo;
+	unless ( defined $mojo ) {
+	    die "ERROR: Please pass in Mojo";
 	}
 	if ( $input ) {
-	    $self->{mojo}->send($input);
+	    $mojo->send($input);
 	} else {
-	    $self->{mojo}->send( $self->{g}->stringify() );
+	    $mojo->send( $self->{g}->stringify() );
 	}
     } elsif ( $format eq 'text' ) {
         if ( ref $input ) {

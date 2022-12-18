@@ -51,6 +51,7 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 our $calls = 0; ### Number of calls to is_hamiltonian()
 
+$Graph::Undirected::Hamiltonicity::mojo = '';
 
 ##########################################################################
 
@@ -59,7 +60,12 @@ sub new {
     my ( %params ) = @_;
    
     my $self = {};
-    $self->{mojo} = $params{mojo} if $params{mojo};
+    if ( ref $params{mojo} ) {
+	$self->{mojo} = $params{mojo};
+	$Graph::Undirected::Hamiltonicity::mojo = $params{mojo};
+    }
+
+    $self->{output_format} //= $params{output_format} // $ENV{HC_OUTPUT_FORMAT} // 'none';
 
     if ( $params{graph} ) {
 	$self->{g} = $params{graph};
@@ -201,7 +207,7 @@ sub is_hamiltonian {
     my @undecided_vertices = grep { $self->{g}->degree($_) > 2 } $self->{g}->vertices();
     if (@undecided_vertices) {
         unless ( $params->{tentative} ) {
-            output(  "Now running an exhaustive, recursive,"
+            $self->output(  "Now running an exhaustive, recursive,"
                      . " and conclusive search,"
                      . " only slightly better than brute force.<BR/>" );
         }
@@ -220,7 +226,7 @@ sub is_hamiltonian {
             foreach my $neighbor ( $g1->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
-                output("Deleting edge: $vertex=$neighbor<BR/>");
+                $self->output("Deleting edge: $vertex=$neighbor<BR/>");
                 $g1->delete_edge( $vertex, $neighbor );
             }
 
@@ -235,7 +241,7 @@ sub is_hamiltonian {
             if ( $is_hamiltonian == $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN ) {
                 return ( $is_hamiltonian, $reason, $params );
             }
-            output("...backtracking.<BR/>");
+            $self->output("...backtracking.<BR/>");
         }
     }
 

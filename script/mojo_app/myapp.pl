@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite -signatures;
-use Graph::Undirected::GraphMojo;
+use Graph::Undirected::Hamiltonicity;
 
 get '/' => sub ($c) {
   $c->render(template => 'index');
@@ -9,9 +9,16 @@ get '/' => sub ($c) {
 # WebSocket service used by the template to extract the title from a web site
 websocket '/detect' => sub ($c) {
     $c->on(message => sub ($c, $msg) {
-	$ENV{HC_OUTPUT_FORMAT} = 'json';
-	my $g = Graph::Undirected::Hamiltonicity->new(graph_text => $msg // "", mojo => $c);
+	my $g = Graph::Undirected::Hamiltonicity->new(graph_text => $msg // "", mojo => $c, output_format => 'json');
 	my ( $is_hamiltonian, $reason, $params ) = $g->graph_is_hamiltonian();
+	my $modal_id;
+	if ( $is_hamiltonian == $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN ) {
+	    $modal_id = '#ham';
+	} else {
+	    $modal_id = '#non';
+	}
+	my $message = qq{<script>jQuery('$modal_id').modal("show");</script>\n};
+	$c->send($message);
   });
 
 };
@@ -38,12 +45,19 @@ __DATA__
 jQuery( document ).ready(function() {
     console.log( "ready!" );
     const ws = new WebSocket('<%= $url %>');
-    ws.onmessage = function (event) { document.body.innerHTML += event.data + "<BR/>\n" };
-    ws.onopen    = function (event) { ws.send('https://mojolicious.org') };
+    ws.onmessage = function (event) {
+        let message = event.data;
+        console.log("message=[" + message + "]");
+        document.body.innerHTML += message + "<BR/>\n"
+    };
     jQuery("#detect_button").click(function(){
         console.log( "[" + jQuery('#graph_text').val() + "]" );
         ws.send( jQuery('#graph_text').val()  );
     });
+
+
+
+
 });
 
 </script>
@@ -58,6 +72,18 @@ jQuery( document ).ready(function() {
             <input type="button" id="spoof_button" value="Spoof a Graph!" class="btn btn-primary">
             </div>
         </DIV>
+
+
+ <!-- Hamiltonian modal -->
+  <div id="ham" style="display:none; overflow: visible;" class="modal">
+    <H1>The graph is Hamiltonian!</H1>
+  </div>
+
+ <!-- Non-Hamiltonian modal -->
+  <div id="non" style="display:none; overflow: visible;" class="modal">
+    <H1>The graph is <u>not</u> Hamiltonian!</H1>
+  </div>
+
 
 @@ layouts/default.html.ep
 <!DOCTYPE html>

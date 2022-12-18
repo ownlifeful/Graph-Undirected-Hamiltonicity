@@ -78,8 +78,7 @@ sub delete_cycle_closing_edges {
         $self->{required_graph}->delete_edge($vertex, $other_vertex);
         $deleted_edges++;
 
-        output( "Deleted edge $vertex=$other_vertex"
-                . ", between endpoints of a required walk.<BR/>" );
+        $self->output( "Deleted edge $vertex=$other_vertex, between endpoints of a required walk.<BR/>" );
     }
 
     if ( $deleted_edges ) {
@@ -127,9 +126,9 @@ sub delete_non_required_neighbors {
 
     if ( $deleted_edges ) {
         my $s = $deleted_edges == 1 ? '' : 's';
-        output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
+        $self->output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
     } else {
-        output("Did not shrink the graph.<BR/>");
+        $self->output("Did not shrink the graph.<BR/>");
     }
     return $deleted_edges;
 }
