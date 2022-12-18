@@ -4,18 +4,6 @@ use Modern::Perl;
 use Carp;
 
 use Graph::Undirected;
-use Graph::Undirected::Hamiltonicity::Transforms qw(&add_random_edges &get_random_isomorph);
-
-use Exporter qw(import);
-
-our @EXPORT_OK = qw(
-    &spoof_canonical_hamiltonian_graph
-    &spoof_known_hamiltonian_graph
-    &spoof_random_graph
-    &spoof_randomish_graph
-);
-
-our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 ##############################################################################
 

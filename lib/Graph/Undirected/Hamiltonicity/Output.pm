@@ -1,22 +1,12 @@
-package Graph::Undirected::Hamiltonicity::Output;
+package Graph::Undirected::Hamiltonicity;
 
 use Modern::Perl;
 use Carp;
-use Exporter qw(import);
-
-our @EXPORT_OK = qw(
-    &output
-    &output_graph_svg
-    &output_image_svg
-    &output_adjacency_matrix_svg
-);
-
-our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 ##############################################################################
 
 sub output {
-    my $g = shift;
+    my $self = shift;
     my ($input) = @_;
 
     my $format = $ENV{HC_OUTPUT_FORMAT} || 'none';
@@ -25,7 +15,7 @@ sub output {
 
     if ( $format eq 'html' ) {
         if ( ref $input ) {
-            $g->output_image_svg(@_);
+            $self->output_image_svg(@_);
         } else {
             say $input;
         }
@@ -52,8 +42,8 @@ sub output {
 ##########################################################################
 
 sub output_image_svg {
-    my ( $g, $hash_ref ) = @_;
-
+    my ( $self, $hash_ref ) = @_;
+    my $g = $self->{g};
     my %params = %{ $hash_ref // {} };
     my $image_size = $params{size} || 600;
 

@@ -1,15 +1,15 @@
 #!perl
 use Modern::Perl;
 
-use Graph::Undirected::Hamiltonicity qw(:all);
-use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph);
-use Graph::Undirected::Hamiltonicity::Wolfram qw(:all);
+use Graph::Undirected::Hamiltonicity;
+use Graph::Undirected::GraphMojo;
+use Graph::Undirected::Hamiltonicity::Wolfram;
 
 use Test::More;
 
 $ENV{HC_OUTPUT_FORMAT} = 'none';
 
-my $url = get_url_from_config();
+my $url = Graph::Undirected::Hamiltonicity::get_url_from_config();
 if ($url) {
     plan tests => 28;
 } else {
@@ -24,13 +24,13 @@ while ( defined( my $line = <DATA> ) ) {
 
     if ( $line =~ /^([^|]+)\|([01])\|(\d+|\d+=\d+(,\d+=\d+)*)$/ ) {
         my ( $label, $expected_result, $graph_text ) = ( $1, $2, $3 );
-        my $g = string_to_graph($graph_text);
+        my $g = Graph::Undirected::Hamiltonicity->new($graph_text);
 
-        my $is_hamiltonian = graph_is_hamiltonian($g);
+        my $is_hamiltonian = $g->graph_is_hamiltonian();
         is( $is_hamiltonian, $expected_result, $label );
 
         if ($url) {
-            is( is_hamiltonian_per_wolfram($g),
+            is( $g->is_hamiltonian_per_wolfram(),
                 $expected_result, "Wolfram: $label" );
         }
     }

@@ -29,25 +29,71 @@ use lib 'local/lib/perl5';
 
 package Graph::Undirected::Hamiltonicity;
 
+$Graph::Undirected::Hamiltonicity::DONT_KNOW                = 0;
+$Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN     = 1;
+$Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN = 2;
+
 # ABSTRACT: decide whether a given Graph::Undirected contains a Hamiltonian Cycle.
 
 # You can get documentation for this module with this command:
 #    perldoc Graph::Undirected::Hamiltonicity
 
-use Graph::Undirected::Hamiltonicity::Output qw(&output);
-use Graph::Undirected::Hamiltonicity::Tests qw(:all);
-use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
+use Graph::Undirected::Hamiltonicity::Output;
+use Graph::Undirected::Hamiltonicity::Tests;
+use Graph::Undirected::Hamiltonicity::Transforms;
 
 use Exporter qw(import);
 
-our $VERSION     = '0.17';
+our $VERSION     = '0.18';
 our @EXPORT      = qw(graph_is_hamiltonian);    # exported by default
 our @EXPORT_OK   = qw(graph_is_hamiltonian);
 our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 our $calls = 0; ### Number of calls to is_hamiltonian()
 
+
 ##########################################################################
+
+sub new {
+    my $class = shift;
+    my ( $graph_text, $mojo ) = @_;
+    $graph_text //= '';
+
+    my $self = {};
+    $self->{mojo} = $mojo if $mojo;
+
+    if ( ref $graph_text ) {
+	$self->{g} = $graph_text;
+	bless $self, $class;
+	return $self;
+    }
+    
+    $graph_text =~ s/[^0-9=,]+//g;
+    $graph_text =~ s/([=,])\D+/$1/g;
+    $graph_text =~ s/^\D+|\D+$//g;
+
+    my $g;
+    if ( $graph_text =~ /\d/ ) {
+	eval { $g = Graph::Undirected::Hamiltonicity::string_to_graph($graph_text); };
+	if ( my $exception = $@ ) {
+	    say "That was not a valid graph, ";
+	    say "according to the Graph::Undirected module.<BR/>";
+	    say "[$graph_text][$exception]<BR/>";
+	    die;
+	} else {
+	    $self->{g} = $g;
+	}
+    } else {
+	die "Could not create a graph.\n";
+    }
+
+   bless $self, $class;
+   return $self;
+}
+
+
+####################################################################################
+
 
 # graph_is_hamiltonian()
 #
@@ -59,15 +105,15 @@ our $calls = 0; ### Number of calls to is_hamiltonian()
 #
 
 sub graph_is_hamiltonian {
-    my ($g) = @_;
+    my ($self) = @_;
 
     $calls = 0;
     my ( $is_hamiltonian, $reason );
     my $time_begin = time;
     my @once_only_tests = qw( test_trivial test_dirac );
     foreach my $test_sub (@once_only_tests) {
-        ( $is_hamiltonian, $reason ) = $g->$test_sub();
-        last unless $is_hamiltonian == $DONT_KNOW;
+        ( $is_hamiltonian, $reason ) = $self->$test_sub();
+        last unless $is_hamiltonian == $Graph::Undirected::Hamiltonicity::DONT_KNOW;
     }
 
     my $params = {
@@ -75,21 +121,21 @@ sub graph_is_hamiltonian {
         tentative   => 0,
     };
     
-    if ( $is_hamiltonian == $DONT_KNOW ) {
-        ( $is_hamiltonian, $reason, $params ) = $g->is_hamiltonian($params);
+    if ( $is_hamiltonian == $Graph::Undirected::Hamiltonicity::DONT_KNOW ) {
+        ( $is_hamiltonian, $reason, $params ) = $self->is_hamiltonian($params);
     } else {
-        my $spaced_string = $g->stringify();
+        my $spaced_string = $self->{g}->stringify();
         $spaced_string =~ s/\,/, /g;
-        output("<HR NOSHADE>");
-        output("In graph_is_hamiltonian($spaced_string)");
-        output($g);
+        $self->output("<HR NOSHADE>");
+        $self->output("In graph_is_hamiltonian($spaced_string)");
+        $self->output();
     }
     my $time_end = time;
 
     $params->{time_elapsed} = int($time_end - $time_begin);
     $params->{calls}        = $calls;
 
-    my $final_bit = ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
+    my $final_bit = ( $is_hamiltonian == $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN ) ? 1 : 0;
     return wantarray ? ( $final_bit, $reason, $params ) : $final_bit;
 }
 
@@ -105,14 +151,14 @@ sub graph_is_hamiltonian {
 #
 
 sub is_hamiltonian {
-    my ($g, $params) = @_;
+    my ($self, $params) = @_;
     $calls++;
 
-    my $spaced_string = $g->stringify();
+    my $spaced_string = $self->{g}->stringify();
     $spaced_string =~ s/\,/, /g;
-    output("<HR NOSHADE>");
-    output("Calling is_hamiltonian($spaced_string)");
-    output($g);
+    $self->output("<HR NOSHADE>");
+    $self->output("Calling is_hamiltonian($spaced_string)");
+    $self->output();
 
     my ( $is_hamiltonian, $reason );
     my @tests_1 = qw(
@@ -123,37 +169,36 @@ sub is_hamiltonian {
     );
 
     foreach my $test_sub (@tests_1) {
-        ( $is_hamiltonian, $reason ) = $g->$test_sub($params);
+        ( $is_hamiltonian, $reason ) = $self->$test_sub($params);
         return ( $is_hamiltonian, $reason, $params )
-            unless $is_hamiltonian == $DONT_KNOW;
+            unless $is_hamiltonian == $Graph::Undirected::Hamiltonicity::DONT_KNOW;
     }
 
     ### Create a graph made of only required edges.
-    $g->get_required_graph();
+    $self->get_required_graph();
 
-    if ( $g->{required_graph}->edges() ) {
+    if ( $self->{required_graph}->edges() ) {
         my @tests_2 = qw(
             test_required_max_degree
             test_required_connected
             test_required_cyclic );
         foreach my $test_sub (@tests_2) {
-            ( $is_hamiltonian, $reason, $params ) = $g->$test_sub($params);
+            ( $is_hamiltonian, $reason, $params ) = $self->$test_sub($params);
             return ( $is_hamiltonian, $reason, $params )
-                unless $is_hamiltonian == $DONT_KNOW;
+                unless $is_hamiltonian == $Graph::Undirected::Hamiltonicity::DONT_KNOW;
         }
 
         ### Delete edges that can be safely eliminated so far.
-        my ( $deleted_edges , $g1 ) = delete_cycle_closing_edges($g, $required_graph);
-        my ( $deleted_edges2, $g2 ) = delete_non_required_neighbors($g1, $required_graph);
+        my $deleted_edges = $self->delete_cycle_closing_edges();
+        my $deleted_edges2 = $self->delete_non_required_neighbors();
         if ($deleted_edges || $deleted_edges2) {
             $params->{transformed} = 1;
-            @_ = ($g2, $params);
-            goto &is_hamiltonian;
+	    return $self->is_hamiltonian($params);
         }
     }
 
     ### If there are undecided vrtices, choose between them recursively.
-    my @undecided_vertices = grep { $g->degree($_) > 2 } $g->vertices();
+    my @undecided_vertices = grep { $self->{g}->degree($_) > 2 } $self->{g}->vertices();
     if (@undecided_vertices) {
         unless ( $params->{tentative} ) {
             output(  "Now running an exhaustive, recursive,"
@@ -162,14 +207,14 @@ sub is_hamiltonian {
         }
 
         my $vertex =
-            get_chosen_vertex( $g, $required_graph, \@undecided_vertices );
+            $self->get_chosen_vertex( \@undecided_vertices );
 
         my $tentative_combinations =
-            get_tentative_combinations( $g, $required_graph, $vertex );
+            $self->get_tentative_combinations( $vertex );
 
         foreach my $tentative_edge_pair (@$tentative_combinations) {
-            my $g1 = $g->deep_copy_graph();
-            output("For vertex: $vertex, protecting " .
+            my $g1 = $self->{g}->deep_copy_graph();
+            $self->output("For vertex: $vertex, protecting " .
                     ( join ',', map {"$vertex=$_"} @$tentative_edge_pair ) .
                    "<BR/>" );
             foreach my $neighbor ( $g1->neighbors($vertex) ) {
@@ -179,21 +224,22 @@ sub is_hamiltonian {
                 $g1->delete_edge( $vertex, $neighbor );
             }
 
-            output(   "The Graph with $vertex=" . $tentative_edge_pair->[0]
+            $self->output(   "The Graph with $vertex=" . $tentative_edge_pair->[0]
                     . ", $vertex=" . $tentative_edge_pair->[1]
                     . " protected:<BR/>" );
-            output($g1);
+            $self->output($g1);
 
+	    my $g1g = Graph::Undirected::Hamiltonicity->new($g1);
             $params->{tentative} = 1;
-            ( $is_hamiltonian, $reason, $params ) = is_hamiltonian($g1, $params);
-            if ( $is_hamiltonian == $GRAPH_IS_HAMILTONIAN ) {
+            ( $is_hamiltonian, $reason, $params ) = $g1g->is_hamiltonian($params);
+            if ( $is_hamiltonian == $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN ) {
                 return ( $is_hamiltonian, $reason, $params );
             }
             output("...backtracking.<BR/>");
         }
     }
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN,
+    return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN,
              "The graph passed through an exhaustive search " .
              "for Hamiltonian Cycles.", $params );
 
@@ -206,11 +252,11 @@ sub get_tentative_combinations {
     # Generate all allowable combinations of 2 edges,
     # incident on a given vertex.
 
-    my ( $g, $required_graph, $vertex ) = @_;
+    my ( $self, $vertex ) = @_;
     my @tentative_combinations;
-    my @neighbors = sort { $a <=> $b } $g->neighbors($vertex);
-    if ( $required_graph->degree($vertex) == 1 ) {
-        my ($fixed_neighbor) = $required_graph->neighbors($vertex);
+    my @neighbors = sort { $a <=> $b } $self->{g}->neighbors($vertex);
+    if ( $self->{required_graph}->degree($vertex) == 1 ) {
+        my ($fixed_neighbor) = $self->{required_graph}->neighbors($vertex);
         foreach my $tentative_neighbor (@neighbors) {
             next if $fixed_neighbor == $tentative_neighbor;
             push @tentative_combinations,
@@ -231,7 +277,7 @@ sub get_tentative_combinations {
 ##########################################################################
 
 sub get_chosen_vertex {
-    my ( $g, $required_graph, $undecided_vertices ) = @_;
+    my ( $self, $undecided_vertices ) = @_;
 
     # 1. Choose the vertex with the highest degree first.
     #
@@ -245,8 +291,8 @@ sub get_chosen_vertex {
     my $chosen_vertex_degree;
     my $chosen_vertex_required_degree;
     foreach my $vertex (@$undecided_vertices) {
-        my $degree          = $g->degree($vertex);
-        my $required_degree = $required_graph->degree($vertex);
+        my $degree          = $self->{g}->degree($vertex);
+        my $required_degree = $self->{required_graph}->degree($vertex);
         if (   ( !defined $chosen_vertex_degree )
             or ( $degree > $chosen_vertex_degree )
             or (    ( $degree == $chosen_vertex_degree )

@@ -1,61 +1,38 @@
-package Graph::Undirected::Hamiltonicity::Tests;
+package Graph::Undirected::Hamiltonicity;
+
+$Graph::Undirected::Hamiltonicity::DONT_KNOW                = 0;
+$Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN     = 1;
+$Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN = 2;
 
 use Modern::Perl;
-use Exporter qw(import);
-
-use Graph::Undirected::Hamiltonicity::Transforms qw(:all);
-use Graph::Undirected::Hamiltonicity::Output qw(:all);
-
-our $DONT_KNOW                = 0;
-our $GRAPH_IS_HAMILTONIAN     = 1;
-our $GRAPH_IS_NOT_HAMILTONIAN = 2;
-
-our @EXPORT = qw($DONT_KNOW $GRAPH_IS_HAMILTONIAN $GRAPH_IS_NOT_HAMILTONIAN);
-
-our @EXPORT_OK = (
-    @EXPORT, qw(
-        &test_articulation_vertex
-        &test_canonical
-        &test_dirac
-        &test_graph_bridge
-        &test_min_degree
-        &test_ore
-        &test_required_max_degree
-        &test_required_connected
-        &test_required_cyclic
-        &test_trivial
-        )
-);
-
-our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
 ##########################################################################
 
 sub test_trivial {
-    my ($g) = @_;
-    $g->output("Entering test_trivial()<BR/>");
-    my $e         = scalar( $g->edges );
-    my $v         = scalar( $g->vertices );
+    my ($self) = @_;
+    $self->output("Entering test_trivial()<BR/>");
+    my $e         = scalar( $self->{g}->edges );
+    my $v         = scalar( $self->{g}->vertices );
     my $max_edges = ( $v * $v - $v ) / 2;
 
     if ( $v == 1 ) {
-        return ( $GRAPH_IS_HAMILTONIAN,
+        return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN,
                   "By convention, a graph with a single vertex is "
                 . "considered to be Hamiltonian." );
     }
 
     if ( $v < 3 ) {
-        return ( $GRAPH_IS_NOT_HAMILTONIAN,
+        return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN,
             "A graph with 0 or 2 vertices cannot be Hamiltonian." );
     }
 
     if ( $e < $v ) {
-        foreach my $vertex ( $g->vertices ) {
+        foreach my $vertex ( $self->{g}->vertices ) {
             say "vertex=[$vertex]"; ### DEBUG: REMOVE!
         }
 
         
-        return ( $GRAPH_IS_NOT_HAMILTONIAN,
+        return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN,
             "e < v, therefore the graph is not Hamiltonian. e=$e, v=$v" );
     }
 
@@ -65,40 +42,40 @@ sub test_trivial {
         my $reason = "If e > ( (v*(v-1)/2)-(v-2)), the graph is Hamiltonian.";
         $reason .= " For v=$v, e > ";
         $reason .= $max_edges - $v + 2;
-        return ( $GRAPH_IS_HAMILTONIAN, $reason );
+        return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN, $reason );
     }
 
-    return $DONT_KNOW;
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW;
 
 }
 
 ##########################################################################
 
 sub test_canonical {
-    my ($g) = @_;
-    $g->output("Entering test_canonical()<BR/>");
+    my ($self) = @_;
+    $self->output("Entering test_canonical()<BR/>");
 
-    my @vertices = sort { $a <=> $b } $g->vertices();
+    my @vertices = sort { $a <=> $b } $self->{g}->vertices();
     my $v = scalar(@vertices);
 
-    if ( $g->has_edge( $vertices[0], $vertices[-1] ) ) {
+    if ( $self->{g}->has_edge( $vertices[0], $vertices[-1] ) ) {
         for ( my $counter = 0; $counter < $v - 1; $counter++ ) {
             unless (
-                $g->has_edge(
+                $self->{g}->has_edge(
                     $vertices[$counter], $vertices[ $counter + 1 ]
                 )
                 )
             {
-                return ( $DONT_KNOW,
+                return ( $Graph::Undirected::Hamiltonicity::DONT_KNOW,
                           "This graph is not a supergraph of "
                         . "the canonical Hamiltonian Cycle." );
             }
         }
-        return ( $GRAPH_IS_HAMILTONIAN,
+        return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN,
                   "This graph is a supergraph of "
                 . "the canonical Hamiltonian Cycle." );
     } else {
-        return ( $DONT_KNOW,
+        return ( $Graph::Undirected::Hamiltonicity::DONT_KNOW,
                   "This graph is not a supergraph of "
                 . "the canonical Hamiltonian Cycle." );
     }
@@ -108,41 +85,41 @@ sub test_canonical {
 
 sub test_min_degree {
 
-    my ($g, $params) = @_;
-    $g->output("Entering test_min_degree()<BR/>");
+    my ($self, $params) = @_;
+    $self->output("Entering test_min_degree()<BR/>");
  
-    foreach my $vertex ( $g->vertices ) {
-        if ( $g->degree($vertex) < 2 ) {
+    foreach my $vertex ( $self->{g}->vertices ) {
+        if ( $self->{g}->degree($vertex) < 2 ) {
 
             my $reason = $params->{transformed} 
             ? "After removing edges according to constraints, this graph " 
                 . "was found to have a vertex ($vertex) with degree < 2"
                 : "This graph has a vertex ($vertex) with degree < 2";
 
-            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
+            return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
         }
     }
 
-    return $DONT_KNOW;
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW;
 }
 
 ##########################################################################
 
 sub test_articulation_vertex {
-    my ($g, $params) = @_;
-    $g->output("Entering test_articulation_vertex()<BR/>");
-    return $DONT_KNOW if $g->is_biconnected();
+    my ($self, $params) = @_;
+    $self->output("Entering test_articulation_vertex()<BR/>");
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW if $self->{g}->is_biconnected();
 
     my $reason = $params->{transformed}
     ? "After removing edges according to constraints, the graph was no" .
         " longer biconnected, therefore not Hamiltonian."
         : "This graph is not biconnected, therefore not Hamiltonian. ";
     
-    return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
+    return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
 
-#    my $vertices_string = join ',', $g->articulation_points();
+#    my $vertices_string = join ',', $self->{g}->articulation_points();
 #
-#    return ( $GRAPH_IS_NOT_HAMILTONIAN,
+#    return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN,
 #              "This graph is not biconnected, therefore not Hamiltonian. "
 #            . "It contains the following articulation vertices: "
 #            . "($vertices_string)" );
@@ -152,20 +129,20 @@ sub test_articulation_vertex {
 ##########################################################################
 
 sub test_graph_bridge {
-    my ($g, $params) = @_;
-    $g->output("Entering test_graph_bridge()<BR/>");
-    return $DONT_KNOW if $g->is_edge_connected();
+    my ($self, $params) = @_;
+    $self->output("Entering test_graph_bridge()<BR/>");
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW if $self->{g}->is_edge_connected();
 
     my $reason = $params->{transformed}
     ? "After removing edges according to constraints, the graph was " . 
         "found to have a bridge, and is therefore, not Hamiltonian."
         : "This graph has a bridge, and is therefore not Hamiltonian.";
 
-    return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
+    return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
 
-#   my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $g->bridges();
+#   my $bridge_string = join ',', map { sprintf "%d=%d", @$_ } $self->{g}->bridges();
 #
-#   return ( $GRAPH_IS_NOT_HAMILTONIAN,
+#   return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN,
 #            "This graph is not edge-connected, therefore not Hamiltonian. "
 #          . " It contains the following bridges ($bridge_string)." );
 
@@ -178,22 +155,22 @@ sub test_graph_bridge {
 ### https://en.wikipedia.org/wiki/Hamiltonian_path
 
 sub test_dirac {
-    my ($g) = @_;
+    my ($self) = @_;
 
-    $g->output("Entering test_dirac()<BR/>");
+    $self->output("Entering test_dirac()<BR/>");
 
-    my $v = $g->vertices();
-    return $DONT_KNOW if $v < 3;
+    my $v = $self->{g}->vertices();
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW if $v < 3;
 
     my $half_v = $v / 2;
 
-    foreach my $vertex ( $g->vertices() ) {
-        if ( $g->degree($vertex) < $half_v ) {
-            return $DONT_KNOW;
+    foreach my $vertex ( $self->{g}->vertices() ) {
+        if ( $self->{g}->degree($vertex) < $half_v ) {
+            return $Graph::Undirected::Hamiltonicity::DONT_KNOW;
         }
     }
 
-    return ($GRAPH_IS_HAMILTONIAN,
+    return ($Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN,
             "Every vertex has degree $half_v or more.");
 
 }
@@ -206,17 +183,17 @@ sub test_dirac {
 ### https://en.wikipedia.org/wiki/Ore%27s_theorem
 
 sub test_ore {
-    my ($g, $params) = @_;
-    $g->output("Entering test_ore()<BR/>");
-    my $v = $g->vertices();
-    return $DONT_KNOW if $v < 3;
+    my ($self, $params) = @_;
+    $self->output("Entering test_ore()<BR/>");
+    my $v = $self->{g}->vertices();
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW if $v < 3;
 
-    foreach my $vertex1 ( $g->vertices() ) {
-        foreach my $vertex2 ( $g->vertices() ) {
+    foreach my $vertex1 ( $self->{g}->vertices() ) {
+        foreach my $vertex2 ( $self->{g}->vertices() ) {
             last if $vertex1 == $vertex2;
-            next if $g->has_edge($vertex1, $vertex2);
-            my $sum_of_degrees = $g->degree($vertex1) + $g->degree($vertex2);
-            return $DONT_KNOW if $sum_of_degrees < $v;
+            next if $self->{g}->has_edge($vertex1, $vertex2);
+            my $sum_of_degrees = $self->{g}->degree($vertex1) + $self->{g}->degree($vertex2);
+            return $Graph::Undirected::Hamiltonicity::DONT_KNOW if $sum_of_degrees < $v;
         }
     }
 
@@ -224,18 +201,18 @@ sub test_ore {
     $reason .= " >= v.";
     $reason .= " ( Ore's Theorem. )";
 
-    return ($GRAPH_IS_HAMILTONIAN, $reason, $params);
+    return ($Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN, $reason, $params);
 
 }
 
 ##########################################################################
 
 sub test_required_max_degree {
-    my ($g, $params) = @_;
-    $g->output("Entering test_required_max_degree()<BR/>");
+    my ($self, $params) = @_;
+    $self->output("Entering test_required_max_degree()<BR/>");
 
-    foreach my $vertex ( $g->{required_graph}->vertices() ) {
-        my $degree = $g->{required_graph}->degree($vertex);
+    foreach my $vertex ( $self->{required_graph}->vertices() ) {
+        my $degree = $self->{required_graph}->degree($vertex);
         if ( $degree > 2 ) {
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the vertex $vertex "
@@ -244,85 +221,85 @@ sub test_required_max_degree {
 
             $reason .= " It can only be required by upto 2 edges.";
 
-            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
+            return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
         }
     }
 
-    return $DONT_KNOW;
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW;
 }
 
 ##########################################################################
 
 sub test_required_connected {
-    my ($g, $params) = @_;
-    $g->output("Entering test_required_connected()<BR/>");
+    my ($self, $params) = @_;
+    $self->output("Entering test_required_connected()<BR/>");
 
-    if ( $g->{required_graph}->is_connected() ) {
+    if ( $self->{required_graph}->is_connected() ) {
         my @degree1_vertices =
             grep
-                 { $g->{required_graph}->degree($_) == 1 }
-                 $g->{required_graph}->vertices();
+                 { $self->{required_graph}->degree($_) == 1 }
+                 $self->{required_graph}->vertices();
 
         unless ( @degree1_vertices ) {
-            $g->{required_graph}->_output_cycle();
+            $self->_output_cycle();
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
                 . "found to be connected, with no vertices of degree 1."
                 : "The required graph is connected, and has no vertices with degree 1.";
 
-            return ( $GRAPH_IS_HAMILTONIAN, $reason, $params );
+            return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN, $reason, $params );
         }
 
-        if ( $g->has_edge( @degree1_vertices ) ) {
-            unless ( $g->{required_graph}->has_edge(@degree1_vertices) ) {
-                $g->{required_graph}->add_edge(@degree1_vertices);
+        if ( $self->{g}->has_edge( @degree1_vertices ) ) {
+            unless ( $self->{required_graph}->has_edge(@degree1_vertices) ) {
+                $self->{required_graph}->add_edge(@degree1_vertices);
             }
-            $g->{required_graph}->_output_cycle();
+            $self->_output_cycle();
 
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
                 . "found to contain a Hamiltonian Cycle."
                 : "The required graph contains a Hamiltonian Cycle";
 
-            return ( $GRAPH_IS_HAMILTONIAN, $reason, $params );
+            return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN, $reason, $params );
         } else {
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
                 . "found to be connected, but not cyclic."
                 : "The required graph is connected, but not cyclic";
-            return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
+            return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
         }
     }
 
-    return $DONT_KNOW;
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW;
 
 }
 
 ##########################################################################
 
 sub test_required_cyclic {
-    my ($g, $params) = @_;
-    $g->output("Entering test_required_cyclic()<BR/>");
+    my ($self, $params) = @_;
+    $self->output("Entering test_required_cyclic()<BR/>");
 
-    if ( $g->{required_graph}->has_a_cycle ) {
+    if ( $self->{required_graph}->has_a_cycle ) {
         my $reason = $params->{transformed}
         ? "After removing edges according to rules, the required graph was "
             . "found to be cyclic, but not connected."
             : "The required graph is cyclic, but not connected.";
-        return ( $GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
+        return ( $Graph::Undirected::Hamiltonicity::GRAPH_IS_NOT_HAMILTONIAN, $reason, $params );
     }
 
-    return $DONT_KNOW;    
+    return $Graph::Undirected::Hamiltonicity::DONT_KNOW;    
 }
 
 ##########################################################################
 
 sub _output_cycle {
-    my ($g) = @_;
-    my @cycle        = $g->find_a_cycle();
+    my ($self) = @_;
+    my @cycle        = $self->{required_graph}->find_a_cycle();
     my $cycle_string = join ', ', @cycle;
-    $g->output();
-    $g->output("Found a cycle: [$cycle_string]<BR/>");
+    $self->output();
+    $self->output("Found a cycle: [$cycle_string]<BR/>");
 }
 
 ##########################################################################

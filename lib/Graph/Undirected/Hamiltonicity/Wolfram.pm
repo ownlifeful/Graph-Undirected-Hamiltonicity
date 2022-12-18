@@ -1,17 +1,10 @@
-package Graph::Undirected::Hamiltonicity::Wolfram;
+package Graph::Undirected::Hamiltonicity;
 
 use Modern::Perl;
 use Carp;
 use Config::INI::Reader;
 use LWP::UserAgent;
 
-use Exporter qw(import);
-
-our @EXPORT_OK = qw(&is_hamiltonian_per_wolfram
-    &get_url_from_config);
-our @EXPORT = qw(&is_hamiltonian_per_wolfram);
-
-our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 
 ##############################################################################
 
