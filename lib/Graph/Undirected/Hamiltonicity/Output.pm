@@ -16,6 +16,7 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK, );
 ##############################################################################
 
 sub output {
+    my $g = shift;
     my ($input) = @_;
 
     my $format = $ENV{HC_OUTPUT_FORMAT} || 'none';
@@ -24,7 +25,7 @@ sub output {
 
     if ( $format eq 'html' ) {
         if ( ref $input ) {
-            output_image_svg(@_);
+            $g->output_image_svg(@_);
         } else {
             say $input;
         }

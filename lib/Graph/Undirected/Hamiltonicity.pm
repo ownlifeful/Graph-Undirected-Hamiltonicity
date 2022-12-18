@@ -8,7 +8,7 @@ Graph::Undirected::Hamiltonicity - decide whether a given Graph::Undirected
 
 =head1 VERSION
 
-Version 0.17
+Version 0.18
 
 =head1 LICENSE
 
@@ -64,9 +64,9 @@ sub graph_is_hamiltonian {
     $calls = 0;
     my ( $is_hamiltonian, $reason );
     my $time_begin = time;
-    my @once_only_tests = ( \&test_trivial, \&test_dirac );
+    my @once_only_tests = qw( test_trivial test_dirac );
     foreach my $test_sub (@once_only_tests) {
-        ( $is_hamiltonian, $reason ) = &$test_sub($g);
+        ( $is_hamiltonian, $reason ) = $g->$test_sub();
         last unless $is_hamiltonian == $DONT_KNOW;
     }
 
@@ -74,9 +74,9 @@ sub graph_is_hamiltonian {
         transformed => 0,
         tentative   => 0,
     };
-
+    
     if ( $is_hamiltonian == $DONT_KNOW ) {
-        ( $is_hamiltonian, $reason, $params ) = is_hamiltonian($g, $params);
+        ( $is_hamiltonian, $reason, $params ) = $g->is_hamiltonian($params);
     } else {
         my $spaced_string = $g->stringify();
         $spaced_string =~ s/\,/, /g;
@@ -115,30 +115,29 @@ sub is_hamiltonian {
     output($g);
 
     my ( $is_hamiltonian, $reason );
-    my @tests_1 = (
-        \&test_ore,
-        \&test_min_degree,
-        \&test_articulation_vertex,
-        \&test_graph_bridge,
+    my @tests_1 = qw(
+        test_ore
+        test_min_degree
+        test_articulation_vertex
+        test_graph_bridge
     );
 
     foreach my $test_sub (@tests_1) {
-        ( $is_hamiltonian, $reason ) = &$test_sub($g, $params);
+        ( $is_hamiltonian, $reason ) = $g->$test_sub($params);
         return ( $is_hamiltonian, $reason, $params )
             unless $is_hamiltonian == $DONT_KNOW;
     }
 
     ### Create a graph made of only required edges.
-    my $required_graph;
-    ( $required_graph, $g ) = get_required_graph($g);
+    $g->get_required_graph();
 
-    if ( $required_graph->edges() ) {
-        my @tests_2 = (
-            \&test_required_max_degree,
-            \&test_required_connected,
-            \&test_required_cyclic );
+    if ( $g->{required_graph}->edges() ) {
+        my @tests_2 = qw(
+            test_required_max_degree
+            test_required_connected
+            test_required_cyclic );
         foreach my $test_sub (@tests_2) {
-            ( $is_hamiltonian, $reason, $params ) = &$test_sub($required_graph, $g, $params);
+            ( $is_hamiltonian, $reason, $params ) = $g->$test_sub($params);
             return ( $is_hamiltonian, $reason, $params )
                 unless $is_hamiltonian == $DONT_KNOW;
         }

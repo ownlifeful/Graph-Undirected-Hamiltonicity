@@ -32,9 +32,8 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 ##########################################################################
 
 sub test_trivial {
-    output("Entering test_trivial()<BR/>");
     my ($g) = @_;
-
+    $g->output("Entering test_trivial()<BR/>");
     my $e         = scalar( $g->edges );
     my $v         = scalar( $g->vertices );
     my $max_edges = ( $v * $v - $v ) / 2;
@@ -76,8 +75,9 @@ sub test_trivial {
 ##########################################################################
 
 sub test_canonical {
-    output("Entering test_canonical()<BR/>");
     my ($g) = @_;
+    $g->output("Entering test_canonical()<BR/>");
+
     my @vertices = sort { $a <=> $b } $g->vertices();
     my $v = scalar(@vertices);
 
@@ -108,10 +108,9 @@ sub test_canonical {
 
 sub test_min_degree {
 
-    output("Entering test_min_degree()<BR/>");
-
     my ($g, $params) = @_;
-
+    $g->output("Entering test_min_degree()<BR/>");
+ 
     foreach my $vertex ( $g->vertices ) {
         if ( $g->degree($vertex) < 2 ) {
 
@@ -130,9 +129,8 @@ sub test_min_degree {
 ##########################################################################
 
 sub test_articulation_vertex {
-    output("Entering test_articulation_vertex()<BR/>");
-    
     my ($g, $params) = @_;
+    $g->output("Entering test_articulation_vertex()<BR/>");
     return $DONT_KNOW if $g->is_biconnected();
 
     my $reason = $params->{transformed}
@@ -154,10 +152,9 @@ sub test_articulation_vertex {
 ##########################################################################
 
 sub test_graph_bridge {
-    output("Entering test_graph_bridge()<BR/>");
     my ($g, $params) = @_;
+    $g->output("Entering test_graph_bridge()<BR/>");
     return $DONT_KNOW if $g->is_edge_connected();
-
 
     my $reason = $params->{transformed}
     ? "After removing edges according to constraints, the graph was " . 
@@ -181,10 +178,10 @@ sub test_graph_bridge {
 ### https://en.wikipedia.org/wiki/Hamiltonian_path
 
 sub test_dirac {
-
-    output("Entering test_dirac()<BR/>");
-
     my ($g) = @_;
+
+    $g->output("Entering test_dirac()<BR/>");
+
     my $v = $g->vertices();
     return $DONT_KNOW if $v < 3;
 
@@ -209,9 +206,8 @@ sub test_dirac {
 ### https://en.wikipedia.org/wiki/Ore%27s_theorem
 
 sub test_ore {
-    output("Entering test_ore()<BR/>");
-
     my ($g, $params) = @_;
+    $g->output("Entering test_ore()<BR/>");
     my $v = $g->vertices();
     return $DONT_KNOW if $v < 3;
 
@@ -235,12 +231,11 @@ sub test_ore {
 ##########################################################################
 
 sub test_required_max_degree {
-    output("Entering test_required_max_degree()<BR/>");
+    my ($g, $params) = @_;
+    $g->output("Entering test_required_max_degree()<BR/>");
 
-    my ($required_graph, $g, $params) = @_;
-    
-    foreach my $vertex ( $required_graph->vertices() ) {
-        my $degree = $required_graph->degree($vertex);
+    foreach my $vertex ( $g->{required_graph}->vertices() ) {
+        my $degree = $g->{required_graph}->degree($vertex);
         if ( $degree > 2 ) {
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the vertex $vertex "
@@ -259,18 +254,17 @@ sub test_required_max_degree {
 ##########################################################################
 
 sub test_required_connected {
-    output("Entering test_required_connected()<BR/>");
+    my ($g, $params) = @_;
+    $g->output("Entering test_required_connected()<BR/>");
 
-    my ($required_graph, $g, $params) = @_;
-
-    if ( $required_graph->is_connected() ) {
+    if ( $g->{required_graph}->is_connected() ) {
         my @degree1_vertices =
             grep
-                 { $required_graph->degree($_) == 1 }
-                 $required_graph->vertices();
+                 { $g->{required_graph}->degree($_) == 1 }
+                 $g->{required_graph}->vertices();
 
         unless ( @degree1_vertices ) {
-            _output_cycle($required_graph);
+            $g->{required_graph}->_output_cycle();
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
                 . "found to be connected, with no vertices of degree 1."
@@ -278,12 +272,12 @@ sub test_required_connected {
 
             return ( $GRAPH_IS_HAMILTONIAN, $reason, $params );
         }
-        
+
         if ( $g->has_edge( @degree1_vertices ) ) {
-            unless ( $required_graph->has_edge(@degree1_vertices) ) {
-                $required_graph->add_edge(@degree1_vertices);
+            unless ( $g->{required_graph}->has_edge(@degree1_vertices) ) {
+                $g->{required_graph}->add_edge(@degree1_vertices);
             }
-            _output_cycle($required_graph);
+            $g->{required_graph}->_output_cycle();
 
             my $reason = $params->{transformed}
             ? "After removing edges according to rules, the required graph was "
@@ -307,10 +301,10 @@ sub test_required_connected {
 ##########################################################################
 
 sub test_required_cyclic {
-    output("Entering test_required_cyclic()<BR/>");
-    my ($required_graph, $g, $params) = @_;
+    my ($g, $params) = @_;
+    $g->output("Entering test_required_cyclic()<BR/>");
 
-    if ( $required_graph->has_a_cycle ) {
+    if ( $g->{required_graph}->has_a_cycle ) {
         my $reason = $params->{transformed}
         ? "After removing edges according to rules, the required graph was "
             . "found to be cyclic, but not connected."
@@ -327,8 +321,8 @@ sub _output_cycle {
     my ($g) = @_;
     my @cycle        = $g->find_a_cycle();
     my $cycle_string = join ', ', @cycle;
-    output( $g );
-    output("Found a cycle: [$cycle_string]<BR/>");
+    $g->output();
+    $g->output("Found a cycle: [$cycle_string]<BR/>");
 }
 
 ##########################################################################

@@ -29,50 +29,49 @@ our %EXPORT_TAGS = ( all => \@EXPORT_OK );
 sub get_required_graph {
     my ($g) = @_;
 
-    output(   "Beginning a sweep to mark all edges adjacent to degree 2 "
+    $g->output(   "Beginning a sweep to mark all edges adjacent to degree 2 "
             . "vertices as required:<BR/>" );
 
-    my $g1 = $g->deep_copy_graph();
-    output($g1);
+##    my $g1 = $g->deep_copy_graph();
+##    $g1->output();
 
     my @vertices = $g1->vertices();
     my $required_graph = Graph::Undirected->new( vertices => \@vertices );
 
     foreach my $vertex (@vertices) {
-        my $degree = $g1->degree($vertex);
+        my $degree = $g->degree($vertex);
         if ( $degree != 2 ) {
-            output("Vertex $vertex : Degree=[$degree] ...skipping.<BR/>");
+            $g->output("Vertex $vertex : Degree=[$degree] ...skipping.<BR/>");
             next;
         }
 
-        output("Vertex $vertex : Degree=[$degree] ");
-        output("<UL>");
-        foreach my $neighbor_vertex ( $g1->neighbors($vertex) ) {
+        $g->output("Vertex $vertex : Degree=[$degree] ");
+        $g->output("<UL>");
+        foreach my $neighbor_vertex ( $g->neighbors($vertex) ) {
             $required_graph->add_edge( $vertex, $neighbor_vertex );
 
-            if ( $g1->get_edge_attribute( $vertex, $neighbor_vertex,
+            if ( $g->get_edge_attribute( $vertex, $neighbor_vertex,
                                           'required') ) {
-                output( "<LI>$vertex=$neighbor_vertex is already "
+                $g->output( "<LI>$vertex=$neighbor_vertex is already "
                         . "marked required</LI>" );
                 next;
             }
 
-            $g1->set_edge_attribute($vertex, $neighbor_vertex,
+            $g->set_edge_attribute($vertex, $neighbor_vertex,
                                     'required', 1);
-            output( "<LI>Marking $vertex=$neighbor_vertex "
+            $g->output( "<LI>Marking $vertex=$neighbor_vertex "
                     . "as required</LI>" );
         }
-        output("</UL>");
+        $g->output("</UL>");
     }
 
+    $g->{required_graph} = $required_graph;
     if ( $required_graph->edges() ) {
-        output("required graph:");
-        output( $required_graph, { required => 1 } );
+        $required_graph->output("required graph:");
+        $required_graph->output( { required => 1 } );
     } else {
-        output("The required graph has no edges.<BR/>");
+        $g->output("The required graph has no edges.<BR/>");
     }
-
-    return ( $required_graph, $g1 );
 }
 
 ##########################################################################
@@ -82,23 +81,21 @@ sub get_required_graph {
 # the edge can never be part of a Hamiltonian cycle.
 
 sub delete_cycle_closing_edges {
-    output("Entering delete_cycle_closing_edges()<BR/>");
-    my ($g, $required_graph) = @_;
+    my ($g) = @_;
+    $g->output("Entering delete_cycle_closing_edges()<BR/>");
     my $deleted_edges = 0;
-    my $g1;
     my %eliminated;
 
-    foreach my $vertex ( $required_graph->vertices() ) {
-        next unless $required_graph->degree($vertex) == 1;
+    foreach my $vertex ( $g->{required_graph}->vertices() ) {
+        next unless $g->{required_graph}->degree($vertex) == 1;
         next if $eliminated{$vertex}++;
 
-        my @reachable = $required_graph->all_reachable($vertex);
+        my @reachable = $g->{required_graph}->all_reachable($vertex);
 
-        my ( $other_vertex ) = grep { $required_graph->degree($_) == 1 } @reachable;
-        $g1 //= $g->deep_copy_graph();
-        next unless $g1->has_edge($vertex, $other_vertex);
-        $g1->delete_edge($vertex, $other_vertex);
-        $required_graph->delete_edge($vertex, $other_vertex);
+        my ( $other_vertex ) = grep { $g->{required_graph}->degree($_) == 1 } @reachable;
+        next unless $g->has_edge($vertex, $other_vertex);
+        $g->delete_edge($vertex, $other_vertex);
+        $g->{required_graph}->delete_edge($vertex, $other_vertex);
         $deleted_edges++;
 
         output( "Deleted edge $vertex=$other_vertex"
@@ -107,39 +104,33 @@ sub delete_cycle_closing_edges {
 
     if ( $deleted_edges ) {
         my $s = $deleted_edges == 1 ? '' : 's';
-        output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
-        return ( $deleted_edges, $g1 );
+        $g->output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
     } else {
-        output("Did not shrink the graph.<BR/>");
-        return ( $deleted_edges, $g );
+        $g->output("Did not shrink the graph.<BR/>");
     }
+    return $deleted_edges;
 }
 
 ##########################################################################
 
 sub delete_non_required_neighbors {
-    output("Entering delete_non_required_neighbors()<BR/>");
-
-    my ( $g, $required_graph ) = @_;
-    my $g1;
+    my ( $g ) = @_;
+    $g->output("Entering delete_non_required_neighbors()<BR/>");
     my $deleted_edges = 0;
-    foreach my $required_vertex ( $required_graph->vertices() ) {
-        next if $required_graph->degree($required_vertex) != 2;
+    foreach my $required_vertex ( $g->{required_graph}->vertices() ) {
+        next if $g->{required_graph}->degree($required_vertex) != 2;
         foreach my $neighbor_vertex ( $g->neighbors($required_vertex) ) {
             my $required =
                 $g->get_edge_attribute( $required_vertex,
                                         $neighbor_vertex, 'required' );
             next if $required;
-            ### Clone graph lazily
-            $g1 //= $g->deep_copy_graph();
-
             next
-                unless $g1->has_edge(
+                unless $g->has_edge(
                     $required_vertex, $neighbor_vertex );
 
-            $g1->delete_edge( $required_vertex, $neighbor_vertex );
+            $g->delete_edge( $required_vertex, $neighbor_vertex );
             $deleted_edges++;
-            output( "Deleted edge $required_vertex=$neighbor_vertex "
+            $g->output( "Deleted edge $required_vertex=$neighbor_vertex "
                     . "because vertex $required_vertex has degree==2 "
                     . "in the required graph.<BR/>" );
         }
@@ -148,40 +139,34 @@ sub delete_non_required_neighbors {
     if ( $deleted_edges ) {
         my $s = $deleted_edges == 1 ? '' : 's';
         output("Shrank the graph by removing $deleted_edges edge$s.<BR/>");
-        return ( $deleted_edges, $g1 );
     } else {
         output("Did not shrink the graph.<BR/>");
-        return ( $deleted_edges, $g );
     }
+    return $deleted_edges;
 }
 
 ##########################################################################
 
 sub swap_vertices {
     my ( $g, $vertex_1, $vertex_2 ) = @_;
-    my $g1 = $g->deep_copy_graph();
 
-    my %common_neighbors =
-        %{ get_common_neighbors( $g1, $vertex_1, $vertex_2 ) };
-
+    my %common_neighbors = $g->get_common_neighbors( $vertex_1, $vertex_2 );
     my @vertex_1_neighbors =
-        grep { $_ != $vertex_2 } $g1->neighbors($vertex_1);
+        grep { $_ != $vertex_2 } $g->neighbors($vertex_1);
     my @vertex_2_neighbors =
-        grep { $_ != $vertex_1 } $g1->neighbors($vertex_2);
+        grep { $_ != $vertex_1 } $g->neighbors($vertex_2);
 
     foreach my $neighbor_vertex (@vertex_1_neighbors) {
         next if $common_neighbors{$neighbor_vertex};
-        $g1->delete_edge( $neighbor_vertex, $vertex_1 );
-        $g1->add_edge( $neighbor_vertex, $vertex_2 );
+        $g->delete_edge( $neighbor_vertex, $vertex_1 );
+        $g->add_edge( $neighbor_vertex, $vertex_2 );
     }
 
     foreach my $neighbor_vertex (@vertex_2_neighbors) {
         next if $common_neighbors{$neighbor_vertex};
-        $g1->delete_edge( $neighbor_vertex, $vertex_2 );
-        $g1->add_edge( $neighbor_vertex, $vertex_1 );
+        $g->delete_edge( $neighbor_vertex, $vertex_2 );
+        $g->add_edge( $neighbor_vertex, $vertex_1 );
     }
-
-    return $g1;
 }
 
 ##########################################################################
@@ -199,7 +184,7 @@ sub get_common_neighbors {
         $common_neighbors{$neighbor_vertex} = 1;
     }
 
-    return \%common_neighbors;
+    return %common_neighbors;
 }
 
 ##########################################################################
