@@ -1,6 +1,7 @@
 #!perl
 use Modern::Perl;
 
+use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph);
 
 use Test::More;
@@ -64,22 +65,22 @@ my @tests = (
 );
 
 foreach my $test (@tests) {
-    my $g = string_to_graph( $test->{input_graph_text} );
+    my $self = Graph::Undirected::Hamiltonicity->new( graph_text => $test->{input_graph_text} );
 
-    is( scalar( $g->vertices() ),
+    is( scalar( $self->{g}->vertices() ),
         $test->{expected_vertex_count},
         "Preserved number of vertices. [$test->{label}]"
     );
-    is( scalar( $g->edges() ),
+    is( scalar( $self->{g}->edges() ),
         $test->{expected_edge_count},
         "Preserved number of edges. [$test->{label}]"
     );
     if ( $test->{preserved} ) {
-        is( "$g", $test->{input_graph_text},
+        is( $self->{g}->stringify(), $test->{input_graph_text},
             "Graph to string is the same as string to graph. [$test->{label}]"
         );
     } else {
-        isnt( "$g", $test->{input_graph_text},
+        isnt( $self->{g}->stringify(), $test->{input_graph_text},
             "Graph to string is NOT the same as string to graph. [$test->{label}]"
         );
     }

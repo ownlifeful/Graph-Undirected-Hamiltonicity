@@ -1,3 +1,6 @@
+
+use Graph::Undirected::Hamiltonicity;
+use Graph::Undirected::Hamiltonicity::Transforms;
 package Graph::Undirected::Hamiltonicity::Spoof;
 
 use Modern::Perl;
@@ -35,9 +38,9 @@ sub spoof_known_hamiltonian_graph {
 
     croak "The number of edges must be >= number of vertices." if $e < $v;
 
-    my $g = spoof_canonical_hamiltonian_graph($v);
-    $g = get_random_isomorph($g);
-    $g = add_random_edges( $g, $e - $v ) if ( $e - $v ) > 0;
+    my $g = Graph::Undirected::Hamiltonicity->new(graph => spoof_canonical_hamiltonian_graph($v) );
+    $g->get_random_isomorph();
+    $g->add_random_edges( $e - $v ) if ( $e - $v ) > 0;
 
     return $g;
 }
@@ -50,9 +53,10 @@ sub spoof_random_graph {
     $e //= get_random_edge_count($v);
 
     my $g = Graph::Undirected->new( vertices => [ 0 .. $v-1 ] );
-    $g = add_random_edges( $g, $e ) if $e;
+    my $g1g = Graph::Undirected::Hamiltonicity->new(graph => $g);
+    $g1g->add_random_edges( $e ) if $e;
 
-    return $g;
+    return $g1g;
 }
 
 ##############################################################################
@@ -62,21 +66,21 @@ sub spoof_randomish_graph {
     my ( $v, $e ) = @_;
     $e ||= get_random_edge_count($v);
 
-    my $g = spoof_random_graph( $v, $e );
+    my $self = spoof_random_graph( $v, $e );
 
     ### Seek out vertices with degree < 2
     ### and add random edges to them.
     my $edges_to_remove = 0;
-    foreach my $vertex1 ( $g->vertices() ) {
-        my $degree = $g->degree($vertex1);
+    foreach my $vertex1 ( $self->{g}->vertices() ) {
+        my $degree = $self->{g}->degree($vertex1);
 
         next if $degree > 1;
         my $added_edges = 0;
         while ( $added_edges < (2 - $degree) ) {
             my $vertex2 = int( rand($v) );
             next if $vertex1 == $vertex2;
-            next if $g->has_edge($vertex1, $vertex2);
-            $g->add_edge($vertex1,$vertex2);
+            next if $self->{g}->has_edge($vertex1, $vertex2);
+            $self->{g}->add_edge($vertex1,$vertex2);
             $added_edges++;
             $edges_to_remove++;
         }
@@ -92,12 +96,12 @@ sub spoof_randomish_graph {
     while ( $edges_to_remove and ($try_count < $max_tries) ) {
         $try_count++;
       LOOP:
-        foreach my $vertex1 ( $g->vertices() ) {
-            next if $g->degree($vertex1) < 3;
+        foreach my $vertex1 ( $self->{g}->vertices() ) {
+            next if $self->{g}->degree($vertex1) < 3;
 
-            foreach my $vertex2 ( $g->neighbors($vertex1) ) {
-                next if $g->degree($vertex2) < 3;
-                $g->delete_edge($vertex1,$vertex2);
+            foreach my $vertex2 ( $self->{g}->neighbors($vertex1) ) {
+                next if $self->{g}->degree($vertex2) < 3;
+                $self->{g}->delete_edge($vertex1,$vertex2);
                 $edges_to_remove--;
                 last LOOP;
             }
@@ -106,7 +110,7 @@ sub spoof_randomish_graph {
 
     carp "Exiting with $edges_to_remove extra edges.\n" if $edges_to_remove;
 
-    return $g;
+    return $self;
 }
 
 ##############################################################################

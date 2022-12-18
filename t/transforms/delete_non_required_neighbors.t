@@ -1,6 +1,8 @@
 #!perl
 use Modern::Perl;
 
+use Graph::Undirected::Hamiltonicity;
+use Graph::Undirected::Hamiltonicity::Spoof;
 use Graph::Undirected::Hamiltonicity::Transforms
     qw(&string_to_graph &delete_non_required_neighbors);
 
@@ -48,23 +50,24 @@ my @tests = (
 
 foreach my $test (@tests) {
     my $required_graph =
-        string_to_graph( $test->{input_required_graph_text} );
+        Graph::Undirected::Hamiltonicity->new( graph_text => $test->{input_required_graph_text} );
 
-    my $g = string_to_graph( $test->{input_graph_text} );
-    foreach my $edge_ref ( $required_graph->edges() ) {
-        $g->set_edge_attribute( @$edge_ref, 'required', 1 );
+    my $self = Graph::Undirected::Hamiltonicity->new( graph_text => $test->{input_graph_text} );
+
+    foreach my $edge_ref ( $required_graph->{g}->edges() ) {
+        $self->{g}->set_edge_attribute( @$edge_ref, 'required', 1 );
     }
 
-    my ( $deleted_edges, $output_graph ) =
-        delete_non_required_neighbors( $g, $required_graph );
-
+    $self->{required_graph} = $required_graph->{g};
+    
+    my $deleted_edges = $self->delete_non_required_neighbors();
     is( $deleted_edges,
         $test->{expected_deleted_edges},
         "Deleted the expected number of edges."
     );
 
     if ( $deleted_edges ) {
-        is( "$output_graph",
+        is( $self->{g}->stringify(),
             $test->{expected_output_graph_text},
             "Deleted all the edges expected."
             );

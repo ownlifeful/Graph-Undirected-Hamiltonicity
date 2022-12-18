@@ -56,35 +56,35 @@ our $calls = 0; ### Number of calls to is_hamiltonian()
 
 sub new {
     my $class = shift;
-    my ( $graph_text, $mojo ) = @_;
-    $graph_text //= '';
-
+    my ( %params ) = @_;
+   
     my $self = {};
-    $self->{mojo} = $mojo if $mojo;
+    $self->{mojo} = $params{mojo} if $params{mojo};
 
-    if ( ref $graph_text ) {
-	$self->{g} = $graph_text;
+    if ( $params{graph} ) {
+	$self->{g} = $params{graph};
 	bless $self, $class;
 	return $self;
     }
-    
-    $graph_text =~ s/[^0-9=,]+//g;
-    $graph_text =~ s/([=,])\D+/$1/g;
-    $graph_text =~ s/^\D+|\D+$//g;
+
+    $params{graph_text} //= '';
+    $params{graph_text} =~ s/[^0-9=,]+//g;
+    $params{graph_text} =~ s/([=,])\D+/$1/g;
+    $params{graph_text} =~ s/^\D+|\D+$//g;
 
     my $g;
-    if ( $graph_text =~ /\d/ ) {
-	eval { $g = Graph::Undirected::Hamiltonicity::string_to_graph($graph_text); };
+    if ( $params{graph_text} =~ /\d/ ) {
+	eval { $g = Graph::Undirected::Hamiltonicity::string_to_graph($params{graph_text}); };
 	if ( my $exception = $@ ) {
 	    say "That was not a valid graph, ";
 	    say "according to the Graph::Undirected module.<BR/>";
-	    say "[$graph_text][$exception]<BR/>";
+	    say "[", $params{graph_text}, "][$exception]<BR/>";
 	    die;
 	} else {
 	    $self->{g} = $g;
 	}
     } else {
-	die "Could not create a graph.\n";
+	die "Could not create a graph. graph_text=[", $params{graph_text}  ,"]\n";
     }
 
    bless $self, $class;
@@ -229,7 +229,7 @@ sub is_hamiltonian {
                     . " protected:<BR/>" );
             $self->output($g1);
 
-	    my $g1g = Graph::Undirected::Hamiltonicity->new($g1);
+	    my $g1g = Graph::Undirected::Hamiltonicity->new( graph => $g1);
             $params->{tentative} = 1;
             ( $is_hamiltonian, $reason, $params ) = $g1g->is_hamiltonian($params);
             if ( $is_hamiltonian == $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN ) {

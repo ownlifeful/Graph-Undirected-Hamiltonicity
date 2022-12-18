@@ -1,6 +1,7 @@
 #!perl
 use Modern::Perl;
 
+use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms
     qw(&string_to_graph &swap_vertices);
 
@@ -35,18 +36,17 @@ my @tests = (
 );
 
 foreach my $test (@tests) {
-    my $input_graph = string_to_graph( $test->{input_graph_text} );
+    my $input_graph = Graph::Undirected::Hamiltonicity->new( graph_text => $test->{input_graph_text} );
+    my $output_graph = Graph::Undirected::Hamiltonicity->new( graph_text => $test->{input_graph_text} );
 
-    my $output_graph =
-        swap_vertices( $input_graph, @{ $test->{vertices_to_swap} } );
-    is( "$output_graph",
+    $output_graph->swap_vertices( @{ $test->{vertices_to_swap} } );
+    is( $output_graph->{g}->stringify(),
         $test->{expected_output_graph_text},
         "graph changed as expected."
     );
 
-    my $output_graph2 =
-        swap_vertices( $output_graph, @{ $test->{vertices_to_swap} } );
-    is( "$output_graph2", $test->{input_graph_text},
+    $output_graph->swap_vertices(  @{ $test->{vertices_to_swap} } );
+    is( $output_graph->{g}->stringify(), $test->{input_graph_text},
         "Two consecutive swaps of the same vertices leave the graph unchanged."
     );
 

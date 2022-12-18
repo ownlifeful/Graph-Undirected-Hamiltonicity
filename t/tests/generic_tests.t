@@ -1,6 +1,7 @@
 #!perl
 use Modern::Perl;
 
+use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Tests qw(:all);
 use Graph::Undirected::Hamiltonicity::Transforms qw(&string_to_graph);
 
@@ -16,9 +17,9 @@ while ( defined( my $line = <DATA> ) ) {
     next unless $line;
     my ( $test_sub_name, $expected_result, $label, $graph_text ) = split /\|/, $line;
 
-    my $g = string_to_graph($graph_text);
+    my $self = Graph::Undirected::Hamiltonicity->new( graph_text => $graph_text );
     no strict 'refs';
-    my ( $is_hamiltonian, $reason ) = &$test_sub_name($g);
+    my ( $is_hamiltonian, $reason ) = $self->$test_sub_name();
     use strict 'refs';
     is( $is_hamiltonian, $expected_result, "$test_sub_name: $label" );
 }

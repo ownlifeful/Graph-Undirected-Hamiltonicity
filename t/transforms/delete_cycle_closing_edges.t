@@ -1,6 +1,7 @@
 #!perl
 use Modern::Perl;
 
+use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms
     qw(
        &get_required_graph
@@ -32,11 +33,11 @@ my @tests = (
 );
 
 foreach my $test (@tests) {
-    my $g = string_to_graph( $test->{input_graph_text} );
+    my $self = Graph::Undirected::Hamiltonicity->new( graph_text => $test->{input_graph_text} );
 
-    my ( $required_graph, $g1 ) = get_required_graph($g);
+    $self->get_required_graph();
 
-    my ( $deleted_edges, $output_graph ) = delete_cycle_closing_edges($g, $required_graph);
+    my $deleted_edges = $self->delete_cycle_closing_edges();
 
     is( $deleted_edges,
         $test->{expected_deleted_edges},
@@ -44,7 +45,7 @@ foreach my $test (@tests) {
     );
 
     if ( $deleted_edges ) {
-        is( "$output_graph",
+        is( $self->{g}->stringify(),
             $test->{expected_output_graph_text},
             "Deleted all the cycle closing edges expected."
             );

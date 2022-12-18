@@ -11,15 +11,15 @@ plan tests => 33;
 $ENV{HC_OUTPUT_FORMAT} = 'none';
 
 for my $v ( 3 .. 13 ) {
-    my $g = spoof_random_graph($v);
-    is( scalar( $g->vertices() ), $v, "Spoofed random graph has $v vertices." );
+    my $self = Graph::Undirected::Hamiltonicity::Spoof::spoof_random_graph($v);
+    is( scalar( $self->{g}->vertices() ), $v, "Spoofed random graph has $v vertices." );
 }
 
 for my $v ( 10 .. 20 ) {
     my $max_edges = ( $v * $v - $v ) / 2;
     my $e = int( rand( $max_edges ) );
-    my $g = spoof_random_graph( $v, $e );
-    is( scalar( $g->vertices() ), $v, "Spoofed random graph has $v vertices." );
-    is( scalar( $g->edges() ),    $e, "Spoofed random graph has $e edges." );
+    my $self = Graph::Undirected::Hamiltonicity::Spoof::spoof_random_graph( $v, $e );
+    is( scalar( $self->{g}->vertices() ), $v, "Spoofed random graph has $v vertices." );
+    is( scalar( $self->{g}->edges() ),    $e, "Spoofed random graph has $e edges." );
 }
 

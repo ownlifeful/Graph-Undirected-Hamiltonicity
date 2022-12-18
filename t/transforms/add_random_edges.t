@@ -1,6 +1,7 @@
 #!perl
 use Modern::Perl;
 
+use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms
     qw(&string_to_graph &add_random_edges);
 
@@ -15,18 +16,18 @@ while ( defined( my $line = <DATA> ) ) {
     chomp $line;
 
     if ( $line =~ /^\d+=\d+(,\d+=\d+)*$/ ) {
-        my $g = string_to_graph($line);
-
-        my $e         = scalar( $g->edges() );
-        my @vertices  = $g->vertices;
+	my $self = Graph::Undirected::Hamiltonicity->new(graph_text => $line);
+	
+        my $e         = scalar( $self->{g}->edges() );
+        my @vertices  = $self->{g}->vertices;
         my $v         = @vertices;
         my $max_edges = ( $v * $v - $v ) / 2;
 
         my $edges_to_add = int( rand( $max_edges - $e ) );
 
-        my $g1 = add_random_edges( $g, $edges_to_add );
+	$self->add_random_edges( $edges_to_add );
 
-        is( scalar( $g1->edges() ),
+        is( scalar( $self->{g}->edges() ),
             $e + $edges_to_add,
             "Succesfully added $edges_to_add edges."
         );

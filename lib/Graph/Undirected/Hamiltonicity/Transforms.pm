@@ -1,10 +1,8 @@
-package Graph::Undirected::Hamiltonicity;
-
 use Graph::Undirected;
-use Graph::Undirected::GraphMojo;
+use Carp qw(croak);
 
 use Modern::Perl;
-use Carp;
+package Graph::Undirected::Hamiltonicity;
 
 ##########################################################################
 
@@ -99,6 +97,15 @@ sub delete_non_required_neighbors {
     my ( $self ) = @_;
     $self->output("Entering delete_non_required_neighbors()<BR/>");
     my $deleted_edges = 0;
+
+
+    use Data::Dump qw(dump);
+    my $x = dump($self->{required_graph});
+#    $self->output("==========BEGIN========");
+#    $self->output($x);
+###    Test::More::diag($x);
+#    $self->output("==========END===========");
+
     foreach my $required_vertex ( $self->{required_graph}->vertices() ) {
         next if $self->{required_graph}->degree($required_vertex) != 2;
         foreach my $neighbor_vertex ( $self->{g}->neighbors($required_vertex) ) {
@@ -132,7 +139,7 @@ sub delete_non_required_neighbors {
 sub swap_vertices {
     my ( $self, $vertex_1, $vertex_2 ) = @_;
 
-    my %common_neighbors = $self->{g}->get_common_neighbors( $vertex_1, $vertex_2 );
+    my %common_neighbors = $self->get_common_neighbors( $vertex_1, $vertex_2 );
     my @vertex_1_neighbors =
         grep { $_ != $vertex_2 } $self->{g}->neighbors($vertex_1);
     my @vertex_2_neighbors =
@@ -157,6 +164,7 @@ sub get_common_neighbors {
     my ( $self, $vertex_1, $vertex_2 ) = @_;
     my %common_neighbors;
     my %vertex_1_neighbors;
+    
     foreach my $neighbor_vertex ( $self->{g}->neighbors($vertex_1) ) {
         $vertex_1_neighbors{$neighbor_vertex} = 1;
     }
@@ -225,7 +233,7 @@ sub get_random_isomorph {
 
         next if $v1 == $v2;
 
-        $self->{g}->swap_vertices( $v1, $v2 );
+        $self->swap_vertices( $v1, $v2 );
         $shuffles++;
     }
 }
@@ -235,13 +243,20 @@ sub get_random_isomorph {
 sub add_random_edges {
     my ( $self, $edges_to_add ) = @_;
 
+=back    
+    use Data::Dump qw(dump);
+    my $x = dump($self->{g});
+    Test::More::diag("==========BEGIN3===========");
+    Test::More::diag($x);
+    Test::More::diag("==========END3===========");
+=cut
+    
     my $e  = scalar( $self->{g}->edges() );
     my $v  = scalar( $self->{g}->vertices() );
     my $max_edges = ( $v * $v - $v ) / 2;
 
     if ( ($e + $edges_to_add) > $max_edges ) {
-        croak "Can only add up to: ", $max_edges - $e, 
-              " edges. NOT [$edges_to_add]; e=[$e]\n";
+        croak( "Can only add up to: ", $max_edges - $e, " edges. NOT [$edges_to_add]; e=[$e]\n" );
     }
 
     my $added_edges = 0;

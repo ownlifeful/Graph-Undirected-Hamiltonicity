@@ -38,11 +38,13 @@ foreach my $test (@tests) {
 
     ### A random isomorph is very likely to be different from the original,
     ### but it's not 100% guaranteed.
-    my $before_graph = string_to_graph($graph_text);
-    my $after_graph  = get_random_isomorph($before_graph);
+    my $before_graph = Graph::Undirected::Hamiltonicity->new(graph_text => $graph_text);
+    my $after_graph  = Graph::Undirected::Hamiltonicity->new( graph_text => $graph_text );
+    $after_graph->get_random_isomorph();
     isnt( "$after_graph", "$before_graph",
         "[$label] probably different after get_random_isomorph(). IF THIS TEST FAILS, JUST RE-RUN THE TEST. ODDS ARE, IT WILL PASS."
     );
+
 
     ### The distribution of degrees in the graph remains unchanged after get_random_isomorph.
     my %before_degree_hash = get_degree_hash($before_graph);
@@ -51,7 +53,7 @@ foreach my $test (@tests) {
         "[$label] degree hash unchanged after get_random_isomorph()" );
 
     ### The Hamiltonicity of the graph remains unchanged after get_random_isomorph
-    my $is_hamiltonian = graph_is_hamiltonian($after_graph);
+    my $is_hamiltonian = $after_graph->graph_is_hamiltonian();
     is( $is_hamiltonian,
         $test->{expected_is_hamiltonian},
         "[$label] Hamiltonicity unchanged after get_random_isomorph()"
@@ -61,11 +63,11 @@ foreach my $test (@tests) {
 ##########################################################################
 
 sub get_degree_hash {
-    my ($g) = @_;
+    my ($self) = @_;
 
     my %degree_hash;
-    foreach my $vertex ( $g->vertices() ) {
-        $degree_hash{ $g->degree($vertex) }++;
+    foreach my $vertex ( $self->{g}->vertices() ) {
+        $degree_hash{ $self->{g}->degree($vertex) }++;
     }
 
     return %degree_hash;

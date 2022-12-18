@@ -10,5 +10,5 @@ requires 'LWP::UserAgent'      , '6';
 requires 'Config::INI::Reader' , '0.025';
 requires 'Carp'                , '1.29';
 requires 'Test::Exception'     , '0';
-requires 'CGI::Minimal'        , '1.29';
 requires 'Modern::Perl'        , '0';
+requires 'Data::Dump'          , '0';

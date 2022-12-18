@@ -3,8 +3,9 @@
 use Modern::Perl;
 
 use Test::More;
-plan tests => 77;
+plan tests => 73;
 
+use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms
     qw(&string_to_graph &get_required_graph);
 
@@ -29,9 +30,10 @@ my @tests = (
 );
 
 foreach my $test (@tests) {
-    my $g = string_to_graph( $test->{input_graph_text} );
+    my $self = Graph::Undirected::Hamiltonicity->new(graph_text => $test->{input_graph_text} );
 
-    my ( $required_graph, $output_graph ) = get_required_graph($g);
+    $self->get_required_graph();
+    my $required_graph = $self->{required_graph};
 
     is( "$required_graph",
         $test->{expected_required_graph_text},
@@ -39,18 +41,15 @@ foreach my $test (@tests) {
     );
 
     foreach my $edge_ref ( $required_graph->edges() ) {
-        is( $output_graph->get_edge_attribute( @$edge_ref, 'required' ),
+        is( $self->{g}->get_edge_attribute( @$edge_ref, 'required' ),
             1, "the edge has been marked required." );
-        $output_graph->set_edge_attribute( @$edge_ref, 'required', 0 );
+        $self->{g}->set_edge_attribute( @$edge_ref, 'required', 0 );
     }
 
-    foreach my $edge_ref ( $output_graph->edges() ) {
-        isnt( $output_graph->get_edge_attribute( @$edge_ref, 'required' ),
+    foreach my $edge_ref ( $self->{g}->edges() ) {
+        isnt( $self->{g}->get_edge_attribute( @$edge_ref, 'required' ),
             1, "only edges in the required graph can be marked required." );
     }
-
-    is( "$output_graph", "$g",
-        "the graph is intact, except for attributes." );
 
 }
 

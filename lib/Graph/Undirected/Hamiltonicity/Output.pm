@@ -20,6 +20,16 @@ sub output {
             say $input;
         }
 
+    } elsif ( $format eq 'json' ) {
+	unless ( defined $self->{mojo} ) {
+	    say "ERROR: Please pass in Mojo";
+	    die;
+	}
+	if ( $input ) {
+	    $self->{mojo}->send($input);
+	} else {
+	    $self->{mojo}->send( $self->{g}->stringify() );
+	}
     } elsif ( $format eq 'text' ) {
         if ( ref $input ) {
             ### Print the graph's edge-list as a string.

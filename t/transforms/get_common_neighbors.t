@@ -1,6 +1,8 @@
 #!perl
 use Modern::Perl;
 
+use Graph::Undirected::Hamiltonicity;
+use Graph::Undirected::Hamiltonicity::Spoof;
 use Graph::Undirected::Hamiltonicity::Transforms
     qw(&string_to_graph &get_common_neighbors);
 
@@ -39,11 +41,11 @@ my @test_graphs = (
 );
 
 foreach my $test_graph (@test_graphs) {
-    my $g = string_to_graph( $test_graph->{graph_text} );
-
+    my $self = Graph::Undirected::Hamiltonicity->new( graph_text => $test_graph->{graph_text} );
+    
     foreach my $test ( @{ $test_graph->{tests} } ) {
-        my %actual_common_neighbors =
-            %{ get_common_neighbors( $g, @{ $test->{vertices} } ) };
+	
+        my %actual_common_neighbors = $self->get_common_neighbors( @{ $test->{vertices} } );
 
         foreach my $expected_common_neighbor (
             @{ $test->{expected_common_neighbors} } )

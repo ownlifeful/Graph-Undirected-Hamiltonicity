@@ -24,7 +24,7 @@ while ( defined( my $line = <DATA> ) ) {
 
     if ( $line =~ /^([^|]+)\|([01])\|(\d+|\d+=\d+(,\d+=\d+)*)$/ ) {
         my ( $label, $expected_result, $graph_text ) = ( $1, $2, $3 );
-        my $g = Graph::Undirected::Hamiltonicity->new($graph_text);
+        my $g = Graph::Undirected::Hamiltonicity->new(graph_text => $graph_text);
 
         my $is_hamiltonian = $g->graph_is_hamiltonian();
         is( $is_hamiltonian, $expected_result, $label );
