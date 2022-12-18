@@ -16,8 +16,6 @@ sub output {
     my $format = $self->{output_format};
     return if $format eq 'none';
 
-    my ($input) = @_;
-
     if ( $format eq 'html' ) {
         if ( ref $input ) {
             $self->output_image_svg(@_);
@@ -30,11 +28,18 @@ sub output {
 	unless ( defined $mojo ) {
 	    die "ERROR: Please pass in Mojo";
 	}
-	if ( $input ) {
-	    $mojo->send($input);
+	if ( defined $_[0] ) {
+	    my $message = {
+		op => 'text',
+		args => \@_
+	    };
 	} else {
-	    $mojo->send( $self->{g}->stringify() );
+	    my $message = {
+		op => 'graph',
+		args => $self->{g}->stringify()
+	    };
 	}
+	$mojo->send($Graph::Undirected::Hamiltonicity::json->encode($message));
     } elsif ( $format eq 'text' ) {
         if ( ref $input ) {
             ### Print the graph's edge-list as a string.
