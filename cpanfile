@@ -10,5 +10,7 @@ requires 'LWP::UserAgent'      , '6';
 requires 'Config::INI::Reader' , '0.025';
 requires 'Carp'                , '1.29';
 requires 'Test::Exception'     , '0';
-requires 'Modern::Perl'        , '0';
-requires 'Data::Dump'          , '0';
+requires 'Modern::Perl'        , '1';
+requires 'Data::Dump'          , '1';
+requires 'Mojolicious::Lite'   , '1',
+requires 'Mojo::JSON'          , '1'

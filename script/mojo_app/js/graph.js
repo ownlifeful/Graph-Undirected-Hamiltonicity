@@ -25,7 +25,7 @@ function draw() {
 //    } else {
 //      draw_coin();
 //      draw_bit();
-    }
+//    }
 }
 
 // -----------------------------------------------------------------------
@@ -35,9 +35,11 @@ function main() {
   // background(random_color());
   background(255);
 
-    // g = getGraph();
+  // g = getGraph();
   g = window.g;
-  output_graph(g);
+  if ( g != null ) {
+     output_graph(g);
+  }
 }
 // -----------------------------------------------------------------------
 

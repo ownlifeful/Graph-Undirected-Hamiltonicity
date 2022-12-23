@@ -1,5 +1,5 @@
 package Graph::Undirected::Hamiltonicity;
-
+use Mojo::JSON qw(encode_json);
 use Modern::Perl;
 use Carp;
 
@@ -16,11 +16,13 @@ sub output {
     my $format = $self->{output_format};
     return if $format eq 'none';
 
+    my ( $input ) = @_;
+    
     if ( $format eq 'html' ) {
-        if ( ref $input ) {
+        if ( defined $_[0] ) {
             $self->output_image_svg(@_);
         } else {
-            say $input;
+            say "ERROR: No data.";
         }
 
     } elsif ( $format eq 'json' ) {
@@ -28,18 +30,19 @@ sub output {
 	unless ( defined $mojo ) {
 	    die "ERROR: Please pass in Mojo";
 	}
+	my $message;
 	if ( defined $_[0] ) {
-	    my $message = {
+	    $message = {
 		op => 'text',
 		args => \@_
 	    };
 	} else {
-	    my $message = {
+	    $message = {
 		op => 'graph',
 		args => $self->{g}->stringify()
 	    };
 	}
-	$mojo->send($Graph::Undirected::Hamiltonicity::json->encode($message));
+	$mojo->send( encode_json($message) );
     } elsif ( $format eq 'text' ) {
         if ( ref $input ) {
             ### Print the graph's edge-list as a string.
