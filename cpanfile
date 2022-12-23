@@ -13,7 +13,7 @@ requires 'Test::Exception'     , '0';
 requires 'Modern::Perl'        , '1';
 requires 'Data::Dump'          , '1';
 requires 'Mojolicious::Lite'   , '1',
-requires 'Mojo::JSON'          , '1'
+requires 'Mojo::JSON'          , '1';
 requires 'Mojolicious::Lite'   , '1';
 requires 'Mojo::JSON'          , '1';
 
