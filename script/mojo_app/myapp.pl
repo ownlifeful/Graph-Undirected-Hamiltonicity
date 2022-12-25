@@ -158,7 +158,7 @@ jQuery( document ).ready(function() {
 <span class="col-6" id="graph_div">
 </span>
 <span class="col-6">
-<iframe id="my_frame" src="/text" height="1000" width="500">
+<iframe id="my_frame" src="/text" height="500" width="500">
 </iframe>
 </span>
 </div>
@@ -193,9 +193,6 @@ jQuery( document ).ready(function() {
   <body class="container-fluid">
 
 <%= content %>
-
-
-
 
 </body>
 </html>

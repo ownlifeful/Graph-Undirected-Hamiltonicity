@@ -219,25 +219,24 @@ sub is_hamiltonian {
             $self->get_tentative_combinations( $vertex );
 
         foreach my $tentative_edge_pair (@$tentative_combinations) {
-            my $g1 = $self->{g}->deep_copy_graph();
+	    my $g1 = Graph::Undirected::Hamiltonicity->new( graph => $self->{g}->deep_copy_graph() );
             $self->output("For vertex: $vertex, protecting " .
                     ( join ',', map {"$vertex=$_"} @$tentative_edge_pair ) .
                    "<BR/>" );
-            foreach my $neighbor ( $g1->neighbors($vertex) ) {
+            foreach my $neighbor ( $g1->{g}->neighbors($vertex) ) {
                 next if $neighbor == $tentative_edge_pair->[0];
                 next if $neighbor == $tentative_edge_pair->[1];
                 $self->output("Deleting edge: $vertex=$neighbor<BR/>");
-                $g1->delete_edge( $vertex, $neighbor );
+                $g1->{g}->delete_edge( $vertex, $neighbor );
             }
 
             $self->output(   "The Graph with $vertex=" . $tentative_edge_pair->[0]
                     . ", $vertex=" . $tentative_edge_pair->[1]
                     . " protected:<BR/>" );
-            $self->output($g1);
+            $g1->output();
 
-	    my $g1g = Graph::Undirected::Hamiltonicity->new( graph => $g1);
             $params->{tentative} = 1;
-            ( $is_hamiltonian, $reason, $params ) = $g1g->is_hamiltonian($params);
+            ( $is_hamiltonian, $reason, $params ) = $g1->is_hamiltonian($params);
             if ( $is_hamiltonian == $Graph::Undirected::Hamiltonicity::GRAPH_IS_HAMILTONIAN ) {
                 return ( $is_hamiltonian, $reason, $params );
             }
