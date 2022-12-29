@@ -50,8 +50,8 @@ websocket '/detect' => sub ($c) {
 	}
 	my $message = {
 	    op => 'eval',
-###	    args => [ qq{jQuery('$modal_id').modal("show")} ]
-	    args => [ $modal_id ]
+	    args => [ qq< jQuery('.reason').html('$reason'); jQuery('$modal_id').modal({ fadeDuration: 1000, fadeDelay: 0.50 }); > ]
+###	    args => [ $modal_id ]
 	};
 	$c->send( encode_json($message) );
   });
@@ -74,13 +74,8 @@ Output goes here...
 % title 'Welcome to Hamitonia';
 % my $url = 'ws://173.255.210.224:3000/detect';
 
-<!--
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.8.0/jquery.modal.min.css" integrity="sha256-rll6wTV76AvdluCY5Pzv2xJfw2x7UXnK+fGfj9tQocc=" crossorigin="anonymous" />
--->
-
 <script src="https://bhopal.art/js/p5.min.js"></script>
 <script src="https://bhopal.art/js/graph.js"></script>
-<script src="https://bhopal.art/js/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Remember to include jQuery :) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
@@ -93,8 +88,10 @@ Output goes here...
 
  #form_div {
     background-color: #DDD;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    height: 10vw;
+    display: flex;
+    position: --webkit-sticky;
+    position: sticky;
   }
 </style>
 
@@ -105,6 +102,7 @@ function looseJsonParse(obj) {
 ////////////////////////////////////////////////////
 // A $( document ).ready() block.
 jQuery( document ).ready(function() {
+    jQuery.noConflict();
     console.log( "ready!" );
     const ws = new WebSocket('<%= $url %>');
     ws.onmessage = function (event) {
@@ -124,7 +122,7 @@ jQuery( document ).ready(function() {
            console.log(message);
            let g = x.args;
            if (g !== window.g) {
-               clear();
+               // clear();
                window.g = g;
            }
            console.log("graph=[" + g + "]");
@@ -133,11 +131,9 @@ jQuery( document ).ready(function() {
            let message = "op=[eval]";
            console.log(message);
            console.log(arg="[" + x.args[0] + "]");
-           jQuery.noConflict();
-           jQuery( x.args[0] ).modal("show");
-           // looseJsonParse(x.args[0]);
+           eval(x.args[0]);
         } else {
-           let message = "op=[" + x.op + "]";
+           let message = "unknown op=[" + x.op + "]";
            console.log(message);
         }
     };
@@ -177,12 +173,14 @@ jQuery( document ).ready(function() {
  <!-- Hamiltonian modal -->
 <div class="modal" id="ham">
   <p>The Graph is Hamiltonian.</p>
+  <p class="reason"></p>
 </div>
 
 
  <!-- Non-Hamiltonian modal -->
 <div class="modal" id="non">
   <p>The graph is <U>not</U> Hamiltonian.</p>
+  <p class="reason"></p>
 </div>
 
 
