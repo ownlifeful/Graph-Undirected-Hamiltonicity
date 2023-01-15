@@ -7,7 +7,7 @@ plan tests => 73;
 
 use Graph::Undirected::Hamiltonicity;
 use Graph::Undirected::Hamiltonicity::Transforms
-    qw(&string_to_graph &get_required_graph);
+    qw(&string_to_graph &create_required_graph);
 
 my $herschel_graph_text =
     '0=1,0=10,0=3,0=9,10=6,10=8,1=2,1=4,2=5,2=9,3=4,3=6,4=5,4=7,5=8,6=7,7=8,8=9';
@@ -32,7 +32,7 @@ my @tests = (
 foreach my $test (@tests) {
     my $self = Graph::Undirected::Hamiltonicity->new(graph_text => $test->{input_graph_text} );
 
-    $self->get_required_graph();
+    $self->create_required_graph();
     my $required_graph = $self->{required_graph};
 
     is( "$required_graph",

@@ -37,8 +37,8 @@ get '/text' => sub ($c) {
 # WebSocket service used by the template to extract the title from a web site
 websocket '/detect' => sub ($c) {
     $c->on(message => sub ($c, $msg) {
+	$Graph::Undirected::Hamiltonicity::mojo = $c;
 	my $g = Graph::Undirected::Hamiltonicity->new(graph_text => $msg // "",
-						      mojo => $c,
 						      output_format => 'json');
 
 	my ( $is_hamiltonian, $reason, $params ) = $g->graph_is_hamiltonian();
@@ -123,6 +123,7 @@ jQuery( document ).ready(function() {
            let g = x.args;
            if (g !== window.g) {
                // clear();
+               alert("graph=[" + g  + "]");
                window.g = g;
            }
            console.log("graph=[" + g + "]");

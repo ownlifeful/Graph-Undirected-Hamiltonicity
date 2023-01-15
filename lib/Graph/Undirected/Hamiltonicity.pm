@@ -60,10 +60,6 @@ sub new {
     my ( %params ) = @_;
    
     my $self = {};
-    if ( ref $params{mojo} ) {
-	$self->{mojo} = $params{mojo};
-	$Graph::Undirected::Hamiltonicity::mojo = $params{mojo};
-    }
 
     $self->{output_format} //= $params{output_format} // $ENV{HC_OUTPUT_FORMAT} // 'none';
 
@@ -181,7 +177,7 @@ sub is_hamiltonian {
     }
 
     ### Create a graph made of only required edges.
-    $self->get_required_graph();
+    $self->create_required_graph();
 
     if ( $self->{required_graph}->edges() ) {
         my @tests_2 = qw(

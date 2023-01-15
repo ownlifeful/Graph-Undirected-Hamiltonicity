@@ -11,7 +11,7 @@ sub output {
     use Data::Dump qw(dump);
     my $x = dump($self);
     die $x unless ref $self;
-    ### $self->output($x);
+    ## $self->output($x);
 
     my $format = $self->{output_format};
     return if $format eq 'none';
@@ -26,23 +26,24 @@ sub output {
         }
 
     } elsif ( $format eq 'json' ) {
-	my $mojo = $self->{'mojo'} // $Graph::Undirected::Hamiltonicity::mojo;
-	unless ( defined $mojo ) {
-	    die "ERROR: Please pass in Mojo";
-	}
 	my $message;
-	if ( defined $_[0] ) {
+	if ( defined $_[0] and not ref $_[0] ) {
 	    $message = {
 		op => 'text',
 		args => \@_
 	    };
 	} else {
+	    my $sub_graph = ( defined $_[0] and ref $_[0] ) ? 'required_graph' : 'g';
 	    $message = {
 		op => 'graph',
-		args => $self->{g}->stringify()
+		args => $self->{$sub_graph}->stringify()
 	    };
+	    print "=" x 60, "\n";
+	    print ++$Graph::Undirected::Hamiltonicity::Output::graph_count, "\n";
+	    print "=" x 60, "\n";
 	}
-	$mojo->send( encode_json($message) );
+	$Graph::Undirected::Hamiltonicity::mojo->send( encode_json($message) );
+	
     } elsif ( $format eq 'text' ) {
         if ( ref $input ) {
             ### Print the graph's edge-list as a string.

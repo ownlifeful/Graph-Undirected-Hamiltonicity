@@ -9,7 +9,7 @@ package Graph::Undirected::Hamiltonicity;
 # The "required graph" contains the same vertices as the original graph,
 # but with only the edges incident on vertices of degree == 2.
 
-sub get_required_graph {
+sub create_required_graph {
     my ($self) = @_;
 
     $self->output(   "Beginning a sweep to mark all edges adjacent to degree 2 "
