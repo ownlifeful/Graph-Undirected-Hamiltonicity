@@ -1,27 +1,20 @@
 #!/usr/bin/env perl
 use Mojolicious::Lite -signatures;
 use Mojo::JSON qw(encode_json);
-
+use Graph::Undirected::Hamiltonicity;
 
 $| = 1;
 
-use Mojolicious::Static;
-my $static = Mojolicious::Static->new;
-
-my $js_dir = '/root/Documents/code/Perl/HC6/Graph-Undirected-Hamiltonicity/script/mojo_app/js';
-$static = $static->asset_dir('js');
-push @{$static->paths}, $js_dir;
-
-foreach ( qw ( p5.min.js graph.js ) ) {
-    $static = $static->extra({ $_ => "$js_dir/$_" });
-}
-
-
-use Graph::Undirected::Hamiltonicity;
-
 get '/' => sub ($c) {
-  $c->render(template => 'index');
+    my $host_port = $c->req->url->to_abs->host_port;
+    my $ws_url = "ws://$host_port/detect";
+    $c->render(template => 'index', ws_url => $ws_url);
 };
+
+get '/graph.js' => sub ($c) {
+  $c->render(template => 'graph', format => 'js');
+};
+
 
 get '/text' => sub ($c) {
   $c->render(template => 'text');
@@ -36,6 +29,8 @@ get '/text' => sub ($c) {
 
 # WebSocket service used by the template to extract the title from a web site
 websocket '/detect' => sub ($c) {
+
+    
     $c->on(message => sub ($c, $msg) {
 	$Graph::Undirected::Hamiltonicity::mojo = $c;
 	my $g = Graph::Undirected::Hamiltonicity->new(graph_text => $msg // "",
@@ -72,10 +67,9 @@ Output goes here...
 @@ index.html.ep
 % layout 'default';
 % title 'Welcome to Hamitonia';
-% my $url = 'ws://173.255.210.224:3000/detect';
 
 <script src="https://bhopal.art/js/p5.min.js"></script>
-<script src="https://bhopal.art/js/graph.js"></script>
+<script src="/graph.js"></script>
 
 <!-- Remember to include jQuery :) -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
@@ -104,7 +98,7 @@ function looseJsonParse(obj) {
 jQuery( document ).ready(function() {
     jQuery.noConflict();
     console.log( "ready!" );
-    const ws = new WebSocket('<%= $url %>');
+    const ws = new WebSocket('<%= $ws_url %>');
     ws.onmessage = function (event) {
         let x = JSON.parse(event.data);
 
@@ -123,7 +117,7 @@ jQuery( document ).ready(function() {
            let g = x.args;
            if (g !== window.g) {
                // clear();
-               alert("graph=[" + g  + "]");
+               // alert("graph=[" + g  + "]");
                window.g = g;
            }
            console.log("graph=[" + g + "]");
@@ -195,3 +189,139 @@ jQuery( document ).ready(function() {
 
 </body>
 </html>
+
+@@ graph.js.ep
+
+let radius = 16;
+let vertex_radius = 16;
+let image_size = 500;
+
+let edge_color = [];
+
+// -----------------------------------------------------------------------
+
+function setup() {
+    let myCanvas = createCanvas(image_size, image_size);
+    myCanvas.parent('graph_div');
+    background(255);
+    textSize(image_size / 25);
+    textAlign(CENTER, CENTER);
+}
+
+// -----------------------------------------------------------------------
+
+function draw() {
+    main();
+}
+
+// -----------------------------------------------------------------------
+
+function main() {
+    g = window.g;
+    if ( g != null ) {
+	output_graph(g);
+    }
+    window.g = null;
+}
+// -----------------------------------------------------------------------
+
+function random_color() {
+    return [ random(255), random(255), random(255) ];
+}
+// -----------------------------------------------------------------------
+
+function onlyUnique(value, index, self) {
+    return self.indexOf(value) === index;
+}
+
+// -----------------------------------------------------------------------
+
+function output_graph(g) {
+    let edge_refs = g.split(',');
+    let vertex_refs = g.split(/\D+/);
+    let uniq_vertices = vertex_refs.filter(onlyUnique);
+    let v = uniq_vertices.length;
+
+    // Compute angle between vertices
+    let angle_between_vertices = PI * 2 / v;
+
+    // Compute Center of image
+    let x_center = image_size / 2;
+    let y_center = x_center;
+    let border   = 0; //parseInt( image_size / 25 );  // cellpadding in the image
+
+    // Compute vertex coordinates
+    let radius   = ( image_size / 2 ) - border;
+    let angle    = Math.PI * ( 0.5 - ( 1 / v ) );
+    let vertices = uniq_vertices.sort();
+
+    let vertex_coordinates = [];
+    for ( let i = 0; i < v; i++ ) {
+	let vertex = vertices[i];
+	let x = ( radius * cos(angle) ) + x_center;
+	let y = ( radius * sin(angle) ) + y_center;
+	vertex_coordinates[vertex] = { "x": x, "y": y };
+	angle += angle_between_vertices;
+    }
+
+    draw_edges(vertex_coordinates,edge_refs);
+    draw_vertices(vertex_coordinates,vertices);
+
+}
+
+// -----------------------------------------------------------------------
+function draw_vertices(vertex_coordinates, vertices) {
+    for ( let i in vertices ) {
+	let vertex = vertices[i];
+	draw_vertex(vertex, vertex_coordinates[vertex]["x"], vertex_coordinates[vertex]["y"]);
+    }
+}
+
+// -----------------------------------------------------------------------
+
+function draw_edges(vertex_coordinates,edge_refs) {
+
+  for( let j = 0; j < edge_refs.length; j++ ) {
+
+    let edge_ref = edge_refs[j].split('=');
+
+    let v1 = edge_ref[0];
+    let v2 = edge_ref[1];
+
+    let x1 = vertex_coordinates[ v1 ].x;
+    let y1 = vertex_coordinates[ v1 ].y;
+    let x2 = vertex_coordinates[ v2 ].x;
+    let y2 = vertex_coordinates[ v2 ].y;
+
+    let e_color = [0, 0, 0];
+    stroke( e_color );
+    line( x1, y1, x2, y2 );
+  }
+
+}
+
+// -----------------------------------------------------------------------
+
+function get_edge_color(v1,v2) {
+  let e_color = random_color();
+  if ( (edge_color === undefined) || (edge_color[ v1 ] === undefined )) {
+    edge_color[ v1 ] = [];
+  }
+  edge_color[ v1 ][ v2 ] = e_color;
+  return e_color;
+}
+
+
+// -----------------------------------------------------------------------
+
+function draw_vertex(vertex, x,y) {
+    // TODO: Add vertex labels
+    // Draw vertex
+    stroke(0);
+    fill(0, 0, 216);
+    ellipse(x,y,vertex_radius,vertex_radius);
+    fill(255);
+    text(vertex,x,y);
+}
+
+// -----------------------------------------------------------------------
